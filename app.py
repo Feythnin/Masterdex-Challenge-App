@@ -67,6 +67,19 @@ class FormTracking(db.Model):
 def load_user(user_id):
     return User.query.get(int(user_id))
 
+# Valid games for each generation (for the Pokemon Home Challenge)
+GENERATION_GAMES = {
+    1: ['Red', 'Blue', 'Yellow', 'FireRed', 'LeafGreen', "Let's Go Pikachu", "Let's Go Eevee"],
+    2: ['Gold', 'Silver', 'Crystal', 'HeartGold', 'SoulSilver'],
+    3: ['Ruby', 'Sapphire', 'Emerald', 'Omega Ruby', 'Alpha Sapphire'],
+    4: ['Diamond', 'Pearl', 'Platinum', 'Brilliant Diamond', 'Shining Pearl'],
+    5: ['Black', 'White', 'Black 2', 'White 2'],
+    6: ['X', 'Y'],
+    7: ['Sun', 'Moon', 'Ultra Sun', 'Ultra Moon'],
+    8: ['Sword', 'Shield'],
+    9: ['Scarlet', 'Violet'],
+}
+
 # Pokemon data
 # has_gender_diff: True if Pokemon has visual gender differences (affects male/female checkboxes display)
 # has_gender: True if Pokemon can be male/female (not genderless)
@@ -1196,6 +1209,7 @@ def get_pokemon():
         ).all()
 
         pokemon_data = pokemon.copy()
+        pokemon_data['valid_games'] = GENERATION_GAMES.get(pokemon['generation'], [])
         pokemon_data['tracking'] = {
             'original_gen': tracking.original_gen if tracking else False,
             'male': tracking.male if tracking else False,

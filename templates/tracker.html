@@ -346,7 +346,7 @@ function createDetailContent(pokemon) {
                     <input type="checkbox"
                            data-field="original_gen"
                            ${tracking.original_gen ? 'checked' : ''}>
-                    <span class="checkbox-label">Original Gen</span>
+                    <span class="checkbox-label">Obtained</span>
                 </label>
                 ${pokemon.has_gender_diff ? `
                     <label class="checkbox-item">
@@ -416,6 +416,11 @@ function createDetailContent(pokemon) {
                 </div>
             </div>
         ` : ''}
+
+        <div class="games-section">
+            <h4>Obtainable Games</h4>
+            <p class="games-list">${pokemon.valid_games ? pokemon.valid_games.join(', ') : 'Unknown'}</p>
+        </div>
 
         <div class="notes-section">
             <h4>Notes</h4>

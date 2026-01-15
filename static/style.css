@@ -648,6 +648,7 @@ body {
 .tracking-section,
 .forms-section,
 .stars-section,
+.games-section,
 .notes-section {
     padding: 1rem 1.5rem;
     border-top: 1px solid var(--border-color);
@@ -656,6 +657,7 @@ body {
 .tracking-section h4,
 .forms-section h4,
 .stars-section h4,
+.games-section h4,
 .notes-section h4 {
     font-size: 0.875rem;
     color: var(--text-muted);
@@ -790,6 +792,14 @@ body {
     color: var(--text-muted);
     font-size: 0.875rem;
     flex: 1;
+}
+
+/* Games Section */
+.games-list {
+    font-size: 0.9rem;
+    color: var(--text-color);
+    line-height: 1.5;
+    margin: 0;
 }
 
 /* Notes Section */
