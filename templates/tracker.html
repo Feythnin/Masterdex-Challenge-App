@@ -184,8 +184,10 @@ function createCompactCard(pokemon) {
     const completedShinies = (tracking.shiny ? 1 : 0) + Object.values(formShinyTracking).filter(v => v).length;
     const allShiniesComplete = completedShinies === totalShinies;
 
+    const isObtained = tracking.original_gen;
+
     card.innerHTML = `
-        <img src="${pokemon.sprite}" alt="${pokemon.name}" class="compact-sprite">
+        <img src="${pokemon.sprite}" alt="${pokemon.name}" class="compact-sprite ${isObtained ? '' : 'not-obtained'}">
         <div class="compact-info">
             <span class="compact-number">#${pokemon.id}</span>
             <span class="compact-name">${pokemon.name}</span>

@@ -178,6 +178,7 @@ python app.py
 - [x] **Fixed shiny count indicator** - Compact cards now show correct X/Y count including form shinies (e.g., ✨0/4 for Meowth)
 - [x] **Ghost Stars includes form shinies** - Counts base shiny + all form shinies
 - [x] **Progress shows 1 decimal place** - Percentages now show 0.2% instead of rounding to 0%
+- [x] **Grayscale filter for unobtained Pokemon** - Sprites appear greyed out until "Original Gen" is checked
 
 ## Completed Milestones
 - [x] Full National Pokédex (1025 Pokémon)

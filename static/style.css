@@ -348,6 +348,11 @@ body {
     width: 72px;
     height: 72px;
     image-rendering: pixelated;
+    transition: filter 0.2s;
+}
+
+.compact-sprite.not-obtained {
+    filter: grayscale(100%) brightness(0.7);
 }
 
 .compact-info {
