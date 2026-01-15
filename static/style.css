@@ -649,6 +649,7 @@ body {
 .forms-section,
 .stars-section,
 .games-section,
+.locations-section,
 .notes-section {
     padding: 1rem 1.5rem;
     border-top: 1px solid var(--border-color);
@@ -658,6 +659,7 @@ body {
 .forms-section h4,
 .stars-section h4,
 .games-section h4,
+.locations-section h4,
 .notes-section h4 {
     font-size: 0.875rem;
     color: var(--text-muted);
@@ -799,6 +801,32 @@ body {
     font-size: 0.9rem;
     color: var(--text-color);
     line-height: 1.5;
+    margin: 0;
+}
+
+/* Locations Section */
+
+.locations-by-game {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.game-locations {
+    font-size: 0.85rem;
+    line-height: 1.4;
+}
+
+.game-locations strong {
+    color: var(--primary-color);
+}
+
+.loading-text,
+.no-locations,
+.error-text {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    font-style: italic;
     margin: 0;
 }
 

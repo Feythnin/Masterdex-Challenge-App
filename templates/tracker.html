@@ -233,6 +233,376 @@ function openDetailPanel(pokemonId) {
 
     panel.classList.add('open');
     overlay.classList.add('open');
+
+    // Fetch locations from PokeAPI
+    fetchPokemonLocations(pokemon.id, pokemon.valid_games || [], pokemon.generation);
+}
+
+// Game release order for sorting
+const GAME_ORDER = [
+    'Red', 'Blue', 'Yellow',
+    'Gold', 'Silver', 'Crystal',
+    'Ruby', 'Sapphire', 'Emerald', 'FireRed', 'LeafGreen',
+    'Diamond', 'Pearl', 'Platinum', 'HeartGold', 'SoulSilver',
+    'Black', 'White', 'Black 2', 'White 2',
+    'X', 'Y', 'Omega Ruby', 'Alpha Sapphire',
+    'Sun', 'Moon', 'Ultra Sun', 'Ultra Moon', "Let's Go Pikachu", "Let's Go Eevee",
+    'Sword', 'Shield', 'Brilliant Diamond', 'Shining Pearl', 'Legends Arceus',
+    'Scarlet', 'Violet'
+];
+
+// Map PokeAPI game names to our display names
+const POKEAPI_GAME_MAP = {
+    'red': 'Red',
+    'blue': 'Blue',
+    'yellow': 'Yellow',
+    'gold': 'Gold',
+    'silver': 'Silver',
+    'crystal': 'Crystal',
+    'ruby': 'Ruby',
+    'sapphire': 'Sapphire',
+    'emerald': 'Emerald',
+    'firered': 'FireRed',
+    'leafgreen': 'LeafGreen',
+    'diamond': 'Diamond',
+    'pearl': 'Pearl',
+    'platinum': 'Platinum',
+    'heartgold': 'HeartGold',
+    'soulsilver': 'SoulSilver',
+    'black': 'Black',
+    'white': 'White',
+    'black-2': 'Black 2',
+    'white-2': 'White 2',
+    'x': 'X',
+    'y': 'Y',
+    'omega-ruby': 'Omega Ruby',
+    'alpha-sapphire': 'Alpha Sapphire',
+    'sun': 'Sun',
+    'moon': 'Moon',
+    'ultra-sun': 'Ultra Sun',
+    'ultra-moon': 'Ultra Moon',
+    'lets-go-pikachu': "Let's Go Pikachu",
+    'lets-go-eevee': "Let's Go Eevee",
+    'sword': 'Sword',
+    'shield': 'Shield',
+    'brilliant-diamond': 'Brilliant Diamond',
+    'shining-pearl': 'Shining Pearl',
+    'legends-arceus': 'Legends Arceus',
+    'scarlet': 'Scarlet',
+    'violet': 'Violet'
+};
+
+// Special location data for starters and gift Pokemon
+const STARTER_POKEMON = {
+    // Gen 1 starters
+    1: { // Bulbasaur
+        default: 'Starter gift',
+        'Yellow': 'Gift - Cerulean City',
+        "Let's Go Pikachu": 'Gift - Cerulean City / Viridian Forest (wild, rare)',
+        "Let's Go Eevee": 'Gift - Cerulean City / Viridian Forest (wild, rare)'
+    },
+    4: { // Charmander
+        default: 'Starter gift',
+        'Yellow': 'Gift - Route 24',
+        "Let's Go Pikachu": 'Gift - Route 24 / Route 3, Route 4 (wild, rare)',
+        "Let's Go Eevee": 'Gift - Route 24 / Route 3, Route 4 (wild, rare)'
+    },
+    7: { // Squirtle
+        default: 'Starter gift',
+        'Yellow': 'Gift - Vermilion City',
+        "Let's Go Pikachu": 'Gift - Vermilion City / Route 24, Route 25 (wild, rare)',
+        "Let's Go Eevee": 'Gift - Vermilion City / Route 24, Route 25 (wild, rare)'
+    },
+    // Gen 2 starters
+    152: { default: 'Starter gift' }, // Chikorita
+    155: { default: 'Starter gift' }, // Cyndaquil
+    158: { default: 'Starter gift' }, // Totodile
+    // Gen 3 starters
+    252: { default: 'Starter gift' }, // Treecko
+    255: { default: 'Starter gift' }, // Torchic
+    258: { default: 'Starter gift' }, // Mudkip
+    // Gen 4 starters
+    387: { default: 'Starter gift' }, // Turtwig
+    390: { default: 'Starter gift' }, // Chimchar
+    393: { default: 'Starter gift' }, // Piplup
+    // Gen 5 starters
+    495: { default: 'Starter gift' }, // Snivy
+    498: { default: 'Starter gift' }, // Tepig
+    501: { default: 'Starter gift' }, // Oshawott
+    // Gen 6 starters
+    650: { default: 'Starter gift' }, // Chespin
+    653: { default: 'Starter gift' }, // Fennekin
+    656: { default: 'Starter gift' }, // Froakie
+    // Gen 7 starters
+    722: { default: 'Starter gift' }, // Rowlet
+    725: { default: 'Starter gift' }, // Litten
+    728: { default: 'Starter gift' }, // Popplio
+    // Gen 8 starters
+    810: { default: 'Starter gift' }, // Grookey
+    813: { default: 'Starter gift' }, // Scorbunny
+    816: { default: 'Starter gift' }, // Sobble
+    // Gen 9 starters
+    906: { default: 'Starter gift' }, // Sprigatito
+    909: { default: 'Starter gift' }, // Fuecoco
+    912: { default: 'Starter gift' }, // Quaxly
+};
+
+// Let's Go Pikachu/Eevee location data (PokeAPI doesn't have this)
+// null = evolve only, 'LGP'/'LGE' suffix = version exclusive
+const LGPE_LOCATIONS = {
+    1: 'Viridian Forest (rare)', // Bulbasaur
+    4: 'Route 3, Route 4 (rare)', // Charmander
+    7: 'Route 24, Route 25 (rare)', // Squirtle
+    10: 'Route 2, Viridian Forest', // Caterpie
+    13: 'Route 2, Viridian Forest', // Weedle
+    16: 'Route 1, Route 2', // Pidgey
+    17: 'Route 5, Route 6', // Pidgeotto
+    18: 'Route 7, Route 8 (rare)', // Pidgeot
+    19: 'Route 1, Route 2', // Rattata
+    20: 'Route 16, Route 17', // Raticate
+    21: 'Route 3, Route 22', // Spearow
+    22: 'Route 9, Route 10', // Fearow
+    23: { "Let's Go Eevee": 'Route 4, Route 11' }, // Ekans - LGE exclusive
+    24: { "Let's Go Eevee": 'Route 23' }, // Arbok - LGE exclusive
+    25: 'Viridian Forest', // Pikachu
+    27: { "Let's Go Pikachu": 'Route 3, Route 4' }, // Sandshrew - LGP exclusive
+    28: { "Let's Go Pikachu": 'Route 23' }, // Sandslash - LGP exclusive
+    29: 'Route 9, Route 10', // Nidoran♀
+    30: 'Route 9, Route 10', // Nidorina
+    32: 'Route 9, Route 10', // Nidoran♂
+    33: 'Route 9, Route 10', // Nidorino
+    35: 'Mt. Moon', // Clefairy
+    37: { "Let's Go Eevee": 'Route 5, Route 6' }, // Vulpix - LGE exclusive
+    38: { "Let's Go Eevee": 'Route 7, Route 8 (rare)' }, // Ninetales - LGE exclusive
+    39: 'Route 5, Route 6', // Jigglypuff
+    40: 'Route 7, Route 8 (rare)', // Wigglytuff
+    41: 'Mt. Moon, Rock Tunnel', // Zubat
+    42: 'Seafoam Islands, Victory Road', // Golbat
+    43: { "Let's Go Pikachu": 'Route 1, Route 2' }, // Oddish - LGP exclusive
+    44: { "Let's Go Pikachu": 'Route 12, Route 13' }, // Gloom - LGP exclusive
+    45: { "Let's Go Pikachu": 'Route 21 (rare)' }, // Vileplume - LGP exclusive
+    46: 'Mt. Moon', // Paras
+    47: 'Cerulean Cave', // Parasect
+    48: 'Route 24, Route 25', // Venonat
+    49: 'Route 14, Route 15', // Venomoth
+    50: "Diglett's Cave", // Diglett
+    51: "Diglett's Cave", // Dugtrio
+    52: { "Let's Go Eevee": 'Route 24, Route 25' }, // Meowth - LGE exclusive
+    53: { "Let's Go Eevee": 'Route 7, Route 8 (rare)' }, // Persian - LGE exclusive
+    54: 'Route 4, Route 6 (water)', // Psyduck
+    55: 'Route 4, Cerulean Cave (water)', // Golduck
+    56: { "Let's Go Pikachu": 'Route 3, Route 4' }, // Mankey - LGP exclusive
+    57: { "Let's Go Pikachu": 'Route 23' }, // Primeape - LGP exclusive
+    58: { "Let's Go Pikachu": 'Route 5, Route 6' }, // Growlithe - LGP exclusive
+    59: { "Let's Go Pikachu": 'Route 7, Route 8 (rare)' }, // Arcanine - LGP exclusive
+    60: 'Route 22 (water)', // Poliwag
+    61: 'Cerulean Cave (water)', // Poliwhirl
+    63: 'Route 5, Route 6', // Abra
+    64: 'Route 7, Route 8', // Kadabra
+    66: 'Rock Tunnel, Victory Road', // Machop
+    67: 'Cerulean Cave', // Machoke
+    69: { "Let's Go Eevee": 'Route 1, Route 2' }, // Bellsprout - LGE exclusive
+    70: { "Let's Go Eevee": 'Route 12, Route 13' }, // Weepinbell - LGE exclusive
+    71: { "Let's Go Eevee": 'Route 21 (rare)' }, // Victreebel - LGE exclusive
+    72: 'Route 4, Route 19 (water)', // Tentacool
+    73: 'Route 20, Route 21 (water)', // Tentacruel
+    74: 'Mt. Moon, Rock Tunnel', // Geodude
+    75: 'Cerulean Cave', // Graveler
+    77: 'Route 17', // Ponyta
+    78: 'Route 17 (rare)', // Rapidash
+    79: 'Seafoam Islands (water)', // Slowpoke
+    80: 'Seafoam Islands (water, rare)', // Slowbro
+    81: 'Power Plant', // Magnemite
+    82: 'Power Plant', // Magneton
+    83: 'Route 12, Route 13', // Farfetch'd
+    84: 'Route 16, Route 17', // Doduo
+    85: 'Route 16, Route 17 (rare)', // Dodrio
+    86: 'Seafoam Islands', // Seel
+    87: 'Seafoam Islands (rare)', // Dewgong
+    88: { "Let's Go Pikachu": 'Power Plant, Pokemon Mansion' }, // Grimer - LGP exclusive
+    89: { "Let's Go Pikachu": 'Pokemon Mansion (rare)' }, // Muk - LGP exclusive
+    90: 'Seafoam Islands', // Shellder
+    92: 'Pokemon Tower', // Gastly
+    93: 'Pokemon Tower', // Haunter
+    95: 'Rock Tunnel, Victory Road', // Onix
+    96: 'Route 11', // Drowzee
+    97: 'Route 11 (rare)', // Hypno
+    98: 'Route 10 (water)', // Krabby
+    99: 'Route 12 (water)', // Kingler
+    100: 'Power Plant', // Voltorb
+    101: 'Power Plant', // Electrode
+    102: 'Route 23', // Exeggcute
+    104: 'Rock Tunnel, Pokemon Tower', // Cubone
+    105: 'Victory Road', // Marowak
+    106: 'Fighting Dojo (gift) / Victory Road (rare)', // Hitmonlee
+    107: 'Fighting Dojo (gift) / Victory Road (rare)', // Hitmonchan
+    108: 'Cerulean Cave', // Lickitung
+    109: { "Let's Go Eevee": 'Power Plant, Pokemon Mansion' }, // Koffing - LGE exclusive
+    110: { "Let's Go Eevee": 'Pokemon Mansion (rare)' }, // Weezing - LGE exclusive
+    111: 'Rock Tunnel, Victory Road', // Rhyhorn
+    112: 'Cerulean Cave', // Rhydon
+    113: 'Route 5, Route 6 (rare)', // Chansey
+    114: 'Route 21', // Tangela
+    115: 'Rock Tunnel (rare)', // Kangaskhan
+    116: 'Route 4 (water)', // Horsea
+    117: 'Route 12 (water)', // Seadra
+    118: 'Route 6 (water)', // Goldeen
+    119: 'Route 6 (water)', // Seaking
+    120: 'Route 18 (water)', // Staryu
+    121: 'Route 18 (water)', // Starmie
+    122: 'Route 11 (trade)', // Mr. Mime
+    123: { "Let's Go Pikachu": 'Route 14, Route 15' }, // Scyther - LGP exclusive
+    124: 'Seafoam Islands', // Jynx
+    125: 'Power Plant', // Electabuzz
+    126: 'Pokemon Mansion', // Magmar
+    127: { "Let's Go Eevee": 'Route 14, Route 15' }, // Pinsir - LGE exclusive
+    128: 'Route 14, Route 15 (rare)', // Tauros
+    129: 'Route 4 (water / vendor)', // Magikarp
+    130: 'Route 20, Route 21 (water, rare)', // Gyarados
+    131: 'Saffron City (gift) / Route 19, Route 20 (water, rare)', // Lapras
+    132: 'Pokemon Mansion, Cerulean Cave', // Ditto
+    133: 'Route 17', // Eevee
+    137: 'Route 7 (rare)', // Porygon
+    138: 'Fossil revival - Cinnabar Island', // Omanyte
+    139: 'Cerulean Cave (rare)', // Omastar
+    140: 'Fossil revival - Cinnabar Island', // Kabuto
+    141: 'Cerulean Cave (rare)', // Kabutops
+    142: 'Fossil revival - Cinnabar Island', // Aerodactyl
+    143: 'Route 12, Route 16', // Snorlax
+    144: 'Seafoam Islands', // Articuno
+    145: 'Power Plant', // Zapdos
+    146: 'Victory Road', // Moltres
+    147: 'Route 10 (water)', // Dratini
+    148: 'Route 10 (water, rare)', // Dragonair
+    149: 'Route 7 (sky, rare)', // Dragonite
+    150: 'Cerulean Cave', // Mewtwo
+    151: 'Poke Ball Plus (gift)', // Mew
+};
+
+// Fetch and display Pokemon locations from PokeAPI
+async function fetchPokemonLocations(pokemonId, validGames, generation) {
+    const locationsDiv = document.getElementById('locationsContent');
+
+    // Check if this is a starter Pokemon
+    if (STARTER_POKEMON[pokemonId]) {
+        const starterData = STARTER_POKEMON[pokemonId];
+        // Sort games by release order
+        const sortedGames = [...validGames].sort((a, b) => {
+            return GAME_ORDER.indexOf(a) - GAME_ORDER.indexOf(b);
+        });
+        let html = '<div class="locations-by-game">';
+        sortedGames.forEach(game => {
+            const location = starterData[game] || starterData.default;
+            html += `<div class="game-locations"><strong>${game}:</strong> ${location}</div>`;
+        });
+        html += '</div>';
+        locationsDiv.innerHTML = html;
+        return;
+    }
+
+    try {
+        const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonId}/encounters`);
+        const encounters = await response.json();
+
+        // Group by game version, filtering to only valid games
+        const locationsByGame = {};
+        encounters.forEach(encounter => {
+            let locationName = encounter.location_area.name
+                .replace(/-/g, ' ')
+                .replace(/\b\w/g, c => c.toUpperCase());
+
+            // Clean up location names
+            // Remove " Area" suffix
+            locationName = locationName.replace(/ Area$/i, '');
+            // Remove region prefix for single-region generations (not Gen 2)
+            if (generation !== 2) {
+                locationName = locationName.replace(/^Kanto /i, '');
+                locationName = locationName.replace(/^Johto /i, '');
+                locationName = locationName.replace(/^Hoenn /i, '');
+                locationName = locationName.replace(/^Sinnoh /i, '');
+                locationName = locationName.replace(/^Unova /i, '');
+                locationName = locationName.replace(/^Kalos /i, '');
+                locationName = locationName.replace(/^Alola /i, '');
+                locationName = locationName.replace(/^Galar /i, '');
+                locationName = locationName.replace(/^Paldea /i, '');
+            }
+
+            encounter.version_details.forEach(vd => {
+                const apiGameName = vd.version.name;
+                const displayGameName = POKEAPI_GAME_MAP[apiGameName];
+
+                // Only include if it's in the valid games list
+                if (displayGameName && validGames.includes(displayGameName)) {
+                    if (!locationsByGame[displayGameName]) {
+                        locationsByGame[displayGameName] = new Set();
+                    }
+                    locationsByGame[displayGameName].add(locationName);
+                }
+            });
+        });
+
+        // Sort valid games by release order
+        const sortedGames = [...validGames].sort((a, b) => {
+            return GAME_ORDER.indexOf(a) - GAME_ORDER.indexOf(b);
+        });
+
+        // Games that PokeAPI doesn't have encounter data for
+        const gamesWithoutAPIData = ["Let's Go Pikachu", "Let's Go Eevee", "Brilliant Diamond", "Shining Pearl", "Legends Arceus", "Scarlet", "Violet"];
+
+        // Build HTML - show all valid games, with locations where available
+        let html = '<div class="locations-by-game">';
+        let hasContent = false;
+
+        for (const game of sortedGames) {
+            if (locationsByGame[game]) {
+                // We have location data from API
+                const locations = locationsByGame[game];
+                html += `<div class="game-locations">
+                    <strong>${game}:</strong> ${[...locations].join(', ')}
+                </div>`;
+                hasContent = true;
+            } else if (game === "Let's Go Pikachu" || game === "Let's Go Eevee") {
+                // Use LGPE_LOCATIONS data
+                const lgpeData = LGPE_LOCATIONS[pokemonId];
+                if (lgpeData) {
+                    let location = null;
+                    if (typeof lgpeData === 'string') {
+                        // Available in both versions
+                        location = lgpeData;
+                    } else if (lgpeData[game]) {
+                        // Version exclusive
+                        location = lgpeData[game];
+                    }
+                    if (location) {
+                        html += `<div class="game-locations">
+                            <strong>${game}:</strong> ${location}
+                        </div>`;
+                        hasContent = true;
+                    }
+                }
+                // If no lgpeData entry, it's evolve-only in LGPE - don't show
+            } else if (gamesWithoutAPIData.includes(game)) {
+                // Other games without API data - show "Available"
+                html += `<div class="game-locations">
+                    <strong>${game}:</strong> <em>Available</em>
+                </div>`;
+                hasContent = true;
+            }
+        }
+
+        // If no locations found for any valid game, it's evolve only
+        if (!hasContent) {
+            locationsDiv.innerHTML = '<p class="no-locations">Evolve only</p>';
+            return;
+        }
+
+        html += '</div>';
+
+        locationsDiv.innerHTML = html;
+    } catch (error) {
+        console.error('Error fetching locations:', error);
+        locationsDiv.innerHTML = '<p class="error-text">Failed to load locations</p>';
+    }
 }
 
 // Cancel and close detail panel (discard changes)
@@ -420,6 +790,13 @@ function createDetailContent(pokemon) {
         <div class="games-section">
             <h4>Obtainable Games</h4>
             <p class="games-list">${pokemon.valid_games ? pokemon.valid_games.join(', ') : 'Unknown'}</p>
+        </div>
+
+        <div class="locations-section">
+            <h4>Locations</h4>
+            <div class="locations-content" id="locationsContent">
+                <p class="loading-text">Loading locations...</p>
+            </div>
         </div>
 
         <div class="notes-section">
