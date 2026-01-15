@@ -181,6 +181,11 @@ python app.py
 - [x] **Grayscale filter for unobtained Pokemon** - Sprites appear greyed out until "Obtained" is checked
 - [x] **Obtainable Games section** - Shows valid games for each generation (e.g., Gen 1: RBY, FRLG, LGPE)
 - [x] **Renamed "Original Gen" to "Obtained"** - Clearer label for the main collection checkbox
+- [x] **Location data from PokeAPI** - Shows where to catch each Pokemon in valid games
+- [x] **LGPE location data** - Manually added Let's Go Pikachu/Eevee locations from Bulbapedia (PokeAPI lacks this data)
+- [x] **Version exclusives handled** - LGPE exclusives only show for their respective game (e.g., Ekans = LGE only)
+- [x] **Clean location names** - Removed "Area" suffix and region prefixes for single-region gens
+- [x] **Games sorted chronologically** - Locations display in release order (RBY → FRLG → LGPE)
 
 ## Completed Milestones
 - [x] Full National Pokédex (1025 Pokémon)
@@ -189,6 +194,7 @@ python app.py
 - [x] All collectible form variants
 - [x] Gender difference tracking
 - [x] Per-form shiny tracking
+- [x] Location data integration (PokeAPI + manual LGPE data)
 
 ## Future Enhancements (Not Yet Implemented)
 - [ ] Export/Import data as JSON/CSV
