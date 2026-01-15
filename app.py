@@ -1209,7 +1209,11 @@ def get_pokemon():
         ).all()
 
         pokemon_data = pokemon.copy()
-        pokemon_data['valid_games'] = GENERATION_GAMES.get(pokemon['generation'], [])
+        valid_games = GENERATION_GAMES.get(pokemon['generation'], [])[:]  # Copy the list
+        # Add Legends Arceus for Pokemon with Hisuian forms
+        if any('Hisuian' in form for form in pokemon.get('forms', [])):
+            valid_games.append('Legends Arceus')
+        pokemon_data['valid_games'] = valid_games
         pokemon_data['tracking'] = {
             'original_gen': tracking.original_gen if tracking else False,
             'male': tracking.male if tracking else False,
