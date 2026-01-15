@@ -1,0 +1,561 @@
+{% extends 'base.html' %}
+
+{% block title %}Tracker - Pokémon Home Challenge{% endblock %}
+
+{% block content %}
+<div class="tracker-header">
+    <h1>Pokémon Collection Tracker</h1>
+    <div class="progress-summary" id="progressSummary">
+        <div class="progress-stat">
+            <span class="stat-value" id="masterDexPercent">0%</span>
+            <span class="stat-label">Master Dex Completion</span>
+        </div>
+        <div class="progress-stat">
+            <span class="stat-value" id="formDexPercent">0%</span>
+            <span class="stat-label">Form Dex Completion</span>
+        </div>
+        <div class="progress-stat">
+            <span class="stat-value" id="starsCompleted">0</span>
+            <span class="stat-label">Stars</span>
+        </div>
+        <div class="progress-stat">
+            <span class="stat-value" id="ghostStars">0</span>
+            <span class="stat-label">Ghost Stars</span>
+        </div>
+    </div>
+</div>
+
+<div class="filters-bar">
+    <input type="text" id="searchInput" placeholder="Search Pokémon..." class="search-input">
+    <select id="generationFilter" class="filter-select">
+        <option value="">All Generations</option>
+        <option value="1">Gen 1</option>
+        <option value="2">Gen 2</option>
+        <option value="3">Gen 3</option>
+        <option value="4">Gen 4</option>
+        <option value="5">Gen 5</option>
+        <option value="6">Gen 6</option>
+        <option value="7">Gen 7</option>
+        <option value="8">Gen 8</option>
+        <option value="9">Gen 9</option>
+    </select>
+    <select id="statusFilter" class="filter-select">
+        <option value="">All Status</option>
+        <option value="complete">Completed</option>
+        <option value="incomplete">Incomplete</option>
+    </select>
+</div>
+
+<div class="pokemon-grid" id="pokemonGrid">
+    <!-- Pokemon cards will be loaded here -->
+</div>
+
+<div class="pokemon-detail-panel" id="detailPanel">
+    <div id="detailContent">
+        <!-- Selected Pokemon details will be loaded here -->
+    </div>
+    <div class="panel-buttons">
+        <button class="btn-cancel" id="cancelPanel">Cancel</button>
+        <button class="btn-ok" id="okPanel">OK</button>
+    </div>
+</div>
+<div class="panel-overlay" id="panelOverlay"></div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+let pokemonData = [];
+let pendingChanges = {
+    tracking: {},
+    stars: {},
+    forms: {},
+    formShinies: {}
+};
+let originalState = null;
+
+// Tier order for sorting stars
+const tierOrder = { 'Bronze': 1, 'Silver': 2, 'Gold': 3, 'Platinum': 4 };
+
+function sortStarsByTier(stars) {
+    return [...stars].sort((a, b) => tierOrder[a.tier] - tierOrder[b.tier]);
+}
+
+// Fetch Pokemon data
+async function loadPokemon() {
+    try {
+        const response = await fetch('/api/pokemon');
+        pokemonData = await response.json();
+        renderPokemon();
+        loadProgress();
+    } catch (error) {
+        console.error('Error loading Pokemon:', error);
+    }
+}
+
+// Load progress stats
+async function loadProgress() {
+    try {
+        const response = await fetch('/api/progress');
+        const progress = await response.json();
+        console.log('Progress data:', progress); // Debug logging
+        document.getElementById('masterDexPercent').textContent =
+            progress.master_dex_percentage.toFixed(1) + '%';
+        document.getElementById('formDexPercent').textContent =
+            progress.form_dex_percentage.toFixed(1) + '%';
+        document.getElementById('formDexPercent').title =
+            `${progress.forms_completed}/${progress.total_forms} forms`;
+        document.getElementById('starsCompleted').textContent = progress.stars_completed;
+        document.getElementById('ghostStars').textContent = progress.ghost_stars;
+    } catch (error) {
+        console.error('Error loading progress:', error);
+    }
+}
+
+let selectedPokemonId = null;
+
+// Filter Pokemon based on search and filters
+function getFilteredPokemon() {
+    const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+    const genFilter = document.getElementById('generationFilter').value;
+    const statusFilter = document.getElementById('statusFilter').value;
+
+    return pokemonData.filter(pokemon => {
+        // Search by name or dex number
+        const matchesSearch = !searchTerm ||
+            pokemon.name.toLowerCase().includes(searchTerm) ||
+            pokemon.id.toString().includes(searchTerm);
+
+        // Filter by generation
+        const matchesGen = !genFilter || pokemon.generation.toString() === genFilter;
+
+        // Filter by completion status
+        let matchesStatus = true;
+        if (statusFilter) {
+            const tracking = pokemon.tracking || {};
+            const hasProgress = tracking.original_gen || tracking.shiny;
+            matchesStatus = statusFilter === 'complete' ? hasProgress : !hasProgress;
+        }
+
+        return matchesSearch && matchesGen && matchesStatus;
+    });
+}
+
+// Render Pokemon cards (compact view)
+function renderPokemon() {
+    const grid = document.getElementById('pokemonGrid');
+    grid.innerHTML = '';
+
+    const filteredPokemon = getFilteredPokemon();
+
+    if (filteredPokemon.length === 0) {
+        grid.innerHTML = '<p class="no-results">No Pokémon found matching your search.</p>';
+        return;
+    }
+
+    filteredPokemon.forEach(pokemon => {
+        const card = createCompactCard(pokemon);
+        grid.appendChild(card);
+    });
+}
+
+// Create compact Pokemon card (grid view)
+function createCompactCard(pokemon) {
+    const card = document.createElement('div');
+    card.className = 'pokemon-card-compact';
+    card.dataset.id = pokemon.id;
+
+    const tracking = pokemon.tracking || {};
+
+    // Calculate completion indicators
+    const hasProgress = tracking.original_gen || tracking.shiny;
+    const formTracking = pokemon.form_tracking || {};
+    const formsComplete = pokemon.forms.length > 0 ?
+        pokemon.forms.every(f => formTracking[f]) : true;
+
+    // Calculate stars progress
+    const starTracking = pokemon.star_tracking || {};
+    const totalStars = pokemon.stars ? pokemon.stars.length : 0;
+    const completedStars = totalStars > 0 ? Object.values(starTracking).filter(v => v).length : 0;
+    const starsComplete = totalStars > 0 && completedStars === totalStars;
+
+    // Shiny status - base form + all alternate forms
+    const formShinyTracking = pokemon.form_shiny_tracking || {};
+    const totalShinies = 1 + pokemon.forms.length; // base + each form
+    const completedShinies = (tracking.shiny ? 1 : 0) + Object.values(formShinyTracking).filter(v => v).length;
+    const allShiniesComplete = completedShinies === totalShinies;
+
+    card.innerHTML = `
+        <img src="${pokemon.sprite}" alt="${pokemon.name}" class="compact-sprite">
+        <div class="compact-info">
+            <span class="compact-number">#${pokemon.id}</span>
+            <span class="compact-name">${pokemon.name}</span>
+        </div>
+        <div class="compact-indicators">
+            ${tracking.original_gen ? '<span class="indicator indicator-complete" title="Original Gen">✓</span>' : ''}
+            <span class="indicator indicator-shiny-box ${allShiniesComplete ? 'indicator-complete' : ''}" title="Shiny">✨${completedShinies}/${totalShinies}</span>
+            ${totalStars > 0 ? `<span class="indicator indicator-stars ${starsComplete ? 'indicator-complete' : ''}" title="Stars">★${completedStars}/${totalStars}</span>` : ''}
+            ${pokemon.forms.length > 0 ? `<span class="indicator indicator-forms ${formsComplete ? 'indicator-complete' : ''}" title="Forms">${Object.values(formTracking).filter(v => v).length}/${pokemon.forms.length}</span>` : ''}
+        </div>
+    `;
+
+    card.addEventListener('click', () => openDetailPanel(pokemon.id));
+
+    return card;
+}
+
+// Open detail panel for a Pokemon
+function openDetailPanel(pokemonId) {
+    selectedPokemonId = pokemonId;
+    const pokemon = pokemonData.find(p => p.id === pokemonId);
+    if (!pokemon) return;
+
+    // Reset pending changes
+    pendingChanges = { tracking: {}, stars: {}, forms: {}, formShinies: {} };
+
+    // Store original state for cancel
+    originalState = {
+        tracking: { ...(pokemon.tracking || {}) },
+        star_tracking: { ...(pokemon.star_tracking || {}) },
+        form_tracking: { ...(pokemon.form_tracking || {}) },
+        form_shiny_tracking: { ...(pokemon.form_shiny_tracking || {}) }
+    };
+
+    const panel = document.getElementById('detailPanel');
+    const overlay = document.getElementById('panelOverlay');
+    const content = document.getElementById('detailContent');
+
+    content.innerHTML = createDetailContent(pokemon);
+
+    // Add event listeners
+    attachDetailEventListeners(content, pokemon);
+
+    panel.classList.add('open');
+    overlay.classList.add('open');
+}
+
+// Cancel and close detail panel (discard changes)
+function cancelDetailPanel() {
+    // Restore original state to local data
+    if (selectedPokemonId && originalState) {
+        const pokemon = pokemonData.find(p => p.id === selectedPokemonId);
+        if (pokemon) {
+            pokemon.tracking = { ...originalState.tracking };
+            pokemon.star_tracking = { ...originalState.star_tracking };
+            pokemon.form_tracking = { ...originalState.form_tracking };
+            pokemon.form_shiny_tracking = { ...originalState.form_shiny_tracking };
+        }
+    }
+    closeDetailPanel();
+}
+
+// Close detail panel (internal)
+function closeDetailPanel() {
+    selectedPokemonId = null;
+    originalState = null;
+    pendingChanges = { tracking: {}, stars: {}, forms: {}, formShinies: {} };
+    const panel = document.getElementById('detailPanel');
+    const overlay = document.getElementById('panelOverlay');
+    panel.classList.remove('open');
+    overlay.classList.remove('open');
+}
+
+// Save changes and close detail panel
+async function saveAndCloseDetailPanel() {
+    if (!selectedPokemonId) return;
+
+    const pokemon = pokemonData.find(p => p.id === selectedPokemonId);
+    if (!pokemon) return;
+
+    try {
+        // Save tracking changes
+        for (const [field, value] of Object.entries(pendingChanges.tracking)) {
+            await fetch(`/api/pokemon/${selectedPokemonId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ [field]: value })
+            });
+            pokemon.tracking[field] = value;
+        }
+
+        // Save star changes
+        for (const [starNumber, data] of Object.entries(pendingChanges.stars)) {
+            await fetch(`/api/stars/${selectedPokemonId}/${starNumber}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ tier: data.tier, completed: data.completed })
+            });
+            pokemon.star_tracking[starNumber] = data.completed;
+        }
+
+        // Save form changes
+        for (const [formName, completed] of Object.entries(pendingChanges.forms)) {
+            await fetch(`/api/forms/${selectedPokemonId}/${encodeURIComponent(formName)}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ completed })
+            });
+            pokemon.form_tracking[formName] = completed;
+        }
+
+        // Save form shiny changes
+        for (const [formName, shiny] of Object.entries(pendingChanges.formShinies)) {
+            await fetch(`/api/forms/${selectedPokemonId}/${encodeURIComponent(formName)}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ shiny })
+            });
+            pokemon.form_shiny_tracking[formName] = shiny;
+        }
+
+        refreshCompactCard(selectedPokemonId);
+        loadProgress();
+    } catch (error) {
+        console.error('Error saving changes:', error);
+    }
+
+    closeDetailPanel();
+}
+
+// Create detail content for panel
+function createDetailContent(pokemon) {
+    const tracking = pokemon.tracking || {};
+    const starTracking = pokemon.star_tracking || {};
+    const formTracking = pokemon.form_tracking || {};
+
+    return `
+        <div class="detail-header">
+            <div class="detail-sprites">
+                <img src="${pokemon.sprite}" alt="${pokemon.name}" class="sprite sprite-normal">
+                <img src="${pokemon.shiny_sprite}" alt="${pokemon.name} Shiny" class="sprite sprite-shiny">
+            </div>
+            <div class="detail-info">
+                <h2 class="detail-name">#${pokemon.id} ${pokemon.name}</h2>
+                <div class="pokemon-types">
+                    ${pokemon.types.map(t => `<span class="type-badge type-${t}">${t}</span>`).join('')}
+                </div>
+                <span class="pokemon-gen">Generation ${pokemon.generation}</span>
+            </div>
+        </div>
+
+        <div class="tracking-section">
+            <h4>Collection Status</h4>
+            <div class="checkbox-grid">
+                <label class="checkbox-item">
+                    <input type="checkbox"
+                           data-field="original_gen"
+                           ${tracking.original_gen ? 'checked' : ''}>
+                    <span class="checkbox-label">Original Gen</span>
+                </label>
+                ${pokemon.has_gender_diff ? `
+                    <label class="checkbox-item">
+                        <input type="checkbox"
+                               data-field="male"
+                               ${tracking.male ? 'checked' : ''}>
+                        <span class="checkbox-label">Male ♂</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox"
+                               data-field="female"
+                               ${tracking.female ? 'checked' : ''}>
+                        <span class="checkbox-label">Female ♀</span>
+                    </label>
+                ` : ''}
+                ${!pokemon.has_gender ? `
+                    <span class="genderless-badge">Genderless</span>
+                ` : ''}
+                <label class="checkbox-item shiny-checkbox">
+                    <input type="checkbox"
+                           data-field="shiny"
+                           ${tracking.shiny ? 'checked' : ''}>
+                    <span class="checkbox-label">Shiny ✨</span>
+                </label>
+            </div>
+        </div>
+
+        ${pokemon.forms && pokemon.forms.length > 0 ? `
+            <div class="forms-section">
+                <h4>Forms</h4>
+                <div class="forms-list">
+                    ${pokemon.forms.map(form => `
+                        <div class="form-row">
+                            <label class="checkbox-item form-checkbox">
+                                <input type="checkbox"
+                                       data-form="${form}"
+                                       ${formTracking[form] ? 'checked' : ''}>
+                                <span class="checkbox-label">${form}</span>
+                            </label>
+                            <label class="checkbox-item form-shiny-checkbox">
+                                <input type="checkbox"
+                                       data-form-shiny="${form}"
+                                       ${(pokemon.form_shiny_tracking || {})[form] ? 'checked' : ''}>
+                                <span class="checkbox-label">✨ Shiny</span>
+                            </label>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        ` : ''}
+
+        ${pokemon.stars && pokemon.stars.length > 0 ? `
+            <div class="stars-section">
+                <h4>Star Challenges</h4>
+                <div class="stars-list">
+                    ${sortStarsByTier(pokemon.stars).map(star => `
+                        <label class="star-item tier-${star.tier.toLowerCase()}">
+                            <input type="checkbox"
+                                   data-star="${star.star_number}"
+                                   data-tier="${star.tier}"
+                                   ${starTracking[star.star_number] ? 'checked' : ''}>
+                            <span class="star-badge">★${star.star_number}</span>
+                            <span class="star-tier">${star.tier}</span>
+                            <span class="star-requirement" title="${star.description}">${star.requirement}</span>
+                        </label>
+                    `).join('')}
+                </div>
+            </div>
+        ` : ''}
+
+        <div class="notes-section">
+            <h4>Notes</h4>
+            <textarea class="notes-textarea"
+                      placeholder="Add notes about this Pokémon..."
+                      data-field="notes">${tracking.notes || ''}</textarea>
+        </div>
+    `;
+}
+
+// Attach event listeners to detail panel
+function attachDetailEventListeners(container, pokemon) {
+    // Checkboxes for tracking fields - store locally
+    container.querySelectorAll('input[type="checkbox"][data-field]').forEach(checkbox => {
+        checkbox.addEventListener('change', (e) => {
+            pendingChanges.tracking[e.target.dataset.field] = e.target.checked;
+        });
+    });
+
+    // Star checkboxes - store locally
+    container.querySelectorAll('input[type="checkbox"][data-star]').forEach(checkbox => {
+        checkbox.addEventListener('change', (e) => {
+            pendingChanges.stars[e.target.dataset.star] = {
+                tier: e.target.dataset.tier,
+                completed: e.target.checked
+            };
+        });
+    });
+
+    // Form checkboxes - store locally
+    container.querySelectorAll('input[type="checkbox"][data-form]').forEach(checkbox => {
+        checkbox.addEventListener('change', (e) => {
+            pendingChanges.forms[e.target.dataset.form] = e.target.checked;
+        });
+    });
+
+    // Form shiny checkboxes - store locally
+    container.querySelectorAll('input[type="checkbox"][data-form-shiny]').forEach(checkbox => {
+        checkbox.addEventListener('change', (e) => {
+            pendingChanges.formShinies[e.target.dataset.formShiny] = e.target.checked;
+        });
+    });
+
+    // Notes textarea - store locally
+    const notesTextarea = container.querySelector('.notes-textarea');
+    if (notesTextarea) {
+        notesTextarea.addEventListener('input', (e) => {
+            pendingChanges.tracking.notes = e.target.value;
+        });
+    }
+}
+
+// Refresh the compact card after updates
+function refreshCompactCard(pokemonId) {
+    const pokemon = pokemonData.find(p => p.id === pokemonId);
+    if (!pokemon) return;
+
+    const oldCard = document.querySelector(`.pokemon-card-compact[data-id="${pokemonId}"]`);
+    if (oldCard) {
+        const newCard = createCompactCard(pokemon);
+        oldCard.replaceWith(newCard);
+    }
+}
+
+// Update Pokemon tracking
+async function updatePokemon(pokemonId, field, value) {
+    try {
+        await fetch(`/api/pokemon/${pokemonId}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ [field]: value })
+        });
+        // Update local data
+        const pokemon = pokemonData.find(p => p.id === pokemonId);
+        if (pokemon) {
+            pokemon.tracking[field] = value;
+            refreshCompactCard(pokemonId);
+        }
+        loadProgress();
+    } catch (error) {
+        console.error('Error updating Pokemon:', error);
+    }
+}
+
+// Update star tracking
+async function updateStar(pokemonId, starNumber, tier, completed) {
+    try {
+        await fetch(`/api/stars/${pokemonId}/${starNumber}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ tier, completed })
+        });
+        // Update local data
+        const pokemon = pokemonData.find(p => p.id === pokemonId);
+        if (pokemon) {
+            pokemon.star_tracking[starNumber] = completed;
+            refreshCompactCard(pokemonId);
+        }
+        loadProgress();
+    } catch (error) {
+        console.error('Error updating star:', error);
+    }
+}
+
+// Update form tracking
+async function updateForm(pokemonId, formName, completed) {
+    try {
+        await fetch(`/api/forms/${pokemonId}/${encodeURIComponent(formName)}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ completed })
+        });
+        // Update local data
+        const pokemon = pokemonData.find(p => p.id === pokemonId);
+        if (pokemon) {
+            pokemon.form_tracking[formName] = completed;
+            refreshCompactCard(pokemonId);
+        }
+        loadProgress();
+    } catch (error) {
+        console.error('Error updating form:', error);
+    }
+}
+
+// Initialize
+document.addEventListener('DOMContentLoaded', () => {
+    loadPokemon();
+
+    // Panel button events
+    document.getElementById('cancelPanel').addEventListener('click', cancelDetailPanel);
+    document.getElementById('okPanel').addEventListener('click', saveAndCloseDetailPanel);
+    document.getElementById('panelOverlay').addEventListener('click', cancelDetailPanel);
+
+    // Cancel on Escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') cancelDetailPanel();
+    });
+
+    // Search and filter events
+    document.getElementById('searchInput').addEventListener('input', renderPokemon);
+    document.getElementById('generationFilter').addEventListener('change', renderPokemon);
+    document.getElementById('statusFilter').addEventListener('change', renderPokemon);
+});
+</script>
+{% endblock %}

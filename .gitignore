@@ -1,0 +1,31 @@
+# Project specific
+Instructions.md
+
+# Database
+instance/
+*.db
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+.venv/
+env/
+.env
+
+# Claude Code
+.claude/
+
+# Windows
+nul
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo

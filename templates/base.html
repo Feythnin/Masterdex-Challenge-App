@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Pokémon Home Challenge Tracker{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">
+            <a href="/">Pokémon Tracker</a>
+        </div>
+        <div class="nav-links">
+            {% if current_user.is_authenticated %}
+                <span class="nav-user">Welcome, {{ current_user.username }}</span>
+                <a href="/tracker" class="nav-link">Tracker</a>
+                <a href="/logout" class="nav-link">Logout</a>
+            {% else %}
+                <a href="/login" class="nav-link">Login</a>
+                <a href="/register" class="nav-link">Register</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <main class="container">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2024 Pokémon Home Challenge Tracker</p>
+    </footer>
+
+    {% block scripts %}{% endblock %}
+</body>
+</html>

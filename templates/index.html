@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="hero">
+    <h1>Pokémon Home Challenge Tracker</h1>
+    <p class="hero-subtitle">Track your Pokémon collection progress across all generations</p>
+
+    <div class="hero-features">
+        <div class="feature">
+            <span class="feature-icon">📋</span>
+            <h3>Track Progress</h3>
+            <p>Monitor your collection with checkboxes for original gen, gender variants, and shinies</p>
+        </div>
+        <div class="feature">
+            <span class="feature-icon">⭐</span>
+            <h3>Star Challenges</h3>
+            <p>Complete special star challenges with Bronze, Silver, Gold, and Platinum tiers</p>
+        </div>
+        <div class="feature">
+            <span class="feature-icon">📝</span>
+            <h3>Personal Notes</h3>
+            <p>Add notes about capture locations, dates, and trading history</p>
+        </div>
+    </div>
+
+    <div class="hero-cta">
+        <a href="/register" class="btn btn-primary">Get Started</a>
+        <a href="/login" class="btn btn-secondary">Login</a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,289 @@
+A Pokemon Home Challenge Resource
+
+Vol. IX                Monday, March 06, 2023              Last Update: 24/06/03
+
+Extra! Extra!
+★ STARS ★
+Lists the Pokemon Challenges by Game and Generation
+- Compiled and formatted by Unravled100
+
+=== Gen I ===
+Red, Blue, Yellow, Green
+
+BRONZE STARS:
+Bulbasaur (Yellow Gift) ★1
+Charmander (Yellow Gift) ★1
+Squirtle (Yellow Gift) ★1
+Pikachu (Yellow Starter) ★1
+Pikachu → Alolan Raichu ★2
+Exeggcute → Alolan Exeggutor ★3
+Cubone → Alolan Marowak ★4
+Koffing → Galarian Weezing ★5
+Zubat/Golbat → Crobat ★6
+Oddish/Gloom → Bellossom ★7
+Poliwag/Poliwhirl → Politoed ★8
+Eevee (x5) → Umbreon ★9, Espeon ★10, Leafeon ★23, Glaceon ★24, Sylveon ★26
+Slowpoke → Slowking ★11
+Onix → Steelix ★12
+Scyther (x2) → Scizor ★13, Kleavor ★27
+Horsea/Seadra → Kingdra ★14
+Porygon (x2) → Porygon2 ★15, Porygon Z ★25
+Chansey → Blissey ★16
+Magnemite/Magneton → Magnezone ★17
+Lickitung → Lickilicky ★18
+Rhyhorn/Rhydon → Rhyperior ★19
+Tangela → Tangrowth ★20
+Electabuzz → Electivire ★21
+Magmar → Magmortar ★22
+Mankey/Primeape → Annihilape ★28
+
+GOLD STARS:
+Chansey (Safari Zone, Not glitched) ★1
+
+PLATINUM STARS:
+Shiny Articuno ★1
+Shiny Zapdos ★1
+Shiny Moltres ★1
+Shiny Mewtwo ★1
+
+=== Gen II ===
+Gold, Silver, Crystal
+
+BRONZE STARS:
+Red Gyarados (Lake of Rage) ★29
+Dratini (Dragon's Den Gift, Extreme Speed) ★30
+Cyndaquil/Quilava → Hisuian Typhlosion ★31
+Aipom → Ambipom ★32
+Misdreavus → Mismagius ★33
+Murkrow → Honchkrow ★34
+Sneasel → Weavile ★35
+Togepi/Togetic → Togekiss ★36
+Yanma → Yanmega ★37
+Gligar → Gliscor ★38
+Swinub/Piloswine → Mamoswine ★39
+Stantler → Wyrdeer ★40
+Teddiursa/Ursaring → Ursaluna ★41
+Girafarig → Farigiraf ★42
+Dunsparce → Dudunsparce ★43
+
+GOLD STARS:
+Unown A-Z (all 26 from GSC) ★2
+Celebi (GS Ball side-quest Crystal) ★3
+
+PLATINUM STARS:
+Shiny Pichu, Cleffa, Igglybuff, Tyrogue, Smoochum, Elekid, Magby (Odd Egg Crystal) ★2
+Dunsparce → Dudunsparce Three Segment ★3
+
+=== Gen III ===
+Ruby, Sapphire, Emerald, FireRed, LeafGreen, Colosseum, XD
+
+BRONZE STARS:
+Shedinja with Baton Pass ★44
+Snorunt (Shoal Cave dead battery) ★45
+Roselia → Roserade ★46
+Male Ralts/Kirlia → Gallade ★47
+Nosepass → Probopass ★48
+Duskull/Dusclops → Dusknoir ★49
+Female Snorunt → Froslass ★50
+
+SILVER STARS:
+Sudowoodo (Emerald Battle Frontier) ★1
+Unown ! and ? (Tanoby Chambers FrLg) ★2
+Raikou (Chose Squirtle FrLg) ★3
+Entei (Chose Bulbasaur FrLg) ★3
+Suicune (Chose Charmander FrLg) ★3
+Togetic (Outskirt Stand Colosseum) ★37
+
+GOLD STARS:
+Feebas (RSE) ★4
+Ho-Oh (Purify all + 100 Battle Colosseum) ★17
+Celebi (Japanese Colosseum Bonus Disc) ★18
+Jirachi (Eng Colosseum Bonus Disc) ★16
+Jirachi (UK/AUS Pokemon Channel) ★19
+Dragonite (XD) ★20
+Lugia (XD) ★21
+
+PLATINUM STARS:
+Chikorita, Cyndaquil, Totodile (Emerald Regional Dex complete) ★4
+Wynaut (Mirage Island RSE) ★5
+Latias, Latios (Eon Ticket Southern Island RSE) ★6
+Pichu (Pokemon Box 1499 deposits) ★16
+Chikorita, Cyndaquil, Totodile (XD Mt. Battle clear) ★17
+Togepi, Mareep, Scizor (Japanese e-Card Colosseum) ★19
+
+=== Gen IV ===
+Diamond, Pearl, Platinum, HeartGold, SoulSilver, Ranch, Battle Revolution
+
+BRONZE STARS:
+Mime Jr. (x2) → Galarian Mr. Mime ★51, Mr. Rime ★54
+Feebas (Mt. Coronet DPPt) ★52
+Regigigas (Event Platinum) ★53
+Scyther (Bug Catching Contest HGSS) ★55
+Pinsir (Bug Catching Contest HGSS) ★56
+Clefairy (Pokewalker Night Sky's Edge) ★57
+Jigglypuff (Pokewalker Night Sky's Edge) ★58
+
+SILVER STARS:
+Gengar (Old Chateau Dual Slot DPPt) ★4
+Cranidos, Shieldon (Platinum) ★5
+Tentacool (Softlock prevention Cianwood HGSS) ★6
+Bagon (Safari Zone HGSS) ★7
+Metang (Safari Zone HGSS) ★8
+Spiritomb (Pokewalker Quiet Cave) ★9
+Electivire (Battle Revolution) ★38
+Magmortar (Battle Revolution) ★39
+
+GOLD STARS:
+Spiritomb (Talk to 30 players Underground DPPt) ★5
+Pikachu (Battle Revolution) ★22
+Phione (250 Pokemon in Ranch) ★23
+
+PLATINUM STARS:
+Munchlax (Honey Tree) ★7
+Rayquaza (HGSS) ★8
+Mew (999 Pokemon in Ranch) ★18
+Manaphy (Pokemon Ranger egg) ★20
+
+=== Gen V ===
+Black, White, Black 2, White 2, Dream Radar
+
+BRONZE STARS:
+Oshawott/Dewott → Hisuian Samurott ★62
+Petilil → Hisuian Lilligant ★69
+Rufflet → Hisuian Braviary ★79
+Pawniard/Bisharp → Kingambit ★80
+Hariyama (Pinwheel Forest Hidden Grotto W2) ★59
+Medicham (Pinwheel Forest Hidden Grotto B2) ★60
+N's Pokemon: Purrloin ★63, Pidove ★64, Boldore ★65, Woobat ★66, Timburr ★67, Tympole ★68, Sandile ★70, Darumaka ★71, Darmanitan ★72, Scraggy ★73, Sigilyph ★74, Zorua ★75, Joltik ★76, Ferroseed ★77, Klink ★78
+Regirock (B2W2 Underground Ruins) ★61
+Regice (B2 Underground Ruins) ★61
+Registeel (W2 Underground Ruins) ★61
+
+SILVER STARS:
+Lugia, Ho-Oh, Dialga, Palkia, Giratina (Dream Radar) ★40-44
+
+GOLD STARS:
+Teddiursa (Yancy trade B2W2) ★7
+Phanpy (Curtis trade B2W2) ★8
+Shiny Dratini (White 2 Benga) ★6
+Shiny Gible (Black 2 Benga) ★9
+Shiny Haxorus (Nature Preserve B2W2) ★10
+Tornadus, Thundurus, Landorus (Dream Radar) ★24-26
+
+PLATINUM STARS:
+Magikarp Level 1 (Nature Preserve B2W2) ★9
+Magikarp Level 100 (Nature Preserve B2W2) ★10
+Reshiram, Zekrom (Dragonspiral Tower full PC BW) ★11
+
+=== Gen VI ===
+X, Y, Omega Ruby, Alpha Sapphire
+
+BRONZE STARS:
+Goomy (x2) → Hisuian Sliggoo ★82, Hisuian Goodra ★83
+Bergmite → Hisuian Avalugg ★84
+Magikarp (Hotel Hiker trade XY) ★81
+Zygarde 10% ★85
+Latias, Latios (Southern Island ORAS) ★86
+
+SILVER STARS:
+Articuno (Chespin starter XY) ★10
+Zapdos (Fennekin starter XY) ★10
+Moltres (Froakie starter XY) ★10
+
+GOLD STARS:
+Deoxys (Delta Episode ORAS) ★11
+Steelix (Japanese ORAS Demo) ★27
+Glalie (All other ORAS Demos) ★28
+
+PLATINUM STARS:
+Vivillon (18 patterns from XY) ★12
+
+=== Gen VII ===
+Sun, Moon, Ultra Sun, Ultra Moon, Let's Go Pikachu, Let's Go Eevee
+
+BRONZE STARS:
+Rowlet/Dartrix → Hisuian Decidueye ★87
+Magearna (QR Code SM/USUM) ★88
+Persian (Let's Go Pikachu gift) ★89
+Arcanine (Let's Go Eevee gift) ★89
+
+SILVER STARS:
+Mismagius (Poke Pelago SM) ★11
+Honchkrow (Poke Pelago USUM) ★14
+Raichu (Surfing Pikachu evolved in Ultra Space USUM) ★13
+Totem Pokemon gifts (USUM): Alolan Raticate ★12, Gumshoos ★15, Vikavolt ★16, Lurantis ★17, Salazzle ★18, Mimikyu ★19, Kommo-o ★20
+Guzzlord (rarest Ultra Beast USUM) ★21
+Articuno, Zapdos, Moltres (wild routes LGPE) ★22
+Mewtwo (LGPE) ★23
+
+GOLD STARS:
+Greninja Ash (SM Demo) ★31
+
+PLATINUM STARS:
+Salamence (Route 3 SOS SM/USUM) ★13
+Volcarona (Lush Jungle SOS USUM) ★14
+
+=== Gen VIII ===
+Sword, Shield, Brilliant Diamond, Shining Pearl, Legends Arceus
+
+BRONZE STARS:
+Pikachu (LGPE save data SwSh) ★90
+Eevee (LGPE save data SwSh) ★91
+Mew (LGPE save data BDSP) ★92
+Jirachi (SwSh save data BDSP) ★93
+Spiritomb (30 players Crown Tundra) ★94
+Rotom forms (BDSP Secret Room) ★95
+Alolan Vulpix (PLA quest) ★96
+Shiny Ponyta (PLA quest) ★97
+Alpha Pokemon (PLA): Glalie ★98, Kricketune ★99, Vespiquen ★100, Hisuian Zoroark ★101, Hisuian Goodra ★101, Overqwil ★101
+
+SILVER STARS:
+Alolan Diglett (150 Diglett IoA SwSh) ★24
+Regigigas (Giants Bed SwSh CT) ★25
+Keldeo (Curry Dyna Tree Hill SwSh CT) ★26
+Poipole (Dynamax Adventures SwSh) ★27
+Skwovet (Slumbering Weald curry SwSh) ★28
+Spiritomb (107 Wisps PLA) ★29
+Phione, Manaphy (Sea's Legend PLA) ★30-31
+Darkrai (BDSP save PLA) ★32
+Shaymin (SwSh save PLA) ★33
+
+GOLD STARS:
+Shiny Legendary in Sport/Safari Ball (Dynamax Adventures) ★12
+Unown A-Z, !, ? (PLA) ★13
+Dialga, Palkia (Origin Balls PLA) ★14
+Arceus (PLA Pokedex complete) ★15
+
+PLATINUM STARS:
+Arceus (BDSP with PLA dex) ★15
+
+=== Gen IX ===
+Scarlet, Violet
+
+BRONZE STARS:
+Galarian Meowth (Salvatore gift SV) ★102
+Titan Pokemon: Klawf ★103, Bombirdier ★104, Orthworm ★105, Tatsugiri ★106, Great Tusk ★107, Iron Treads ★108
+
+SILVER STARS:
+Shiny Blitzle (Cyrano trade SV) ★34
+Meloetta (Indigo Disc SV) ★35
+Roaring Moon (Catch in Violet) ★35
+Iron Valiant (Catch in Scarlet) ★36
+
+=== EXTRAS ===
+GO, HOME, Pokeball Plus, etc.
+
+BRONZE STARS:
+Mew (Pokeball Plus) ★109
+
+SILVER STARS:
+Farfetch'd, Kangaskhan, Mr. Mime, Tauros (GO regionals) ★45-48
+Mew, Celebi, Jirachi, Shaymin, Victini, Meloetta, Diancie, Meltan (GO Special Research) ★49-56
+Melmetal Gmax (GO to HOME transfer) ★57
+
+GOLD STARS:
+Vivillon 18 patterns (GO) ★29
+Furfrou 9 trims (GO) ★30
+
+PLATINUM STARS:
+Spinda matching forms (x2) ★21
