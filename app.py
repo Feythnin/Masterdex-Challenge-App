@@ -76,7 +76,7 @@ GENERATION_GAMES = {
     5: ['Black', 'White', 'Black 2', 'White 2'],
     6: ['X', 'Y'],
     7: ['Sun', 'Moon', 'Ultra Sun', 'Ultra Moon'],
-    8: ['Sword', 'Shield', 'Legends Arceus'],
+    8: ['Sword', 'Shield'],
     9: ['Scarlet', 'Violet'],
 }
 
