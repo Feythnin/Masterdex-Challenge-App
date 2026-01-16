@@ -442,6 +442,70 @@ body {
     transform: scale(1.02);
 }
 
+/* Selection Mode */
+.btn-select-mode {
+    padding: 0.5rem 1rem;
+    border: 2px solid var(--secondary-color);
+    border-radius: 6px;
+    background: transparent;
+    color: var(--secondary-color);
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-select-mode:hover {
+    background: var(--secondary-color);
+    color: white;
+}
+
+.btn-select-mode.active {
+    background: var(--secondary-color);
+    color: white;
+}
+
+.selection-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-select-action {
+    padding: 0.4rem 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    background: var(--card-bg);
+    color: var(--text-color);
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-select-action:hover {
+    background: var(--hover-color);
+}
+
+.selection-count {
+    font-size: 0.85rem;
+    color: var(--primary-color);
+    font-weight: 500;
+    padding: 0 0.5rem;
+}
+
+.select-checkbox {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: var(--primary-color);
+    flex-shrink: 0;
+}
+
+.pokemon-card-compact.selected {
+    border: 2px solid var(--primary-color);
+    background: rgba(78, 84, 200, 0.1);
+}
+
 /* Filters */
 .filters-bar {
     display: flex;
@@ -1247,6 +1311,17 @@ body {
         min-width: 45%;
         font-size: 0.8rem;
         padding: 0.5rem;
+    }
+
+    .btn-select-mode {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+
+    .selection-controls {
+        width: 100%;
+        justify-content: center;
+        margin-bottom: 0.5rem;
     }
 }
 

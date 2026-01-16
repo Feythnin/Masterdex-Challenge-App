@@ -77,11 +77,17 @@
 </div>
 
 <div class="bulk-actions-bar">
-    <span class="bulk-label">Bulk Actions (<span id="filteredCount">0</span> shown):</span>
-    <button class="btn-bulk btn-bulk-obtain" id="bulkObtainBtn" title="Mark all filtered as Obtained">Mark Obtained</button>
-    <button class="btn-bulk btn-bulk-clear" id="bulkClearObtainBtn" title="Clear Obtained for all filtered">Clear Obtained</button>
-    <button class="btn-bulk btn-bulk-shiny" id="bulkShinyBtn" title="Mark all filtered as Shiny">Mark Shiny</button>
-    <button class="btn-bulk btn-bulk-clear" id="bulkClearShinyBtn" title="Clear Shiny for all filtered">Clear Shiny</button>
+    <button class="btn-select-mode" id="selectModeBtn">Select Mode</button>
+    <div class="selection-controls" id="selectionControls" style="display: none;">
+        <button class="btn-select-action" id="selectAllBtn">Select All</button>
+        <button class="btn-select-action" id="clearSelectionBtn">Clear</button>
+        <span class="selection-count"><span id="selectedCount">0</span> selected</span>
+    </div>
+    <span class="bulk-label">(<span id="filteredCount">0</span> shown):</span>
+    <button class="btn-bulk btn-bulk-obtain" id="bulkObtainBtn" title="Mark selected/filtered as Obtained">Mark Obtained</button>
+    <button class="btn-bulk btn-bulk-clear" id="bulkClearObtainBtn" title="Clear Obtained">Clear Obtained</button>
+    <button class="btn-bulk btn-bulk-shiny" id="bulkShinyBtn" title="Mark selected/filtered as Shiny">Mark Shiny</button>
+    <button class="btn-bulk btn-bulk-clear" id="bulkClearShinyBtn" title="Clear Shiny">Clear Shiny</button>
 </div>
 
 <div class="pokemon-grid" id="pokemonGrid">
@@ -120,6 +126,10 @@ let originalState = null;
 const PAGE_SIZE = 50;
 let displayedCount = 0;
 let currentFilteredPokemon = [];
+
+// Selection mode
+let selectMode = false;
+let selectedPokemon = new Set();
 
 // Tier order for sorting stars
 const tierOrder = { 'Bronze': 1, 'Silver': 2, 'Gold': 3, 'Platinum': 4 };
@@ -339,9 +349,11 @@ function createCompactCardHTML(pokemon) {
     const allShiniesComplete = completedShinies === totalShinies;
 
     const isObtained = tracking.original_gen;
+    const isSelected = selectedPokemon.has(pokemon.id);
 
     return `
-        <div class="pokemon-card-compact" data-id="${pokemon.id}">
+        <div class="pokemon-card-compact ${isSelected ? 'selected' : ''}" data-id="${pokemon.id}">
+            ${selectMode ? `<input type="checkbox" class="select-checkbox" ${isSelected ? 'checked' : ''} onclick="event.stopPropagation(); toggleSelection(${pokemon.id}, this.checked)">` : ''}
             <img src="${pokemon.sprite}" alt="${pokemon.name}" class="compact-sprite ${isObtained ? '' : 'not-obtained'}" loading="lazy">
             <div class="compact-info">
                 <span class="compact-number">#${pokemon.id}</span>
@@ -1873,6 +1885,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Selection mode buttons
+    document.getElementById('selectModeBtn').addEventListener('click', toggleSelectMode);
+    document.getElementById('selectAllBtn').addEventListener('click', selectAllFiltered);
+    document.getElementById('clearSelectionBtn').addEventListener('click', clearSelection);
+
     // Bulk action buttons
     document.getElementById('bulkObtainBtn').addEventListener('click', () => bulkUpdate('original_gen', true));
     document.getElementById('bulkClearObtainBtn').addEventListener('click', () => bulkUpdate('original_gen', false));
@@ -1916,18 +1933,89 @@ async function importData(event) {
     event.target.value = '';
 }
 
+// Selection mode functions
+function toggleSelectMode() {
+    selectMode = !selectMode;
+    const btn = document.getElementById('selectModeBtn');
+    const controls = document.getElementById('selectionControls');
+
+    if (selectMode) {
+        btn.textContent = 'Exit Select';
+        btn.classList.add('active');
+        controls.style.display = 'flex';
+    } else {
+        btn.textContent = 'Select Mode';
+        btn.classList.remove('active');
+        controls.style.display = 'none';
+        selectedPokemon.clear();
+        updateSelectedCount();
+    }
+
+    // Re-render to show/hide checkboxes
+    renderPokemon(true);
+}
+
+function toggleSelection(pokemonId, checked) {
+    if (checked) {
+        selectedPokemon.add(pokemonId);
+    } else {
+        selectedPokemon.delete(pokemonId);
+    }
+    updateSelectedCount();
+
+    // Update card visual
+    const card = document.querySelector(`.pokemon-card-compact[data-id="${pokemonId}"]`);
+    if (card) {
+        card.classList.toggle('selected', checked);
+    }
+}
+
+function selectAllFiltered() {
+    currentFilteredPokemon.forEach(p => selectedPokemon.add(p.id));
+    updateSelectedCount();
+    // Update all visible checkboxes
+    document.querySelectorAll('.select-checkbox').forEach(cb => {
+        cb.checked = true;
+        cb.closest('.pokemon-card-compact').classList.add('selected');
+    });
+}
+
+function clearSelection() {
+    selectedPokemon.clear();
+    updateSelectedCount();
+    // Update all visible checkboxes
+    document.querySelectorAll('.select-checkbox').forEach(cb => {
+        cb.checked = false;
+        cb.closest('.pokemon-card-compact').classList.remove('selected');
+    });
+}
+
+function updateSelectedCount() {
+    document.getElementById('selectedCount').textContent = selectedPokemon.size;
+}
+
 // Bulk action functions
 async function bulkUpdate(field, value) {
-    const pokemonIds = currentFilteredPokemon.map(p => p.id);
+    // Use selected Pokemon if in select mode and have selections, otherwise use filtered
+    let pokemonIds;
+    let targetDesc;
+
+    if (selectMode && selectedPokemon.size > 0) {
+        pokemonIds = Array.from(selectedPokemon);
+        targetDesc = `${pokemonIds.length} selected`;
+    } else {
+        pokemonIds = currentFilteredPokemon.map(p => p.id);
+        targetDesc = `${pokemonIds.length} filtered`;
+    }
 
     if (pokemonIds.length === 0) {
-        alert('No Pokemon to update. Adjust your filters first.');
+        alert('No Pokemon to update. Select some Pokemon or adjust your filters.');
         return;
     }
 
     const action = value ? 'mark' : 'clear';
     const fieldName = field === 'original_gen' ? 'Obtained' : 'Shiny';
-    const confirmMsg = `Are you sure you want to ${action} ${fieldName} for ${pokemonIds.length} Pokemon?`;
+    const confirmMsg = `Are you sure you want to ${action} ${fieldName} for ${targetDesc} Pokemon?`;
 
     if (!confirm(confirmMsg)) return;
 
