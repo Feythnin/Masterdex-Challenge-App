@@ -1219,10 +1219,14 @@ def get_pokemon():
         form_tracking = forms_by_id.get(pokemon_id, [])
 
         pokemon_data = pokemon.copy()
-        valid_games = GENERATION_GAMES.get(pokemon['generation'], [])[:]  # Copy the list
-        # Add Legends Arceus for Pokemon with Hisuian forms
-        if any('Hisuian' in form for form in pokemon.get('forms', [])):
-            valid_games.append('Legends Arceus')
+        # Pokemon 899-905 are Legends Arceus exclusive (not in Sword/Shield)
+        if 899 <= pokemon['id'] <= 905:
+            valid_games = ['Legends Arceus']
+        else:
+            valid_games = GENERATION_GAMES.get(pokemon['generation'], [])[:]  # Copy the list
+            # Add Legends Arceus for Pokemon with Hisuian forms
+            if any('Hisuian' in form for form in pokemon.get('forms', [])):
+                valid_games.append('Legends Arceus')
         pokemon_data['valid_games'] = valid_games
         pokemon_data['tracking'] = {
             'original_gen': tracking.original_gen if tracking else False,
