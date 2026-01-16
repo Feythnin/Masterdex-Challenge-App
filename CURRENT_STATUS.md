@@ -206,10 +206,10 @@ python app.py
 - [x] Export/Import data as CSV
 - [x] Sorting options (Dex #, Name, Completion %)
 - [x] Generation-specific progress bars
+- [x] Bulk editing tools (mark/clear obtained and shiny for filtered Pokemon)
 
 ## Future Enhancements (Not Yet Implemented)
 - [ ] PWA offline support
-- [ ] Bulk editing tools
 - [ ] Statistics dashboard
 
 ### User-Requested Features

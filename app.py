@@ -1395,6 +1395,39 @@ def get_progress():
         'gen_progress': gen_progress
     })
 
+@app.route('/api/bulk', methods=['POST'])
+@login_required
+def bulk_update():
+    data = request.json
+    pokemon_ids = data.get('pokemon_ids', [])
+    field = data.get('field')  # 'original_gen' or 'shiny'
+    value = data.get('value', False)  # True or False
+
+    if not pokemon_ids or field not in ['original_gen', 'shiny']:
+        return jsonify({'error': 'Invalid request'}), 400
+
+    updated_count = 0
+
+    for pokemon_id in pokemon_ids:
+        tracking = PokemonTracking.query.filter_by(
+            user_id=current_user.id,
+            pokemon_id=pokemon_id
+        ).first()
+
+        if not tracking:
+            tracking = PokemonTracking(user_id=current_user.id, pokemon_id=pokemon_id)
+            db.session.add(tracking)
+
+        if field == 'original_gen':
+            tracking.original_gen = value
+        elif field == 'shiny':
+            tracking.shiny = value
+
+        updated_count += 1
+
+    db.session.commit()
+    return jsonify({'success': True, 'updated': updated_count})
+
 @app.route('/api/export', methods=['GET'])
 @login_required
 def export_data():

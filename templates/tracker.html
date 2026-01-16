@@ -76,6 +76,14 @@
     </div>
 </div>
 
+<div class="bulk-actions-bar">
+    <span class="bulk-label">Bulk Actions (<span id="filteredCount">0</span> shown):</span>
+    <button class="btn-bulk btn-bulk-obtain" id="bulkObtainBtn" title="Mark all filtered as Obtained">Mark Obtained</button>
+    <button class="btn-bulk btn-bulk-clear" id="bulkClearObtainBtn" title="Clear Obtained for all filtered">Clear Obtained</button>
+    <button class="btn-bulk btn-bulk-shiny" id="bulkShinyBtn" title="Mark all filtered as Shiny">Mark Shiny</button>
+    <button class="btn-bulk btn-bulk-clear" id="bulkClearShinyBtn" title="Clear Shiny for all filtered">Clear Shiny</button>
+</div>
+
 <div class="pokemon-grid" id="pokemonGrid">
     <!-- Pokemon cards will be loaded here -->
 </div>
@@ -270,6 +278,9 @@ function renderPokemon(resetPagination = true) {
         displayedCount = 0;
         grid.innerHTML = '';
     }
+
+    // Update filtered count for bulk actions
+    document.getElementById('filteredCount').textContent = currentFilteredPokemon.length;
 
     if (currentFilteredPokemon.length === 0) {
         grid.innerHTML = '<p class="no-results">No Pokémon found matching your search.</p>';
@@ -1861,6 +1872,12 @@ document.addEventListener('DOMContentLoaded', () => {
             icon.textContent = '▼';
         }
     });
+
+    // Bulk action buttons
+    document.getElementById('bulkObtainBtn').addEventListener('click', () => bulkUpdate('original_gen', true));
+    document.getElementById('bulkClearObtainBtn').addEventListener('click', () => bulkUpdate('original_gen', false));
+    document.getElementById('bulkShinyBtn').addEventListener('click', () => bulkUpdate('shiny', true));
+    document.getElementById('bulkClearShinyBtn').addEventListener('click', () => bulkUpdate('shiny', false));
 });
 
 // Export data to CSV
@@ -1897,6 +1914,46 @@ async function importData(event) {
 
     // Reset file input so the same file can be re-imported
     event.target.value = '';
+}
+
+// Bulk action functions
+async function bulkUpdate(field, value) {
+    const pokemonIds = currentFilteredPokemon.map(p => p.id);
+
+    if (pokemonIds.length === 0) {
+        alert('No Pokemon to update. Adjust your filters first.');
+        return;
+    }
+
+    const action = value ? 'mark' : 'clear';
+    const fieldName = field === 'original_gen' ? 'Obtained' : 'Shiny';
+    const confirmMsg = `Are you sure you want to ${action} ${fieldName} for ${pokemonIds.length} Pokemon?`;
+
+    if (!confirm(confirmMsg)) return;
+
+    try {
+        const response = await fetch('/api/bulk', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                pokemon_ids: pokemonIds,
+                field: field,
+                value: value
+            })
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            alert(`Successfully updated ${result.updated} Pokemon. Refreshing...`);
+            window.location.reload();
+        } else {
+            alert('Bulk update failed: ' + result.error);
+        }
+    } catch (error) {
+        console.error('Bulk update error:', error);
+        alert('Bulk update failed: ' + error.message);
+    }
 }
 </script>
 {% endblock %}
