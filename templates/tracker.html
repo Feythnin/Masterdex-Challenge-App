@@ -310,7 +310,7 @@ function renderPokemon(resetPagination = true) {
     const allCards = grid.querySelectorAll('.pokemon-card-compact');
     const newCards = Array.from(allCards).slice(-nextBatch.length);
     newCards.forEach(card => {
-        card.addEventListener('click', () => openDetailPanel(parseInt(card.dataset.id)));
+        card.addEventListener('click', (e) => handleCardClick(parseInt(card.dataset.id), e));
     });
 
     // Show/hide Load More button
@@ -353,7 +353,7 @@ function createCompactCardHTML(pokemon) {
 
     return `
         <div class="pokemon-card-compact ${isSelected ? 'selected' : ''}" data-id="${pokemon.id}">
-            ${selectMode ? `<input type="checkbox" class="select-checkbox" ${isSelected ? 'checked' : ''} onclick="event.stopPropagation(); toggleSelection(${pokemon.id}, this.checked)">` : ''}
+            ${selectMode ? `<input type="checkbox" class="select-checkbox" ${isSelected ? 'checked' : ''}>` : ''}
             <img src="${pokemon.sprite}" alt="${pokemon.name}" class="compact-sprite ${isObtained ? '' : 'not-obtained'}" loading="lazy">
             <div class="compact-info">
                 <span class="compact-number">#${pokemon.id}</span>
@@ -367,6 +367,31 @@ function createCompactCardHTML(pokemon) {
             </div>
         </div>
     `;
+}
+
+// Handle card click - toggle selection in select mode, or open detail panel
+function handleCardClick(pokemonId, event) {
+    if (selectMode) {
+        // Toggle selection
+        const isSelected = selectedPokemon.has(pokemonId);
+        if (isSelected) {
+            selectedPokemon.delete(pokemonId);
+        } else {
+            selectedPokemon.add(pokemonId);
+        }
+        updateSelectedCount();
+
+        // Update card visual and checkbox
+        const card = event.currentTarget;
+        card.classList.toggle('selected', !isSelected);
+        const checkbox = card.querySelector('.select-checkbox');
+        if (checkbox) {
+            checkbox.checked = !isSelected;
+        }
+    } else {
+        // Open detail panel
+        openDetailPanel(pokemonId);
+    }
 }
 
 // Open detail panel for a Pokemon
@@ -1777,7 +1802,7 @@ function refreshCompactCard(pokemonId) {
         // Re-attach click listener to the new card
         const newCard = document.querySelector(`.pokemon-card-compact[data-id="${pokemonId}"]`);
         if (newCard) {
-            newCard.addEventListener('click', () => openDetailPanel(pokemonId));
+            newCard.addEventListener('click', (e) => handleCardClick(pokemonId, e));
         }
     }
 }
