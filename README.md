@@ -2,6 +2,8 @@
 
 A full-stack web application for tracking Pokemon collection progress across all 9 generations, featuring star challenges, form tracking, shiny hunting, and detailed location data.
 
+**Live Site**: https://niniana.pythonanywhere.com
+
 ## Features
 
 ### Collection Tracking
@@ -34,6 +36,7 @@ A full-stack web application for tracking Pokemon collection progress across all
 - Filter by generation or completion status
 - Responsive design (desktop, tablet, mobile)
 - User accounts with secure authentication
+- **Export/Import** - Backup and restore your data via CSV
 
 ## Tech Stack
 
@@ -98,6 +101,31 @@ A full-stack web application for tracking Pokemon collection progress across all
 - Colored sprites = obtained
 - Card indicators show: checkmark (obtained), sparkle with count (shinies), form count
 
+### Export/Import Data
+
+**Exporting Your Data:**
+1. Click the **Export** button in the filter bar
+2. A CSV file will download with all your tracking data
+3. The file includes: obtained status, shiny status, gender variants, forms, form shinies, stars, and notes
+
+**Importing Data:**
+1. Click the **Import** button in the filter bar
+2. Select a previously exported CSV file
+3. Your data will be updated and the page will refresh
+
+**CSV Format:**
+The export file contains these columns:
+- `pokemon_id` - National Dex number
+- `pokemon_name` - Pokemon name
+- `obtained` - true/false
+- `male` - true/false (for gender differences)
+- `female` - true/false (for gender differences)
+- `shiny` - true/false (base form shiny)
+- `notes` - Your personal notes
+- `forms_completed` - Pipe-separated list (e.g., "Alolan|Galarian")
+- `forms_shiny` - Pipe-separated list of shiny forms
+- `stars_completed` - Pipe-separated list of star numbers
+
 ## Project Structure
 
 ```
@@ -132,6 +160,8 @@ Masterdex-Challenge-App/
 | PUT | `/api/stars/<pokemon_id>/<star_number>` | Update star completion |
 | PUT | `/api/forms/<pokemon_id>/<form_name>` | Update form completion |
 | GET | `/api/progress` | Get progress statistics |
+| GET | `/api/export` | Export user data as CSV |
+| POST | `/api/import` | Import user data from CSV |
 
 ## Valid Games by Generation
 

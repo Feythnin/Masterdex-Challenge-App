@@ -203,9 +203,9 @@ python app.py
 - [x] Gender difference tracking
 - [x] Per-form shiny tracking
 - [x] Location data integration for all generations (PokeAPI + manual data)
+- [x] Export/Import data as CSV
 
 ## Future Enhancements (Not Yet Implemented)
-- [ ] Export/Import data as JSON/CSV
 - [ ] Sorting options (by dex #, generation, completion, etc.)
 - [ ] Generation-specific progress bars
 - [ ] PWA offline support

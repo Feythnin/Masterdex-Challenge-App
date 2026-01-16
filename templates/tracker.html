@@ -44,6 +44,11 @@
         <option value="complete">Completed</option>
         <option value="incomplete">Incomplete</option>
     </select>
+    <div class="data-buttons">
+        <button class="btn-export" id="exportBtn" title="Export data to CSV">Export</button>
+        <button class="btn-import" id="importBtn" title="Import data from CSV">Import</button>
+        <input type="file" id="importFile" accept=".csv" style="display: none;">
+    </div>
 </div>
 
 <div class="pokemon-grid" id="pokemonGrid">
@@ -1732,6 +1737,49 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Load More button
     document.getElementById('loadMoreBtn').addEventListener('click', loadMorePokemon);
+
+    // Export/Import buttons
+    document.getElementById('exportBtn').addEventListener('click', exportData);
+    document.getElementById('importBtn').addEventListener('click', () => {
+        document.getElementById('importFile').click();
+    });
+    document.getElementById('importFile').addEventListener('change', importData);
 });
+
+// Export data to CSV
+function exportData() {
+    window.location.href = '/api/export';
+}
+
+// Import data from CSV
+async function importData(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+        const response = await fetch('/api/import', {
+            method: 'POST',
+            body: formData
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            alert(`Successfully imported ${result.imported} Pokemon records. Refreshing page...`);
+            window.location.reload();
+        } else {
+            alert('Import failed: ' + result.error);
+        }
+    } catch (error) {
+        console.error('Import error:', error);
+        alert('Import failed: ' + error.message);
+    }
+
+    // Reset file input so the same file can be re-imported
+    event.target.value = '';
+}
 </script>
 {% endblock %}

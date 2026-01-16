@@ -332,6 +332,43 @@ body {
     min-width: 150px;
 }
 
+.data-buttons {
+    display: flex;
+    gap: 0.5rem;
+    margin-left: auto;
+}
+
+.btn-export,
+.btn-import {
+    padding: 0.75rem 1.25rem;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-weight: 500;
+}
+
+.btn-export {
+    background: var(--secondary-color);
+    color: white;
+}
+
+.btn-export:hover {
+    background: var(--primary-color);
+    transform: scale(1.02);
+}
+
+.btn-import {
+    background: #28a745;
+    color: white;
+}
+
+.btn-import:hover {
+    background: #218838;
+    transform: scale(1.02);
+}
+
 .no-results {
     grid-column: 1 / -1;
     text-align: center;
@@ -948,6 +985,17 @@ body {
     .search-input,
     .filter-select {
         width: 100%;
+    }
+
+    .data-buttons {
+        width: 100%;
+        margin-left: 0;
+        justify-content: center;
+    }
+
+    .btn-export,
+    .btn-import {
+        flex: 1;
     }
 
     /* Compact grid becomes list on mobile */

@@ -1,10 +1,12 @@
-from flask import Flask, render_template, request, jsonify, redirect, url_for
+from flask import Flask, render_template, request, jsonify, redirect, url_for, Response
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 from flask_cors import CORS
 import bcrypt
 from datetime import datetime
 import os
+import csv
+import io
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-secret-key-change-in-production')
@@ -1385,6 +1387,167 @@ def get_progress():
         'forms_completed': forms_completed,
         'form_dex_percentage': (forms_completed / total_forms * 100) if total_forms > 0 else 0
     })
+
+@app.route('/api/export', methods=['GET'])
+@login_required
+def export_data():
+    # Get all user tracking data
+    all_tracking = {t.pokemon_id: t for t in PokemonTracking.query.filter_by(user_id=current_user.id).all()}
+    all_stars = {}
+    for s in StarTracking.query.filter_by(user_id=current_user.id).all():
+        if s.pokemon_id not in all_stars:
+            all_stars[s.pokemon_id] = []
+        all_stars[s.pokemon_id].append(s)
+    all_forms = {}
+    for f in FormTracking.query.filter_by(user_id=current_user.id).all():
+        if f.pokemon_id not in all_forms:
+            all_forms[f.pokemon_id] = []
+        all_forms[f.pokemon_id].append(f)
+
+    # Create CSV in memory
+    output = io.StringIO()
+    writer = csv.writer(output)
+
+    # Header row
+    writer.writerow(['pokemon_id', 'pokemon_name', 'obtained', 'male', 'female', 'shiny', 'notes', 'forms_completed', 'forms_shiny', 'stars_completed'])
+
+    # Data rows
+    for pokemon in POKEMON_DATA:
+        pid = pokemon['id']
+        tracking = all_tracking.get(pid)
+        stars = all_stars.get(pid, [])
+        forms = all_forms.get(pid, [])
+
+        # Get completed forms and shiny forms as pipe-separated lists
+        forms_completed = '|'.join([f.form_name for f in forms if f.completed])
+        forms_shiny = '|'.join([f.form_name for f in forms if f.shiny])
+        stars_completed = '|'.join([str(s.star_number) for s in stars if s.completed])
+
+        writer.writerow([
+            pid,
+            pokemon['name'],
+            'true' if tracking and tracking.original_gen else 'false',
+            'true' if tracking and tracking.male else 'false',
+            'true' if tracking and tracking.female else 'false',
+            'true' if tracking and tracking.shiny else 'false',
+            tracking.notes if tracking and tracking.notes else '',
+            forms_completed,
+            forms_shiny,
+            stars_completed
+        ])
+
+    # Return as CSV file download
+    output.seek(0)
+    return Response(
+        output.getvalue(),
+        mimetype='text/csv',
+        headers={'Content-Disposition': f'attachment; filename=pokemon_tracker_export_{current_user.username}.csv'}
+    )
+
+@app.route('/api/import', methods=['POST'])
+@login_required
+def import_data():
+    if 'file' not in request.files:
+        return jsonify({'error': 'No file provided'}), 400
+
+    file = request.files['file']
+    if file.filename == '':
+        return jsonify({'error': 'No file selected'}), 400
+
+    if not file.filename.endswith('.csv'):
+        return jsonify({'error': 'File must be a CSV'}), 400
+
+    try:
+        # Read CSV content
+        stream = io.StringIO(file.stream.read().decode('utf-8'))
+        reader = csv.DictReader(stream)
+
+        imported_count = 0
+
+        for row in reader:
+            pokemon_id = int(row['pokemon_id'])
+
+            # Update or create PokemonTracking
+            tracking = PokemonTracking.query.filter_by(
+                user_id=current_user.id,
+                pokemon_id=pokemon_id
+            ).first()
+
+            if not tracking:
+                tracking = PokemonTracking(user_id=current_user.id, pokemon_id=pokemon_id)
+                db.session.add(tracking)
+
+            tracking.original_gen = row.get('obtained', '').lower() == 'true'
+            tracking.male = row.get('male', '').lower() == 'true'
+            tracking.female = row.get('female', '').lower() == 'true'
+            tracking.shiny = row.get('shiny', '').lower() == 'true'
+            tracking.notes = row.get('notes', '')
+
+            # Handle forms completed
+            forms_completed = row.get('forms_completed', '')
+            if forms_completed:
+                for form_name in forms_completed.split('|'):
+                    if form_name:
+                        form = FormTracking.query.filter_by(
+                            user_id=current_user.id,
+                            pokemon_id=pokemon_id,
+                            form_name=form_name
+                        ).first()
+                        if not form:
+                            form = FormTracking(user_id=current_user.id, pokemon_id=pokemon_id, form_name=form_name)
+                            db.session.add(form)
+                        form.completed = True
+
+            # Handle forms shiny
+            forms_shiny = row.get('forms_shiny', '')
+            if forms_shiny:
+                for form_name in forms_shiny.split('|'):
+                    if form_name:
+                        form = FormTracking.query.filter_by(
+                            user_id=current_user.id,
+                            pokemon_id=pokemon_id,
+                            form_name=form_name
+                        ).first()
+                        if not form:
+                            form = FormTracking(user_id=current_user.id, pokemon_id=pokemon_id, form_name=form_name)
+                            db.session.add(form)
+                        form.shiny = True
+
+            # Handle stars completed
+            stars_completed = row.get('stars_completed', '')
+            if stars_completed:
+                # Get Pokemon data to find star tiers
+                pokemon_data = next((p for p in POKEMON_DATA if p['id'] == pokemon_id), None)
+                if pokemon_data:
+                    for star_num_str in stars_completed.split('|'):
+                        if star_num_str:
+                            star_num = int(star_num_str)
+                            # Find the tier for this star
+                            star_info = next((s for s in pokemon_data.get('stars', []) if s['star_number'] == star_num), None)
+                            if star_info:
+                                star = StarTracking.query.filter_by(
+                                    user_id=current_user.id,
+                                    pokemon_id=pokemon_id,
+                                    star_number=star_num
+                                ).first()
+                                if not star:
+                                    star = StarTracking(
+                                        user_id=current_user.id,
+                                        pokemon_id=pokemon_id,
+                                        star_number=star_num,
+                                        star_tier=star_info['tier']
+                                    )
+                                    db.session.add(star)
+                                star.completed = True
+
+            imported_count += 1
+
+        db.session.commit()
+        return jsonify({'success': True, 'imported': imported_count})
+
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
     with app.app_context():
