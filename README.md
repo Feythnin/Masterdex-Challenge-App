@@ -46,42 +46,13 @@ A full-stack web application for tracking Pokemon collection progress across all
 - **Authentication**: Flask-Login with bcrypt password hashing
 - **Sprites**: PokeAPI sprite repository
 
-## Installation
-
-### Prerequisites
-- Python 3.8 or higher
-- pip (Python package manager)
-
-### Setup
-
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/Feythnin/Masterdex-Challenge-App.git
-   cd Masterdex-Challenge-App
-   ```
-
-2. **Install dependencies**
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-3. **Run the application**
-   ```bash
-   python app.py
-   ```
-
-4. **Access the app**
-   Open your browser and navigate to:
-   ```
-   http://127.0.0.1:5000
-   ```
-
 ## Usage
 
 ### Getting Started
-1. Click **Register** to create an account (password must be 8+ characters)
-2. Log in with your credentials
-3. You'll see the Pokemon tracker grid
+1. Visit https://niniana.pythonanywhere.com
+2. Click **Register** to create an account (password must be 8+ characters)
+3. Log in with your credentials
+4. You'll see the Pokemon tracker grid
 
 ### Tracking Pokemon
 1. Click any Pokemon card to open the detail panel
