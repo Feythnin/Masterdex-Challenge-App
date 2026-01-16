@@ -1640,8 +1640,14 @@ function refreshCompactCard(pokemonId) {
 
     const oldCard = document.querySelector(`.pokemon-card-compact[data-id="${pokemonId}"]`);
     if (oldCard) {
-        const newCard = createCompactCard(pokemon);
-        oldCard.replaceWith(newCard);
+        // Create new card HTML and replace
+        const html = createCompactCardHTML(pokemon);
+        oldCard.outerHTML = html;
+        // Re-attach click listener to the new card
+        const newCard = document.querySelector(`.pokemon-card-compact[data-id="${pokemonId}"]`);
+        if (newCard) {
+            newCard.addEventListener('click', () => openDetailPanel(pokemonId));
+        }
     }
 }
 
