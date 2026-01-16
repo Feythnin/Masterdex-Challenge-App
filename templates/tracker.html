@@ -823,6 +823,354 @@ const XY_LOCATIONS = {
     721: 'Event only', // Volcanion
 };
 
+// Gen 7 - Sun/Moon/Ultra Sun/Ultra Moon location data
+const SM_LOCATIONS = {
+    // Starters
+    722: 'Starter Pokemon', // Rowlet
+    723: 'Evolve Rowlet', // Dartrix
+    724: 'Evolve Dartrix', // Decidueye
+    725: 'Starter Pokemon', // Litten
+    726: 'Evolve Litten', // Torracat
+    727: 'Evolve Torracat', // Incineroar
+    728: 'Starter Pokemon', // Popplio
+    729: 'Evolve Popplio', // Brionne
+    730: 'Evolve Brionne', // Primarina
+    // Early game Pokemon
+    731: 'Route 1, Route 4, Route 5, Route 6', // Pikipek
+    732: 'Route 5, Route 8, Lush Jungle', // Trumbeak
+    733: 'Poni Plains, Poni Grove', // Toucannon
+    734: 'Route 1, Route 2, Route 3', // Yungoos
+    735: 'Route 4, Route 6, Route 8', // Gumshoos
+    736: 'Route 1, Route 4, Route 5, Blush Mountain', // Grubbin
+    737: 'Blush Mountain', // Charjabug
+    738: 'Evolve Charjabug (Blush Mountain/Vast Poni Canyon)', // Vikavolt
+    739: 'Route 2, Route 3', // Crabrawler
+    740: 'Evolve Crabrawler (Mount Lanakila)', // Crabominable
+    741: { // Oricorio - different forms per island
+        'Sun': 'Melemele Meadow (Pom-Pom), Route 6 (Baile), Ula\'ula Meadow (Pa\'u), Poni Meadow (Sensu)',
+        'Moon': 'Melemele Meadow (Pom-Pom), Route 6 (Baile), Ula\'ula Meadow (Pa\'u), Poni Meadow (Sensu)',
+        'Ultra Sun': 'Melemele Meadow (Pom-Pom), Route 6 (Baile), Ula\'ula Meadow (Pa\'u), Poni Meadow (Sensu)',
+        'Ultra Moon': 'Melemele Meadow (Pom-Pom), Route 6 (Baile), Ula\'ula Meadow (Pa\'u), Poni Meadow (Sensu)'
+    },
+    742: 'Route 2, Route 3, Melemele Meadow', // Cutiefly
+    743: 'Ula\'ula Meadow, Poni Meadow', // Ribombee
+    744: 'Route 1, Ten Carat Hill', // Rockruff
+    745: { // Lycanroc - form depends on game/time
+        'Sun': 'Vast Poni Canyon (Midday Form)',
+        'Moon': 'Vast Poni Canyon (Midnight Form)',
+        'Ultra Sun': 'Vast Poni Canyon (Midday/Dusk Form)',
+        'Ultra Moon': 'Vast Poni Canyon (Midnight/Dusk Form)'
+    },
+    746: 'Route 7, Route 8, Route 9, Akala Outskirts', // Wishiwashi
+    747: 'Route 9', // Mareanie
+    748: 'Evolve Mareanie', // Toxapex
+    749: 'Paniola Ranch, Route 6, Route 12', // Mudbray
+    750: 'Blush Mountain, Poni Plains', // Mudsdale
+    751: 'Brooklet Hill, Malie Garden', // Dewpider
+    752: 'Malie Garden, Malie City Outer Cape', // Araquanid
+    753: 'Route 5, Lush Jungle', // Fomantis
+    754: 'Evolve Fomantis (daytime)', // Lurantis
+    755: 'Brooklet Hill, Lush Jungle', // Morelull
+    756: 'Evolve Morelull', // Shiinotic
+    757: 'Route 8, Lush Jungle, Wela Volcano Park', // Salandit
+    758: 'Evolve Salandit (female only)', // Salazzle
+    759: 'Route 8, Route 10, Akala Outskirts', // Stufful
+    760: 'Poni Gauntlet', // Bewear
+    761: 'Route 5, Lush Jungle, Shady House', // Bounsweet
+    762: 'Evolve Bounsweet', // Steenee
+    763: 'Evolve Steenee', // Tsareena
+    764: 'Ula\'ula Meadow, Poni Plains', // Comfey
+    765: { 'Moon': 'Lush Jungle, Poni Plains', 'Ultra Moon': 'Lush Jungle' }, // Oranguru - Moon/UM exclusive
+    766: { 'Sun': 'Lush Jungle, Poni Plains', 'Ultra Sun': 'Lush Jungle' }, // Passimian - Sun/US exclusive
+    767: 'Route 7, Route 8, Secluded Shore', // Wimpod
+    768: 'Evolve Wimpod', // Golisopod
+    769: 'Hano Beach, Route 15', // Sandygast
+    770: 'Hano Beach', // Palossand
+    771: { // Pyukumuku
+        'Sun': 'Hano Beach',
+        'Moon': 'Hano Beach',
+        'Ultra Sun': 'Hano Beach, Route 7',
+        'Ultra Moon': 'Hano Beach, Route 7'
+    },
+    772: 'Gift (Gladion, post-game)', // Type: Null
+    773: 'Evolve Type: Null (high friendship)', // Silvally
+    774: 'Mount Hokulani, Vast Poni Canyon', // Minior
+    775: 'Route 11, Poni Plains', // Komala
+    776: { 'Sun': 'Blush Mountain', 'Ultra Sun': 'Blush Mountain' }, // Turtonator - Sun/US exclusive
+    777: 'Route 12, Route 13, Blush Mountain', // Togedemaru
+    778: 'Thrifty Megamart (Abandoned Site)', // Mimikyu
+    779: 'Route 13, Route 14, Route 15', // Bruxish
+    780: { 'Moon': 'Mount Lanakila, Tapu Village', 'Ultra Moon': 'Mount Lanakila' }, // Drampa - Moon/UM exclusive
+    781: 'Seafolk Village (fishing)', // Dhelmise
+    782: 'Vast Poni Canyon', // Jangmo-o
+    783: 'Vast Poni Canyon', // Hakamo-o
+    784: 'SOS Battle in Vast Poni Canyon', // Kommo-o
+    785: 'Ruins of Conflict (post-game)', // Tapu Koko
+    786: 'Ruins of Life (post-game)', // Tapu Lele
+    787: 'Ruins of Abundance (post-game)', // Tapu Bulu
+    788: 'Ruins of Hope (post-game)', // Tapu Fini
+    789: 'Story event (Lake of the Sunne/Moone)', // Cosmog
+    790: 'Evolve Cosmog', // Cosmoem
+    791: { 'Sun': 'Evolve Cosmoem', 'Ultra Sun': 'Evolve Cosmoem / Ultra Megalopolis' }, // Solgaleo - Sun/US
+    792: { 'Moon': 'Evolve Cosmoem', 'Ultra Moon': 'Evolve Cosmoem / Ultra Megalopolis' }, // Lunala - Moon/UM
+    793: 'Ultra Space Wilds (USUM only) / Wela Volcano Park (SM)', // Nihilego
+    794: { 'Sun': 'Melemele Meadow (post-game)', 'Ultra Sun': 'Ultra Jungle' }, // Buzzwole - Sun/US exclusive
+    795: { 'Moon': 'Verdant Cavern (post-game)', 'Ultra Moon': 'Ultra Desert' }, // Pheromosa - Moon/UM exclusive
+    796: 'Lush Jungle (SM) / Ultra Plant (USUM)', // Xurkitree
+    797: { 'Moon': 'Malie Garden, Route 17 (post-game)', 'Ultra Moon': 'Ultra Crater' }, // Celesteela - Moon/UM exclusive
+    798: { 'Sun': 'Malie Garden, Route 17 (post-game)', 'Ultra Sun': 'Ultra Forest' }, // Kartana - Sun/US exclusive
+    799: 'Resolution Cave', // Guzzlord
+    800: { // Necrozma
+        'Sun': 'Ten Carat Hill (post-game)',
+        'Moon': 'Ten Carat Hill (post-game)',
+        'Ultra Sun': 'Mount Lanakila (post-game)',
+        'Ultra Moon': 'Mount Lanakila (post-game)'
+    },
+    801: 'QR Code event', // Magearna
+    802: 'Event only', // Marshadow
+    // USUM exclusive Pokemon
+    803: { 'Ultra Sun': 'Gift (Ultra Megalopolis)', 'Ultra Moon': 'Gift (Ultra Megalopolis)' }, // Poipole
+    804: { 'Ultra Sun': 'Evolve Poipole', 'Ultra Moon': 'Evolve Poipole' }, // Naganadel
+    805: { 'Ultra Sun': 'Poni Grove (post-game)' }, // Stakataka - US exclusive
+    806: { 'Ultra Moon': 'Poni Grove (post-game)' }, // Blacephalon - UM exclusive
+    807: 'Event only', // Zeraora
+    808: 'Event only (GO transfer)', // Meltan
+    809: 'Event only (GO transfer)', // Melmetal
+};
+
+// Gen 8 - Sword/Shield location data
+const SWSH_LOCATIONS = {
+    // Starters
+    810: 'Gift (Postwick)', // Grookey
+    811: 'Evolve Grookey', // Thwackey
+    812: 'Evolve Thwackey', // Rillaboom
+    813: 'Gift (Postwick)', // Scorbunny
+    814: 'Evolve Scorbunny', // Raboot
+    815: 'Evolve Raboot', // Cinderace
+    816: 'Gift (Postwick)', // Sobble
+    817: 'Evolve Sobble', // Drizzile
+    818: 'Evolve Drizzile', // Inteleon
+    // Wild Area and Routes
+    819: 'Route 1, Route 2', // Skwovet
+    820: 'Route 6, Wild Area', // Greedent
+    821: 'Route 1, Route 2, Wild Area', // Rookidee
+    822: 'Route 5, Wild Area', // Corvisquire
+    823: 'Route 7, Wild Area', // Corviknight
+    824: 'Route 1, Slumbering Weald', // Blipbug
+    825: 'Route 5, Wild Area', // Dottler
+    826: 'Slumbering Weald, Wild Area', // Orbeetle
+    827: 'Route 2, Route 3', // Nickit
+    828: 'Route 7, Route 9, Wild Area', // Thievul
+    829: 'Route 3, Wild Area', // Gossifleur
+    830: 'Route 5, Wild Area', // Eldegoss
+    831: 'Route 3, Wild Area', // Wooloo
+    832: 'Route 7, Wild Area', // Dubwool
+    833: 'Route 2, Wild Area', // Chewtle
+    834: 'Route 7, Wild Area', // Drednaw
+    835: 'Route 4, Wild Area', // Yamper
+    836: 'Route 7, Wild Area', // Boltund
+    837: 'Galar Mine', // Rolycoly
+    838: 'Galar Mine No. 2, Wild Area', // Carkol
+    839: 'Route 8, Wild Area (rare)', // Coalossal
+    840: 'Route 5, Wild Area', // Applin
+    841: { 'Sword': 'Evolve Applin (Tart Apple)' }, // Flapple - Sword exclusive
+    842: { 'Shield': 'Evolve Applin (Sweet Apple)' }, // Appletun - Shield exclusive
+    843: 'Route 6, Wild Area', // Silicobra
+    844: 'Route 6, Wild Area', // Sandaconda
+    845: 'Route 9, Bridge Field', // Cramorant
+    846: 'Route 5, Wild Area', // Arrokuda
+    847: 'Route 6, Route 9, Wild Area', // Barraskewda
+    848: 'Route 7, Hammerlocke Hills', // Toxel
+    849: 'Evolve Toxel (Low Key/Amped based on nature)', // Toxtricity
+    850: 'Route 3, Galar Mine', // Sizzlipede
+    851: 'Lake of Outrage (rare)', // Centiskorch
+    852: 'Route 5, Wild Area', // Clobbopus
+    853: 'Route 9, Wild Area', // Grapploct
+    854: 'Glimwood Tangle', // Sinistea
+    855: 'Evolve Sinistea', // Polteageist
+    856: 'Glimwood Tangle, Stony Wilderness', // Hatenna
+    857: 'Glimwood Tangle, Dusty Bowl', // Hattrem
+    858: 'Lake of Outrage (rare)', // Hatterene
+    859: 'Stony Wilderness, Hammerlocke Hills', // Impidimp
+    860: 'Glimwood Tangle, Dusty Bowl', // Morgrem
+    861: 'Lake of Outrage (rare)', // Grimmsnarl
+    862: 'Evolve Galarian Linoone', // Obstagoon
+    863: 'Evolve Galarian Meowth', // Perrserker
+    864: 'Evolve Galarian Corsola', // Cursola
+    865: { 'Sword': 'Evolve Galarian Farfetch\'d' }, // Sirfetch'd - Sword exclusive (Galarian Farfetch'd)
+    866: 'Evolve Galarian Mr. Mime', // Mr. Rime
+    867: 'Evolve Galarian Yamask (Dusty Bowl)', // Runerigus
+    868: 'Route 4, Wild Area', // Milcery
+    869: 'Evolve Milcery (spin with Sweet)', // Alcremie
+    870: 'Route 9', // Falinks
+    871: 'Route 9', // Pincurchin
+    872: 'Route 8, Route 10', // Snom
+    873: 'Evolve Snom (high friendship at night)', // Frosmoth
+    874: { 'Sword': 'Route 10, Lake of Outrage' }, // Stonjourner - Sword exclusive
+    875: { 'Shield': 'Route 10, Lake of Outrage' }, // Eiscue - Shield exclusive
+    876: 'Glimwood Tangle, Lake of Outrage', // Indeedee
+    877: 'Route 7, Route 9', // Morpeko
+    878: 'Bridge Field, Dusty Bowl', // Cufant
+    879: 'Giant\'s Seat (rare)', // Copperajah
+    880: 'Fossil restoration (Fossilized Bird + Drake)', // Dracozolt
+    881: 'Fossil restoration (Fossilized Bird + Dino)', // Arctozolt
+    882: 'Fossil restoration (Fossilized Fish + Drake)', // Dracovish
+    883: 'Fossil restoration (Fossilized Fish + Dino)', // Arctovish
+    884: 'Lake of Outrage (rare), Route 10', // Duraludon
+    885: 'Lake of Outrage (rare)', // Dreepy
+    886: 'Lake of Outrage', // Drakloak
+    887: 'Lake of Outrage (rare, Overworld)', // Dragapult
+    888: { 'Sword': 'Energy Plant / Tower Summit (post-game)' }, // Zacian - Sword exclusive
+    889: { 'Shield': 'Energy Plant / Tower Summit (post-game)' }, // Zamazenta - Shield exclusive
+    890: 'Energy Plant (story)', // Eternatus
+    891: 'Gift (Mustard, Isle of Armor)', // Kubfu
+    892: 'Evolve Kubfu (Tower of Darkness/Waters)', // Urshifu
+    893: 'Event only', // Zarude
+    894: 'Crown Shrine (Crown Tundra)', // Regieleki
+    895: 'Split-Decision Ruins (Crown Tundra)', // Regidrago
+    896: 'Snowslide Slope (Crown Tundra story)', // Glastrier
+    897: 'Old Cemetery (Crown Tundra story)', // Spectrier
+    898: 'Crown Shrine (Crown Tundra)', // Calyrex
+    // Hisuian Pokemon from Legends Arceus - not available in SwSh base
+    899: 'Trade from Legends Arceus', // Wyrdeer
+    900: 'Trade from Legends Arceus', // Kleavor
+    901: 'Trade from Legends Arceus', // Ursaluna
+    902: 'Trade from Legends Arceus', // Basculegion
+    903: 'Trade from Legends Arceus', // Sneasler
+    904: 'Trade from Legends Arceus', // Overqwil
+    905: 'Trade from Legends Arceus', // Enamorus
+};
+
+// Gen 9 - Scarlet/Violet location data
+const SV_LOCATIONS = {
+    // Starters
+    906: 'Starter Pokemon (Cabo Poco)', // Sprigatito
+    907: 'Evolve Sprigatito', // Floragato
+    908: 'Evolve Floragato', // Meowscarada
+    909: 'Starter Pokemon (Cabo Poco)', // Fuecoco
+    910: 'Evolve Fuecoco', // Crocalor
+    911: 'Evolve Crocalor', // Skeledirge
+    912: 'Starter Pokemon (Cabo Poco)', // Quaxly
+    913: 'Evolve Quaxly', // Quaxwell
+    914: 'Evolve Quaxwell', // Quaquaval
+    915: 'South Province (Area One, Two)', // Lechonk
+    916: 'Evolve Lechonk', // Oinkologne
+    917: 'South Province (Area One, Two, Four)', // Tarountula
+    918: 'South Province, West Province', // Spidops
+    919: 'South Province (Area One)', // Nymble
+    920: 'Evolve Nymble', // Lokix
+    921: 'South Province (Area Two)', // Pawmi
+    922: 'South Province (Area Three), East Province', // Pawmo
+    923: 'Evolve Pawmo (1000 steps in Let\'s Go)', // Pawmot
+    924: 'South Province (Area Two, Three)', // Tandemaus
+    925: 'Evolve Tandemaus (level up in battle)', // Maushold
+    926: 'South Province (Area One, Two)', // Fidough
+    927: 'Evolve Fidough', // Dachsbun
+    928: 'South Province (Area Four)', // Smoliv
+    929: 'West Province (Area Two)', // Dolliv
+    930: 'West Province (Area Three)', // Arboliva
+    931: 'South Province (Area One), Inlet Grotto', // Squawkabilly
+    932: 'South Province (Area Four), Casseroya Lake', // Nacli
+    933: 'South Province, West Province', // Naclstack
+    934: 'Glaseado Mountain, North Province', // Garganacl
+    935: { // Charcadet
+        'Scarlet': 'South Province (Area Three), West Province',
+        'Violet': 'South Province (Area Three), West Province'
+    },
+    936: { 'Scarlet': 'Evolve Charcadet (Auspicious Armor)' }, // Armarouge - Scarlet exclusive
+    937: { 'Violet': 'Evolve Charcadet (Malicious Armor)' }, // Ceruledge - Violet exclusive
+    938: 'Alfornada Cavern, Glaseado Mountain', // Tadbulb
+    939: 'Casseroya Lake, North Province (Area Two)', // Bellibolt
+    940: 'South Province, West Province, East Province', // Wattrel
+    941: 'West Province (Area Two), Casseroya Lake', // Kilowattrel
+    942: 'Casseroya Lake', // Maschiff
+    943: 'West Province (Area Three), Glaseado Mountain', // Mabosstiff
+    944: 'South Province (Area Four), West Province', // Shroodle
+    945: 'North Province (Area One, Two)', // Grafaiai
+    946: 'South Province (Area Five), East Province', // Bramblin
+    947: 'Asado Desert, East Province', // Brambleghast
+    948: 'Porto Marinada, Casseroya Lake', // Toedscool
+    949: 'Casseroya Lake', // Toedscruel
+    950: 'East Province (Area Two)', // Klawf
+    951: 'Dalizapa Passage, Glaseado Mountain', // Capsakid
+    952: 'North Province (Area Three), Glaseado Mountain', // Scovillain
+    953: 'South Province (Area Three, Five)', // Rellor
+    954: 'Asado Desert', // Rabsca
+    955: 'Casseroya Lake, South Province (Area Six)', // Flittle
+    956: 'West Province (Area Three), Glaseado Mountain', // Espathra
+    957: 'South Province (Area Four, Five)', // Tinkatink
+    958: 'West Province (Area Three), East Province', // Tinkatuff
+    959: 'North Province (Area Two), Glaseado Mountain', // Tinkaton
+    960: 'South Province (Area Two), Casseroya Lake', // Wiglett
+    961: 'North Province (Area One, Two)', // Wugtrio
+    962: 'East Province (Area One, Two)', // Bombirdier
+    963: 'South Province (Area Six), Casseroya Lake', // Finizen
+    964: 'Evolve Finizen (online co-op required)', // Palafin
+    965: 'Casseroya Lake, North Province', // Varoom
+    966: 'North Province (Area Two, Three)', // Revavroom
+    967: 'Asado Desert, East Province (Area Three)', // Cyclizar
+    968: 'West Province (Area Two), East Province', // Orthworm
+    969: 'Dalizapa Passage, Glaseado Mountain', // Glimmet
+    970: 'Glaseado Mountain, Area Zero', // Glimmora
+    971: 'Casseroya Lake, Paldea coastlines', // Greavard
+    972: 'Evolve Greavard', // Houndstone
+    973: 'West Province (Area Two, Three)', // Flamigo
+    974: 'South Province (Area Six), Casseroya Lake', // Cetoddle
+    975: 'Glaseado Mountain, North Province (Area Three)', // Cetitan
+    976: 'Asado Desert, East Province', // Veluza
+    977: 'West Province (Area Two)', // Dondozo
+    978: 'West Province (Area Two) - Tatsugiri/Dondozo combo', // Tatsugiri
+    979: 'Evolve Primeape (use Rage Fist 20 times)', // Annihilape
+    980: 'South Province (Area Five), East Province', // Clodsire
+    981: 'Glaseado Mountain, North Province (Area Three)', // Farigiraf
+    982: 'Alfornada Cavern, Casseroya Lake', // Dudunsparce
+    983: 'Evolve Bisharp (defeat 3 Bisharp holding Leader\'s Crest)', // Kingambit
+    984: { 'Scarlet': 'Area Zero' }, // Great Tusk - Scarlet exclusive
+    985: { 'Scarlet': 'Area Zero' }, // Scream Tail - Scarlet exclusive
+    986: { 'Scarlet': 'Area Zero' }, // Brute Bonnet - Scarlet exclusive
+    987: { 'Scarlet': 'Area Zero' }, // Flutter Mane - Scarlet exclusive
+    988: { 'Scarlet': 'Area Zero' }, // Slither Wing - Scarlet exclusive
+    989: { 'Scarlet': 'Area Zero' }, // Sandy Shocks - Scarlet exclusive
+    990: { 'Violet': 'Area Zero' }, // Iron Treads - Violet exclusive
+    991: { 'Violet': 'Area Zero' }, // Iron Bundle - Violet exclusive
+    992: { 'Violet': 'Area Zero' }, // Iron Hands - Violet exclusive
+    993: { 'Violet': 'Area Zero' }, // Iron Jugulis - Violet exclusive
+    994: { 'Violet': 'Area Zero' }, // Iron Moth - Violet exclusive
+    995: { 'Violet': 'Area Zero' }, // Iron Thorns - Violet exclusive
+    996: 'Area Zero (story)', // Frigibax
+    997: 'Area Zero', // Arctibax
+    998: 'Evolve Arctibax', // Baxcalibur
+    999: 'Asado Desert, West Province (Area One)', // Gimmighoul
+    1000: 'Evolve Gimmighoul (999 Gimmighoul Coins)', // Gholdengo
+    1001: 'Socarrat Trail (remove 8 stakes)', // Wo-Chien
+    1002: 'West Province Area One (remove 8 stakes)', // Chien-Pao
+    1003: 'Casseroya Lake area (remove 8 stakes)', // Ting-Lu
+    1004: 'North Province Area Two (remove 8 stakes)', // Chi-Yu
+    1005: { 'Scarlet': 'Area Zero' }, // Roaring Moon - Scarlet exclusive
+    1006: { 'Violet': 'Area Zero' }, // Iron Valiant - Violet exclusive
+    1007: { 'Scarlet': 'Poco Path / Area Zero (story)' }, // Koraidon - Scarlet exclusive
+    1008: { 'Violet': 'Poco Path / Area Zero (story)' }, // Miraidon - Violet exclusive
+    1009: { 'Scarlet': 'Tera Raid / Indigo Disk DLC' }, // Walking Wake - Scarlet exclusive
+    1010: { 'Violet': 'Tera Raid / Indigo Disk DLC' }, // Iron Leaves - Violet exclusive
+    // Kitakami DLC Pokemon
+    1011: 'Kitakami Road', // Dipplin
+    1012: 'Dreaded Den (Kitakami story)', // Poltchageist
+    1013: 'Evolve Poltchageist', // Sinistcha
+    1014: 'Paradise Barrens (Kitakami)', // Okidogi
+    1015: 'Wistful Fields (Kitakami)', // Munkidori
+    1016: 'Oni Mountain (Kitakami)', // Fezandipiti
+    1017: 'Dreaded Den (Kitakami story)', // Ogerpon
+    // Indigo Disk DLC Pokemon
+    1018: 'Polar Biome (Blueberry Academy)', // Archaludon
+    1019: 'Evolve Dipplin (Dragon Cheer at Mossfell Confluence)', // Hydrapple
+    1020: { 'Scarlet': 'Tera Raid / Indigo Disk DLC' }, // Gouging Fire - Scarlet exclusive
+    1021: { 'Scarlet': 'Tera Raid / Indigo Disk DLC' }, // Raging Bolt - Scarlet exclusive
+    1022: { 'Violet': 'Tera Raid / Indigo Disk DLC' }, // Iron Boulder - Violet exclusive
+    1023: { 'Violet': 'Tera Raid / Indigo Disk DLC' }, // Iron Crown - Violet exclusive
+    1024: 'Area Zero Underdepths (Indigo Disk story)', // Terapagos
+    1025: 'Loyalty Plaza (Mochi Mayhem epilogue)', // Pecharunt
+};
+
 // Helper to check if Pokemon has manual data defined for a game category
 function hasManualData(game, pokemonId) {
     if (game === "Let's Go Pikachu" || game === "Let's Go Eevee") {
@@ -835,6 +1183,12 @@ function hasManualData(game, pokemonId) {
         return BW_LOCATIONS[pokemonId] !== undefined;
     } else if (game === "X" || game === "Y") {
         return XY_LOCATIONS[pokemonId] !== undefined;
+    } else if (game === "Sun" || game === "Moon" || game === "Ultra Sun" || game === "Ultra Moon") {
+        return SM_LOCATIONS[pokemonId] !== undefined;
+    } else if (game === "Sword" || game === "Shield") {
+        return SWSH_LOCATIONS[pokemonId] !== undefined;
+    } else if (game === "Scarlet" || game === "Violet") {
+        return SV_LOCATIONS[pokemonId] !== undefined;
     }
     return false;
 }
@@ -854,6 +1208,12 @@ function getManualLocation(game, pokemonId) {
         data = BW_LOCATIONS[pokemonId];
     } else if (game === "X" || game === "Y") {
         data = XY_LOCATIONS[pokemonId];
+    } else if (game === "Sun" || game === "Moon" || game === "Ultra Sun" || game === "Ultra Moon") {
+        data = SM_LOCATIONS[pokemonId];
+    } else if (game === "Sword" || game === "Shield") {
+        data = SWSH_LOCATIONS[pokemonId];
+    } else if (game === "Scarlet" || game === "Violet") {
+        data = SV_LOCATIONS[pokemonId];
     }
 
     if (data) {
