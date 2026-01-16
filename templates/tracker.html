@@ -50,6 +50,11 @@
     <!-- Pokemon cards will be loaded here -->
 </div>
 
+<div class="load-more-container" id="loadMoreContainer" style="display: none; text-align: center; padding: 20px;">
+    <button class="btn-load-more" id="loadMoreBtn">Load More</button>
+    <p class="load-more-info" id="loadMoreInfo"></p>
+</div>
+
 <div class="pokemon-detail-panel" id="detailPanel">
     <div id="detailContent">
         <!-- Selected Pokemon details will be loaded here -->
@@ -72,6 +77,11 @@ let pendingChanges = {
     formShinies: {}
 };
 let originalState = null;
+
+// Pagination settings
+const PAGE_SIZE = 50;
+let displayedCount = 0;
+let currentFilteredPokemon = [];
 
 // Tier order for sorting stars
 const tierOrder = { 'Bronze': 1, 'Silver': 2, 'Gold': 3, 'Platinum': 4 };
@@ -140,24 +150,52 @@ function getFilteredPokemon() {
     });
 }
 
-// Render Pokemon cards (compact view)
-function renderPokemon() {
+// Render Pokemon cards (compact view) with pagination
+function renderPokemon(resetPagination = true) {
     const grid = document.getElementById('pokemonGrid');
-    const filteredPokemon = getFilteredPokemon();
+    const loadMoreContainer = document.getElementById('loadMoreContainer');
+    const loadMoreInfo = document.getElementById('loadMoreInfo');
 
-    if (filteredPokemon.length === 0) {
+    // Get filtered Pokemon and reset pagination if filters changed
+    if (resetPagination) {
+        currentFilteredPokemon = getFilteredPokemon();
+        displayedCount = 0;
+        grid.innerHTML = '';
+    }
+
+    if (currentFilteredPokemon.length === 0) {
         grid.innerHTML = '<p class="no-results">No Pokémon found matching your search.</p>';
+        loadMoreContainer.style.display = 'none';
         return;
     }
 
-    // Build HTML string for better performance (faster than individual DOM operations)
-    const html = filteredPokemon.map(pokemon => createCompactCardHTML(pokemon)).join('');
-    grid.innerHTML = html;
+    // Get next batch of Pokemon
+    const nextBatch = currentFilteredPokemon.slice(displayedCount, displayedCount + PAGE_SIZE);
+    displayedCount += nextBatch.length;
 
-    // Attach click listeners after rendering
-    grid.querySelectorAll('.pokemon-card-compact').forEach(card => {
+    // Build HTML string for better performance
+    const html = nextBatch.map(pokemon => createCompactCardHTML(pokemon)).join('');
+    grid.insertAdjacentHTML('beforeend', html);
+
+    // Attach click listeners to new cards only
+    const allCards = grid.querySelectorAll('.pokemon-card-compact');
+    const newCards = Array.from(allCards).slice(-nextBatch.length);
+    newCards.forEach(card => {
         card.addEventListener('click', () => openDetailPanel(parseInt(card.dataset.id)));
     });
+
+    // Show/hide Load More button
+    if (displayedCount < currentFilteredPokemon.length) {
+        loadMoreContainer.style.display = 'block';
+        loadMoreInfo.textContent = `Showing ${displayedCount} of ${currentFilteredPokemon.length} Pokémon`;
+    } else {
+        loadMoreContainer.style.display = 'none';
+    }
+}
+
+// Load more Pokemon
+function loadMorePokemon() {
+    renderPokemon(false);
 }
 
 // Create compact Pokemon card HTML string (faster than DOM manipulation)
@@ -1685,6 +1723,9 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('searchInput').addEventListener('input', renderPokemon);
     document.getElementById('generationFilter').addEventListener('change', renderPokemon);
     document.getElementById('statusFilter').addEventListener('change', renderPokemon);
+
+    // Load More button
+    document.getElementById('loadMoreBtn').addEventListener('click', loadMorePokemon);
 });
 </script>
 {% endblock %}
