@@ -479,6 +479,406 @@ const LGPE_LOCATIONS = {
     151: 'Poke Ball Plus (gift)', // Mew
 };
 
+// Omega Ruby/Alpha Sapphire location data (Gen 3 Pokemon)
+const ORAS_LOCATIONS = {
+    // Starters
+    252: 'Starter gift', // Treecko
+    255: 'Starter gift', // Torchic
+    258: 'Starter gift', // Mudkip
+    // Wild Pokemon
+    261: 'Route 101, Route 102, Route 103', // Poochyena
+    263: 'Route 101-103, Petalburg Woods', // Zigzagoon
+    264: 'Route 118-123', // Linoone
+    265: 'Route 101, 102, 104, Petalburg Woods', // Wurmple
+    266: 'Petalburg Woods', // Silcoon
+    268: 'Petalburg Woods', // Cascoon
+    270: { 'Alpha Sapphire': 'Route 102, Route 114' }, // Lotad - AS exclusive
+    271: { 'Alpha Sapphire': 'Route 114' }, // Lombre - AS exclusive
+    273: { 'Omega Ruby': 'Route 102, Route 114' }, // Seedot - OR exclusive
+    274: { 'Omega Ruby': 'Route 114' }, // Nuzleaf - OR exclusive
+    276: 'Route 104, 115, 116, Petalburg Woods', // Taillow
+    278: 'Route 103, 104, 110, 118-123', // Wingull
+    279: 'Route 103, 104, 118-123', // Pelipper
+    280: 'Route 102', // Ralts
+    283: 'Route 102, 114, 117', // Surskit
+    284: 'Route 118-123 (water)', // Masquerain
+    285: 'Petalburg Woods', // Shroomish
+    287: 'Petalburg Woods', // Slakoth
+    290: 'Route 116', // Nincada
+    293: 'Route 116, Rusturf Tunnel', // Whismur
+    294: 'Victory Road', // Loudred
+    296: 'Granite Cave', // Makuhita
+    297: 'Victory Road', // Hariyama
+    299: 'Granite Cave B2F', // Nosepass
+    300: 'Route 116', // Skitty
+    302: { 'Alpha Sapphire': 'Granite Cave, Victory Road' }, // Sableye - AS exclusive
+    303: { 'Omega Ruby': 'Granite Cave, Victory Road' }, // Mawile - OR exclusive
+    304: 'Granite Cave B1F/B2F, Victory Road', // Aron
+    305: 'Victory Road', // Lairon
+    307: 'Mt. Pyre', // Meditite
+    308: 'Victory Road', // Medicham
+    309: 'Route 110, Route 118', // Electrike
+    311: 'Route 110', // Plusle
+    312: 'Route 110', // Minun
+    313: 'Route 117', // Volbeat
+    314: 'Route 117', // Illumise
+    315: 'Route 117', // Roselia
+    316: 'Route 110', // Gulpin
+    318: 'Route 118-119 (fishing)', // Carvanha
+    319: 'Route 118-119 (super rod)', // Sharpedo
+    320: 'Route 103, 105-110 (fishing)', // Wailmer
+    322: 'Route 112, Jagged Pass, Fiery Path', // Numel
+    324: 'Fiery Path', // Torkoal
+    325: 'Jagged Pass', // Spoink
+    327: 'Route 113', // Spinda
+    328: 'Route 111 Desert', // Trapinch
+    331: 'Route 111 Desert', // Cacnea
+    333: 'Route 114, 115, Sky Pillar', // Swablu
+    335: { 'Omega Ruby': 'Route 114' }, // Zangoose - OR exclusive
+    336: { 'Alpha Sapphire': 'Route 114' }, // Seviper - AS exclusive
+    337: { 'Alpha Sapphire': 'Meteor Falls' }, // Lunatone - AS exclusive
+    338: { 'Omega Ruby': 'Meteor Falls' }, // Solrock - OR exclusive
+    339: 'Route 111, 114, 120 (fishing)', // Barboach
+    340: 'Route 111, 114 (super rod)', // Whiscash
+    341: 'Route 102, 117, 123 (fishing)', // Corphish
+    342: 'Route 102, 117 (super rod)', // Crawdaunt
+    343: 'Route 111 Desert', // Baltoy
+    344: 'Sky Pillar', // Claydol
+    345: 'Fossil revival - Route 111 Desert', // Lileep
+    347: 'Fossil revival - Route 111 Desert', // Anorith
+    349: 'Route 119 (fishing)', // Feebas
+    351: 'Weather Institute gift', // Castform
+    352: 'Route 118-121, Fortree City', // Kecleon
+    353: 'Route 121, 123, Mt. Pyre', // Shuppet
+    355: 'Mt. Pyre', // Duskull
+    357: 'Route 119, Route 120', // Tropius
+    358: 'Mt. Pyre summit', // Chimecho
+    359: 'Route 120', // Absol
+    360: {
+        'Ruby': 'Mirage Island',
+        'Sapphire': 'Mirage Island',
+        'Emerald': 'Mirage Island',
+        'Omega Ruby': 'Lavaridge Town egg gift',
+        'Alpha Sapphire': 'Lavaridge Town egg gift'
+    }, // Wynaut
+    361: 'Shoal Cave', // Snorunt
+    363: 'Shoal Cave', // Spheal
+    364: 'Shoal Cave', // Sealeo
+    366: 'Route 124, 126 (diving)', // Clamperl
+    369: 'Route 124, 126 (diving)', // Relicanth
+    370: 'Route 128, Ever Grande (fishing)', // Luvdisc
+    371: 'Meteor Falls B1F', // Bagon
+    374: 'Steven gift - Mossdeep City', // Beldum
+    377: 'Route 111 Desert Ruins', // Regirock
+    378: 'Route 105 Island Cave', // Regice
+    379: 'Route 120 Ancient Tomb', // Registeel
+    380: { 'Alpha Sapphire': 'Southern Island' }, // Latias - AS exclusive
+    381: { 'Omega Ruby': 'Southern Island' }, // Latios - OR exclusive
+    382: { 'Alpha Sapphire': 'Cave of Origin' }, // Kyogre - AS exclusive
+    383: { 'Omega Ruby': 'Cave of Origin' }, // Groudon - OR exclusive
+    384: 'Sky Pillar summit', // Rayquaza
+    386: {
+        'Ruby': 'Birth Island (event)',
+        'Sapphire': 'Birth Island (event)',
+        'Emerald': 'Birth Island (event)',
+        'Omega Ruby': 'Sky Pillar (Delta Episode)',
+        'Alpha Sapphire': 'Sky Pillar (Delta Episode)'
+    }, // Deoxys
+};
+
+// Brilliant Diamond/Shining Pearl location data (Gen 4 Pokemon)
+const BDSP_LOCATIONS = {
+    // Starters
+    387: 'Starter gift', // Turtwig
+    390: 'Starter gift', // Chimchar
+    393: 'Starter gift', // Piplup
+    // Wild Pokemon
+    396: 'Route 201-204, 209, 212, Lake Verity', // Starly
+    397: 'Route 209, 212, 215', // Staravia
+    398: 'Route 225', // Staraptor
+    399: 'Route 201-204, Lake Verity', // Bidoof
+    400: 'Route 208-212', // Bibarel
+    401: 'Route 201-204', // Kricketot
+    402: 'Route 206, 210, 212', // Kricketune
+    403: 'Route 202-204, Fuego Ironworks', // Shinx
+    404: 'Route 222', // Luxio
+    405: 'Route 222 (rare)', // Luxray
+    406: 'Route 204, 212, Eterna Forest, Great Marsh', // Budew
+    408: 'Fossil revival - Oreburgh Mine', // Cranidos
+    410: 'Fossil revival - Oreburgh Mine', // Shieldon
+    412: 'Honey trees', // Burmy
+    415: 'Honey trees', // Combee
+    417: 'Route 203, 204, Trophy Garden', // Pachirisu
+    418: 'Route 205, 213, Valley Windworks', // Buizel
+    419: 'Route 213, 224', // Floatzel
+    420: 'Honey trees', // Cherubi
+    422: 'Route 205, 218, 221 (water)', // Shellos
+    423: 'Route 205, 218, 221 (water)', // Gastrodon
+    425: 'Valley Windworks (Friday)', // Drifloon
+    426: 'Route 215 (rare)', // Drifblim
+    427: 'Eterna Forest', // Buneary
+    431: { 'Shining Pearl': 'Route 218, 222' }, // Glameow - SP exclusive
+    432: { 'Shining Pearl': 'Route 222' }, // Purugly - SP exclusive
+    434: { 'Brilliant Diamond': 'Route 206, 214, 221' }, // Stunky - BD exclusive
+    435: { 'Brilliant Diamond': 'Route 221, 225' }, // Skuntank - BD exclusive
+    436: 'Wayward Cave', // Bronzor
+    437: 'Mt. Coronet, Turnback Cave', // Bronzong
+    438: 'Route 209 (rare), breed Sudowoodo', // Bonsly
+    439: 'Trophy Garden, breed Mr. Mime', // Mime Jr.
+    440: 'Trophy Garden, breed Chansey', // Happiny
+    441: 'Route 222', // Chatot
+    442: 'Route 209 (Hallowed Tower)', // Spiritomb
+    443: 'Wayward Cave (hidden)', // Gible
+    444: 'Route 227 (rare)', // Gabite
+    446: 'Honey trees (rare)', // Munchlax
+    447: 'Iron Island gift', // Riolu
+    449: 'Route 228', // Hippopotas
+    450: 'Route 228 (rare)', // Hippowdon
+    451: 'Great Marsh, Route 212', // Skorupi
+    452: 'Great Marsh (post-game)', // Drapion
+    453: 'Great Marsh, Route 212', // Croagunk
+    454: 'Great Marsh (post-game)', // Toxicroak
+    455: 'Great Marsh', // Carnivine
+    456: 'Route 218, 219, 220 (fishing)', // Finneon
+    457: 'Route 220 (fishing)', // Lumineon
+    458: 'Route 223 (water)', // Mantyke
+    459: 'Route 216, 217, Acuity Lakefront', // Snover
+    460: 'Route 217, Acuity Lakefront', // Abomasnow
+    479: 'Old Chateau (special)', // Rotom
+    480: 'Lake Verity cavern', // Uxie
+    481: 'Lake Valor cavern', // Mesprit
+    482: 'Lake Acuity cavern', // Azelf
+    483: { 'Brilliant Diamond': 'Spear Pillar' }, // Dialga - BD exclusive
+    484: { 'Shining Pearl': 'Spear Pillar' }, // Palkia - SP exclusive
+    485: 'Stark Mountain', // Heatran
+    486: 'Snowpoint Temple', // Regigigas
+    487: {
+        'Diamond': 'Turnback Cave',
+        'Pearl': 'Turnback Cave',
+        'Platinum': 'Distortion World / Turnback Cave',
+        'Brilliant Diamond': 'Turnback Cave',
+        'Shining Pearl': 'Turnback Cave'
+    }, // Giratina
+    488: 'Fullmoon Island', // Cresselia
+    491: {
+        'Diamond': 'Newmoon Island (event)',
+        'Pearl': 'Newmoon Island (event)',
+        'Platinum': 'Newmoon Island (event)',
+        'Brilliant Diamond': 'Newmoon Island (event)',
+        'Shining Pearl': 'Newmoon Island (event)'
+    }, // Darkrai
+    492: {
+        'Diamond': 'Flower Paradise (event)',
+        'Pearl': 'Flower Paradise (event)',
+        'Platinum': 'Flower Paradise (event)',
+        'Brilliant Diamond': 'Flower Paradise (event)',
+        'Shining Pearl': 'Flower Paradise (event)'
+    }, // Shaymin
+};
+
+// Black/White/Black 2/White 2 location data (Gen 5 Pokemon)
+const BW_LOCATIONS = {
+    // Starters
+    494: 'Liberty Garden (event)', // Victini
+    495: 'Starter gift', // Snivy
+    498: 'Starter gift', // Tepig
+    501: 'Starter gift', // Oshawott
+    // Wild Pokemon
+    504: 'Route 1, Route 2, Route 3', // Patrat
+    506: 'Route 1, Route 2, Route 3', // Lillipup
+    508: { 'Black': 'Route 10, P2 Lab, Cold Storage Outside (rustling grass)', 'White': 'Route 10, P2 Lab, Cold Storage Outside (rustling grass)', 'Black 2': 'Route 1, 2, 3, P2 Lab (rustling grass)', 'White 2': 'Route 1, 2, 3, P2 Lab (rustling grass)' }, // Stoutland
+    509: 'Route 2, Route 3, Dreamyard', // Purrloin
+    511: { 'Black': 'Dreamyard (gift) / Pinwheel Forest (rustling grass)', 'White': 'Dreamyard (gift) / Pinwheel Forest (rustling grass)', 'Black 2': 'Pinwheel Forest (gift)', 'White 2': 'Pinwheel Forest (gift)' }, // Pansage
+    513: { 'Black': 'Dreamyard (gift) / Pinwheel Forest (rustling grass)', 'White': 'Dreamyard (gift) / Pinwheel Forest (rustling grass)', 'Black 2': 'Pinwheel Forest (gift)', 'White 2': 'Pinwheel Forest (gift)' }, // Pansear
+    515: { 'Black': 'Dreamyard (gift) / Pinwheel Forest (rustling grass)', 'White': 'Dreamyard (gift) / Pinwheel Forest (rustling grass)', 'Black 2': 'Pinwheel Forest (gift)', 'White 2': 'Pinwheel Forest (gift)' }, // Panpour
+    517: 'Dreamyard', // Munna
+    518: 'Dreamyard (rustling grass)', // Musharna
+    519: 'Route 3, Pinwheel Forest', // Pidove
+    521: 'Route 6, Route 7, Lostlorn Forest (rustling grass)', // Unfezant
+    522: 'Route 3', // Blitzle
+    524: 'Wellspring Cave', // Roggenrola
+    527: 'Wellspring Cave, Mistralton Cave', // Woobat
+    529: 'Wellspring Cave, Chargestone Cave (dust cloud)', // Drilbur
+    530: 'Caves (dust cloud)', // Excadrill
+    531: 'Various routes (rustling grass)', // Audino
+    532: 'Pinwheel Forest, Relic Passage', // Timburr
+    535: 'Pinwheel Forest (surfing)', // Tympole
+    537: 'Route 8, Icirrus City (rippling water)', // Seismitoad
+    538: { 'Black': 'Pinwheel Forest, Route 18 (rustling grass)', 'Black 2': 'Pinwheel Forest, Route 18 (rustling grass)' }, // Throh - Black exclusive
+    539: { 'White': 'Pinwheel Forest, Route 18 (rustling grass)', 'White 2': 'Pinwheel Forest, Route 18 (rustling grass)' }, // Sawk - White exclusive
+    540: 'Pinwheel Forest', // Sewaddle
+    542: 'Route 6, Lostlorn Forest (rustling grass)', // Leavanny
+    543: 'Pinwheel Forest, Lostlorn Forest', // Venipede
+    546: { 'Black': 'Pinwheel Forest, Lostlorn Forest', 'Black 2': 'Pinwheel Forest, Lostlorn Forest' }, // Cottonee - Black exclusive
+    547: { 'Black': 'Pinwheel Forest, Lostlorn Forest (rustling grass)', 'Black 2': 'Pinwheel Forest, Lostlorn Forest (rustling grass)' }, // Whimsicott - Black exclusive
+    548: { 'White': 'Pinwheel Forest, Lostlorn Forest', 'White 2': 'Pinwheel Forest, Lostlorn Forest' }, // Petilil - White exclusive
+    549: { 'White': 'Pinwheel Forest, Lostlorn Forest (rustling grass)', 'White 2': 'Pinwheel Forest, Lostlorn Forest (rustling grass)' }, // Lilligant - White exclusive
+    550: 'Route 1, Route 3 (surfing)', // Basculin
+    551: 'Route 4, Desert Resort', // Sandile
+    554: 'Route 4, Desert Resort', // Darumaka
+    556: 'Route 4, Desert Resort', // Maractus
+    557: 'Route 4, Desert Resort', // Dwebble
+    559: 'Route 4, Desert Resort', // Scraggy
+    561: 'Route 4, Desert Resort', // Sigilyph
+    562: 'Relic Castle', // Yamask
+    564: 'Relic Castle (fossil)', // Tirtouga
+    566: 'Relic Castle (fossil)', // Archen
+    568: 'Route 5, Route 16', // Trubbish
+    570: 'Driftveil City (gift)', // Zorua
+    572: 'Route 5, Cold Storage', // Minccino
+    573: 'Route 5, Route 9, Route 16 (rustling grass)', // Cinccino
+    574: { 'Black': 'Route 5, Route 16', 'Black 2': 'Route 5' }, // Gothita - Black exclusive
+    576: { 'Black': 'Route 9 (rustling grass)', 'Black 2': 'Route 9 (rustling grass)' }, // Gothitelle - Black exclusive
+    577: { 'White': 'Route 5, Route 16', 'White 2': 'Route 5' }, // Solosis - White exclusive
+    579: { 'White': 'Route 9 (rustling grass)', 'White 2': 'Route 9 (rustling grass)' }, // Reuniclus - White exclusive
+    580: 'Driftveil Drawbridge (flying shadow)', // Ducklett
+    581: 'Marvelous Bridge (flying shadow)', // Swanna
+    582: 'Cold Storage, Dragonspiral Tower (winter)', // Vanillite
+    585: 'Route 6, Route 7 (seasonal)', // Deerling
+    587: 'Various routes (rustling grass)', // Emolga
+    588: 'Route 6, Chargestone Cave', // Karrablast
+    590: 'Route 6, Route 7', // Foongus
+    592: 'Route 4, Driftveil City (surfing)', // Frillish
+    593: 'Route 4, Driftveil City (rippling water)', // Jellicent
+    594: 'Route 4 (rippling water)', // Alomomola
+    595: 'Chargestone Cave', // Joltik
+    597: 'Chargestone Cave', // Ferroseed
+    599: 'Chargestone Cave, P2 Laboratory', // Klink
+    602: 'Chargestone Cave (fishing)', // Tynamo
+    605: 'Celestial Tower', // Elgyem
+    607: 'Celestial Tower', // Litwick
+    610: 'Mistralton Cave, Victory Road', // Axew
+    613: 'Twist Mountain (winter)', // Cubchoo
+    615: 'Twist Mountain (winter)', // Cryogonal
+    616: 'Route 8, Moor of Icirrus', // Shelmet
+    618: 'Route 8, Moor of Icirrus (also rippling water)', // Stunfisk
+    619: 'Route 8, Twist Mountain', // Mienfoo
+    621: 'Victory Road', // Druddigon
+    622: 'Dragonspiral Tower', // Golett
+    624: 'Route 9', // Pawniard
+    626: 'Route 10', // Bouffalant
+    627: { 'White': 'Route 10, Route 11, Victory Road', 'White 2': 'Route 10, Route 11, Victory Road' }, // Rufflet - White exclusive
+    629: { 'Black': 'Route 10, Route 11, Victory Road', 'Black 2': 'Route 10, Route 11, Victory Road' }, // Vullaby - Black exclusive
+    631: 'Victory Road', // Heatmor
+    632: 'Victory Road', // Durant
+    633: 'Victory Road', // Deino
+    636: 'Route 18 (egg gift)', // Larvesta
+    638: { 'Black': 'Mistralton Cave', 'White': 'Mistralton Cave', 'Black 2': 'Route 13', 'White 2': 'Route 13' }, // Cobalion
+    639: { 'Black': 'Victory Road', 'White': 'Victory Road', 'Black 2': 'Route 22', 'White 2': 'Route 22' }, // Terrakion
+    640: { 'Black': 'Pinwheel Forest', 'White': 'Pinwheel Forest', 'Black 2': 'Route 11', 'White 2': 'Route 11' }, // Virizion
+    641: { 'Black': 'Roaming (post-game)', 'Black 2': 'Route 6 (Therian Shrine)' }, // Tornadus - Black exclusive
+    642: { 'White': 'Roaming (post-game)', 'White 2': 'Route 6 (Therian Shrine)' }, // Thundurus - White exclusive
+    643: { 'Black': 'N\'s Castle / Dragonspiral Tower', 'White 2': 'Dragonspiral Tower' }, // Reshiram - Black/White 2
+    644: { 'White': 'N\'s Castle / Dragonspiral Tower', 'Black 2': 'Dragonspiral Tower' }, // Zekrom - White/Black 2
+    645: 'Abundant Shrine', // Landorus
+    646: 'Giant Chasm', // Kyurem
+    647: 'Event only', // Keldeo
+    648: 'Event only', // Meloetta
+    649: 'Event only', // Genesect
+};
+
+// X/Y location data (Gen 6 Pokemon)
+const XY_LOCATIONS = {
+    // Starters
+    650: 'Starter gift - Aquacorde Town', // Chespin
+    653: 'Starter gift - Aquacorde Town', // Fennekin
+    656: 'Starter gift - Aquacorde Town', // Froakie
+    // Wild Pokemon
+    659: 'Route 2, Route 3, Route 5, Route 22', // Bunnelby
+    660: 'Route 22', // Diggersby
+    661: 'Route 2, Route 3', // Fletchling
+    664: 'Route 2, Santalune Forest', // Scatterbug
+    667: 'Route 22', // Litleo
+    669: 'Route 4, Route 7', // Flabebe
+    672: 'Route 5', // Skiddo
+    674: 'Route 5', // Pancham
+    676: 'Route 5', // Furfrou
+    677: 'Route 6', // Espurr
+    679: 'Route 6', // Honedge
+    682: { 'Y': 'Route 7' }, // Spritzee - Y exclusive
+    684: { 'X': 'Route 7' }, // Swirlix - X exclusive
+    686: 'Route 8, Azure Bay', // Inkay
+    688: 'Route 8, Route 12 (rock smash)', // Binacle
+    690: { 'Y': 'Route 8, Ambrette Town (fishing)' }, // Skrelp - Y exclusive
+    692: { 'X': 'Route 8, Ambrette Town (fishing)' }, // Clauncher - X exclusive
+    694: 'Route 9', // Helioptile
+    696: 'Jaw Fossil - Glittering Cave', // Tyrunt
+    698: 'Sail Fossil - Glittering Cave', // Amaura
+    701: 'Route 10', // Hawlucha
+    702: 'Route 11', // Dedenne
+    703: 'Reflection Cave', // Carbink
+    704: 'Route 14', // Goomy
+    705: 'Route 19', // Sliggoo
+    707: 'Route 15, Route 16, Lost Hotel', // Klefki
+    708: 'Route 16', // Phantump
+    709: 'Route 20', // Trevenant
+    710: 'Route 16', // Pumpkaboo
+    712: 'Frost Cavern', // Bergmite
+    714: 'Terminus Cave, Victory Road', // Noibat
+    716: { 'X': 'Team Flare HQ' }, // Xerneas - X exclusive
+    717: { 'Y': 'Team Flare HQ' }, // Yveltal - Y exclusive
+    718: 'Terminus Cave (post-game)', // Zygarde
+    719: 'Event only', // Diancie
+    720: 'Event only', // Hoopa
+    721: 'Event only', // Volcanion
+};
+
+// Helper to check if Pokemon has manual data defined for a game category
+function hasManualData(game, pokemonId) {
+    if (game === "Let's Go Pikachu" || game === "Let's Go Eevee") {
+        return LGPE_LOCATIONS[pokemonId] !== undefined;
+    } else if (game === "Ruby" || game === "Sapphire" || game === "Emerald" || game === "Omega Ruby" || game === "Alpha Sapphire") {
+        return ORAS_LOCATIONS[pokemonId] !== undefined;
+    } else if (game === "Diamond" || game === "Pearl" || game === "Platinum" || game === "Brilliant Diamond" || game === "Shining Pearl") {
+        return BDSP_LOCATIONS[pokemonId] !== undefined;
+    } else if (game === "Black" || game === "White" || game === "Black 2" || game === "White 2") {
+        return BW_LOCATIONS[pokemonId] !== undefined;
+    } else if (game === "X" || game === "Y") {
+        return XY_LOCATIONS[pokemonId] !== undefined;
+    }
+    return false;
+}
+
+// Helper to get manual location data (returns null if not found)
+function getManualLocation(game, pokemonId) {
+    let data = null;
+    let location = null;
+
+    if (game === "Let's Go Pikachu" || game === "Let's Go Eevee") {
+        data = LGPE_LOCATIONS[pokemonId];
+    } else if (game === "Ruby" || game === "Sapphire" || game === "Emerald" || game === "Omega Ruby" || game === "Alpha Sapphire") {
+        data = ORAS_LOCATIONS[pokemonId];
+    } else if (game === "Diamond" || game === "Pearl" || game === "Platinum" || game === "Brilliant Diamond" || game === "Shining Pearl") {
+        data = BDSP_LOCATIONS[pokemonId];
+    } else if (game === "Black" || game === "White" || game === "Black 2" || game === "White 2") {
+        data = BW_LOCATIONS[pokemonId];
+    } else if (game === "X" || game === "Y") {
+        data = XY_LOCATIONS[pokemonId];
+    }
+
+    if (data) {
+        if (typeof data === 'string') {
+            location = data;
+        } else if (data[game]) {
+            location = data[game];
+        }
+    }
+    return location;
+}
+
+// Filter valid games to exclude version exclusives
+function filterValidGames(validGames, pokemonId) {
+    return validGames.filter(game => {
+        // If manual data exists for this Pokemon in this game category,
+        // check if it's available in this specific game
+        if (hasManualData(game, pokemonId)) {
+            return getManualLocation(game, pokemonId) !== null;
+        }
+        // No manual data defined = assume available in all games
+        return true;
+    });
+}
+
 // Fetch and display Pokemon locations from PokeAPI
 async function fetchPokemonLocations(pokemonId, validGames, generation) {
     const locationsDiv = document.getElementById('locationsContent');
@@ -546,41 +946,31 @@ async function fetchPokemonLocations(pokemonId, validGames, generation) {
             return GAME_ORDER.indexOf(a) - GAME_ORDER.indexOf(b);
         });
 
-        // Games that PokeAPI doesn't have encounter data for
-        const gamesWithoutAPIData = ["Let's Go Pikachu", "Let's Go Eevee", "Brilliant Diamond", "Shining Pearl", "Legends Arceus", "Scarlet", "Violet"];
+        // Games that PokeAPI doesn't have encounter data for (and we don't have manual data)
+        const gamesWithoutAPIData = ["Legends Arceus", "Scarlet", "Violet"];
 
         // Build HTML - show all valid games, with locations where available
         let html = '<div class="locations-by-game">';
         let hasContent = false;
 
         for (const game of sortedGames) {
-            if (locationsByGame[game]) {
-                // We have location data from API
+            // Check manual location data FIRST (more accurate for special cases)
+            const manualLocation = getManualLocation(game, pokemonId);
+            if (manualLocation) {
+                html += `<div class="game-locations">
+                    <strong>${game}:</strong> ${manualLocation}
+                </div>`;
+                hasContent = true;
+            } else if (hasManualData(game, pokemonId)) {
+                // Pokemon has manual data but not for this game = version exclusive, skip this game
+                continue;
+            } else if (locationsByGame[game]) {
+                // Fall back to PokeAPI data
                 const locations = locationsByGame[game];
                 html += `<div class="game-locations">
                     <strong>${game}:</strong> ${[...locations].join(', ')}
                 </div>`;
                 hasContent = true;
-            } else if (game === "Let's Go Pikachu" || game === "Let's Go Eevee") {
-                // Use LGPE_LOCATIONS data
-                const lgpeData = LGPE_LOCATIONS[pokemonId];
-                if (lgpeData) {
-                    let location = null;
-                    if (typeof lgpeData === 'string') {
-                        // Available in both versions
-                        location = lgpeData;
-                    } else if (lgpeData[game]) {
-                        // Version exclusive
-                        location = lgpeData[game];
-                    }
-                    if (location) {
-                        html += `<div class="game-locations">
-                            <strong>${game}:</strong> ${location}
-                        </div>`;
-                        hasContent = true;
-                    }
-                }
-                // If no lgpeData entry, it's evolve-only in LGPE - don't show
             } else if (gamesWithoutAPIData.includes(game)) {
                 // Other games without API data - show "Available"
                 html += `<div class="game-locations">
@@ -789,7 +1179,7 @@ function createDetailContent(pokemon) {
 
         <div class="games-section">
             <h4>Obtainable Games</h4>
-            <p class="games-list">${pokemon.valid_games ? pokemon.valid_games.join(', ') : 'Unknown'}</p>
+            <p class="games-list">${pokemon.valid_games ? filterValidGames(pokemon.valid_games, pokemon.id).join(', ') : 'Unknown'}</p>
         </div>
 
         <div class="locations-section">
