@@ -29,3 +29,9 @@ desktop.ini
 .idea/
 *.swp
 *.swo
+
+# PyInstaller
+build/
+dist/
+*.spec
+launcher.py
