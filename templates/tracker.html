@@ -1235,6 +1235,17 @@ const SWSH_LOCATIONS = {
     905: 'Trade from Legends Arceus', // Enamorus
 };
 
+// Pokemon Legends Arceus location data
+const PLA_LOCATIONS = {
+    899: 'Obsidian Fieldlands (Massive Mass Outbreak)', // Wyrdeer
+    900: 'Obsidian Fieldlands (Massive Mass Outbreak), Evolve Scyther with Black Augurite', // Kleavor
+    901: 'Crimson Mirelands (Massive Mass Outbreak), Evolve Ursaring with Peat Block during full moon', // Ursaluna
+    902: 'Cobalt Coastlands (Massive Mass Outbreak), Evolve White-Striped Basculin', // Basculegion
+    903: 'Coronet Highlands (Massive Mass Outbreak), Evolve Hisuian Sneasel with Razor Claw during day', // Sneasler
+    904: 'Cobalt Coastlands (Massive Mass Outbreak), Evolve Hisuian Qwilfish', // Overqwil
+    905: 'Crimson Mirelands (Scarlet Bog) - Post-game', // Enamorus
+};
+
 // Gen 9 - Scarlet/Violet location data
 const SV_LOCATIONS = {
     // Starters
@@ -1406,6 +1417,8 @@ function getManualLocation(game, pokemonId) {
         data = SM_LOCATIONS[pokemonId];
     } else if (game === "Sword" || game === "Shield") {
         data = SWSH_LOCATIONS[pokemonId];
+    } else if (game === "Legends Arceus") {
+        data = PLA_LOCATIONS[pokemonId];
     } else if (game === "Scarlet" || game === "Violet") {
         data = SV_LOCATIONS[pokemonId];
     }
