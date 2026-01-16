@@ -204,9 +204,9 @@ python app.py
 - [x] Per-form shiny tracking
 - [x] Location data integration for all generations (PokeAPI + manual data)
 - [x] Export/Import data as CSV
+- [x] Sorting options (Dex #, Name, Completion %)
 
 ## Future Enhancements (Not Yet Implemented)
-- [ ] Sorting options (by dex #, generation, completion, etc.)
 - [ ] Generation-specific progress bars
 - [ ] PWA offline support
 - [ ] Bulk editing tools

@@ -44,6 +44,14 @@
         <option value="complete">Completed</option>
         <option value="incomplete">Incomplete</option>
     </select>
+    <select id="sortOrder" class="filter-select">
+        <option value="dex-asc">Dex # (Low to High)</option>
+        <option value="dex-desc">Dex # (High to Low)</option>
+        <option value="name-asc">Name (A-Z)</option>
+        <option value="name-desc">Name (Z-A)</option>
+        <option value="completion-desc">Most Complete</option>
+        <option value="completion-asc">Least Complete</option>
+    </select>
     <div class="data-buttons">
         <button class="btn-export" id="exportBtn" title="Export data to CSV">Export</button>
         <button class="btn-import" id="importBtn" title="Import data from CSV">Import</button>
@@ -129,12 +137,53 @@ async function loadProgress() {
 let selectedPokemonId = null;
 
 // Filter Pokemon based on search and filters
+// Calculate completion score for a Pokemon (for sorting)
+function getCompletionScore(pokemon) {
+    let score = 0;
+    let total = 1; // Base: obtained checkbox
+
+    const tracking = pokemon.tracking || {};
+    if (tracking.original_gen) score++;
+
+    // Shiny
+    total++;
+    if (tracking.shiny) score++;
+
+    // Gender differences
+    if (pokemon.has_gender_diff) {
+        total += 2;
+        if (tracking.male) score++;
+        if (tracking.female) score++;
+    }
+
+    // Forms
+    const formTracking = pokemon.form_tracking || {};
+    if (pokemon.forms && pokemon.forms.length > 0) {
+        total += pokemon.forms.length;
+        pokemon.forms.forEach(form => {
+            if (formTracking[form]) score++;
+        });
+    }
+
+    // Stars
+    const starTracking = pokemon.star_tracking || {};
+    if (pokemon.stars && pokemon.stars.length > 0) {
+        total += pokemon.stars.length;
+        Object.values(starTracking).forEach(completed => {
+            if (completed) score++;
+        });
+    }
+
+    return score / total;
+}
+
 function getFilteredPokemon() {
     const searchTerm = document.getElementById('searchInput').value.toLowerCase();
     const genFilter = document.getElementById('generationFilter').value;
     const statusFilter = document.getElementById('statusFilter').value;
+    const sortOrder = document.getElementById('sortOrder').value;
 
-    return pokemonData.filter(pokemon => {
+    let filtered = pokemonData.filter(pokemon => {
         // Search by name or dex number
         const matchesSearch = !searchTerm ||
             pokemon.name.toLowerCase().includes(searchTerm) ||
@@ -153,6 +202,30 @@ function getFilteredPokemon() {
 
         return matchesSearch && matchesGen && matchesStatus;
     });
+
+    // Apply sorting
+    switch (sortOrder) {
+        case 'dex-asc':
+            filtered.sort((a, b) => a.id - b.id);
+            break;
+        case 'dex-desc':
+            filtered.sort((a, b) => b.id - a.id);
+            break;
+        case 'name-asc':
+            filtered.sort((a, b) => a.name.localeCompare(b.name));
+            break;
+        case 'name-desc':
+            filtered.sort((a, b) => b.name.localeCompare(a.name));
+            break;
+        case 'completion-desc':
+            filtered.sort((a, b) => getCompletionScore(b) - getCompletionScore(a));
+            break;
+        case 'completion-asc':
+            filtered.sort((a, b) => getCompletionScore(a) - getCompletionScore(b));
+            break;
+    }
+
+    return filtered;
 }
 
 // Render Pokemon cards (compact view) with pagination
@@ -1730,10 +1803,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.key === 'Escape') cancelDetailPanel();
     });
 
-    // Search and filter events
+    // Search, filter, and sort events
     document.getElementById('searchInput').addEventListener('input', renderPokemon);
     document.getElementById('generationFilter').addEventListener('change', renderPokemon);
     document.getElementById('statusFilter').addEventListener('change', renderPokemon);
+    document.getElementById('sortOrder').addEventListener('change', renderPokemon);
 
     // Load More button
     document.getElementById('loadMoreBtn').addEventListener('click', loadMorePokemon);
