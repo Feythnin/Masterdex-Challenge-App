@@ -51,9 +51,10 @@ A full-stack web application for tracking Pokemon collection progress across all
 
 ### Setup
 
-1. **Clone or download the repository**
+1. **Clone the repository**
    ```bash
-   cd "E:\Master Dex App"
+   git clone https://github.com/Feythnin/Masterdex-Challenge-App.git
+   cd Masterdex-Challenge-App
    ```
 
 2. **Install dependencies**
@@ -100,11 +101,10 @@ A full-stack web application for tracking Pokemon collection progress across all
 ## Project Structure
 
 ```
-E:\Master Dex App\
+Masterdex-Challenge-App/
 ├── app.py                 # Flask backend (routes, API, models)
 ├── requirements.txt       # Python dependencies
 ├── README.md              # This file
-├── Instructions.md        # Detailed requirements
 ├── CURRENT_STATUS.md      # Development progress
 ├── star_challenges.txt    # Star challenge data
 ├── instance/
