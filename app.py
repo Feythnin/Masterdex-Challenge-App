@@ -1191,22 +1191,30 @@ def tracker():
 @app.route('/api/pokemon', methods=['GET'])
 @login_required
 def get_pokemon():
+    # Fetch all user data in 3 bulk queries instead of 3 per Pokemon
+    all_tracking = PokemonTracking.query.filter_by(user_id=current_user.id).all()
+    all_stars = StarTracking.query.filter_by(user_id=current_user.id).all()
+    all_forms = FormTracking.query.filter_by(user_id=current_user.id).all()
+
+    # Index by pokemon_id for fast lookup
+    tracking_by_id = {t.pokemon_id: t for t in all_tracking}
+    stars_by_id = {}
+    for s in all_stars:
+        if s.pokemon_id not in stars_by_id:
+            stars_by_id[s.pokemon_id] = []
+        stars_by_id[s.pokemon_id].append(s)
+    forms_by_id = {}
+    for f in all_forms:
+        if f.pokemon_id not in forms_by_id:
+            forms_by_id[f.pokemon_id] = []
+        forms_by_id[f.pokemon_id].append(f)
+
     result = []
     for pokemon in POKEMON_DATA:
-        tracking = PokemonTracking.query.filter_by(
-            user_id=current_user.id,
-            pokemon_id=pokemon['id']
-        ).first()
-
-        star_tracking = StarTracking.query.filter_by(
-            user_id=current_user.id,
-            pokemon_id=pokemon['id']
-        ).all()
-
-        form_tracking = FormTracking.query.filter_by(
-            user_id=current_user.id,
-            pokemon_id=pokemon['id']
-        ).all()
+        pokemon_id = pokemon['id']
+        tracking = tracking_by_id.get(pokemon_id)
+        star_tracking = stars_by_id.get(pokemon_id, [])
+        form_tracking = forms_by_id.get(pokemon_id, [])
 
         pokemon_data = pokemon.copy()
         valid_games = GENERATION_GAMES.get(pokemon['generation'], [])[:]  # Copy the list
