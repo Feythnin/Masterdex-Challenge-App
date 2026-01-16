@@ -143,8 +143,6 @@ function getFilteredPokemon() {
 // Render Pokemon cards (compact view)
 function renderPokemon() {
     const grid = document.getElementById('pokemonGrid');
-    grid.innerHTML = '';
-
     const filteredPokemon = getFilteredPokemon();
 
     if (filteredPokemon.length === 0) {
@@ -152,22 +150,21 @@ function renderPokemon() {
         return;
     }
 
-    filteredPokemon.forEach(pokemon => {
-        const card = createCompactCard(pokemon);
-        grid.appendChild(card);
+    // Build HTML string for better performance (faster than individual DOM operations)
+    const html = filteredPokemon.map(pokemon => createCompactCardHTML(pokemon)).join('');
+    grid.innerHTML = html;
+
+    // Attach click listeners after rendering
+    grid.querySelectorAll('.pokemon-card-compact').forEach(card => {
+        card.addEventListener('click', () => openDetailPanel(parseInt(card.dataset.id)));
     });
 }
 
-// Create compact Pokemon card (grid view)
-function createCompactCard(pokemon) {
-    const card = document.createElement('div');
-    card.className = 'pokemon-card-compact';
-    card.dataset.id = pokemon.id;
-
+// Create compact Pokemon card HTML string (faster than DOM manipulation)
+function createCompactCardHTML(pokemon) {
     const tracking = pokemon.tracking || {};
 
     // Calculate completion indicators
-    const hasProgress = tracking.original_gen || tracking.shiny;
     const formTracking = pokemon.form_tracking || {};
     const formsComplete = pokemon.forms.length > 0 ?
         pokemon.forms.every(f => formTracking[f]) : true;
@@ -186,23 +183,21 @@ function createCompactCard(pokemon) {
 
     const isObtained = tracking.original_gen;
 
-    card.innerHTML = `
-        <img src="${pokemon.sprite}" alt="${pokemon.name}" class="compact-sprite ${isObtained ? '' : 'not-obtained'}">
-        <div class="compact-info">
-            <span class="compact-number">#${pokemon.id}</span>
-            <span class="compact-name">${pokemon.name}</span>
-        </div>
-        <div class="compact-indicators">
-            ${tracking.original_gen ? '<span class="indicator indicator-complete" title="Original Gen">✓</span>' : ''}
-            <span class="indicator indicator-shiny-box ${allShiniesComplete ? 'indicator-complete' : ''}" title="Shiny">✨${completedShinies}/${totalShinies}</span>
-            ${totalStars > 0 ? `<span class="indicator indicator-stars ${starsComplete ? 'indicator-complete' : ''}" title="Stars">★${completedStars}/${totalStars}</span>` : ''}
-            ${pokemon.forms.length > 0 ? `<span class="indicator indicator-forms ${formsComplete ? 'indicator-complete' : ''}" title="Forms">${Object.values(formTracking).filter(v => v).length}/${pokemon.forms.length}</span>` : ''}
+    return `
+        <div class="pokemon-card-compact" data-id="${pokemon.id}">
+            <img src="${pokemon.sprite}" alt="${pokemon.name}" class="compact-sprite ${isObtained ? '' : 'not-obtained'}" loading="lazy">
+            <div class="compact-info">
+                <span class="compact-number">#${pokemon.id}</span>
+                <span class="compact-name">${pokemon.name}</span>
+            </div>
+            <div class="compact-indicators">
+                ${tracking.original_gen ? '<span class="indicator indicator-complete" title="Original Gen">✓</span>' : ''}
+                <span class="indicator indicator-shiny-box ${allShiniesComplete ? 'indicator-complete' : ''}" title="Shiny">✨${completedShinies}/${totalShinies}</span>
+                ${totalStars > 0 ? `<span class="indicator indicator-stars ${starsComplete ? 'indicator-complete' : ''}" title="Stars">★${completedStars}/${totalStars}</span>` : ''}
+                ${pokemon.forms.length > 0 ? `<span class="indicator indicator-forms ${formsComplete ? 'indicator-complete' : ''}" title="Forms">${Object.values(formTracking).filter(v => v).length}/${pokemon.forms.length}</span>` : ''}
+            </div>
         </div>
     `;
-
-    card.addEventListener('click', () => openDetailPanel(pokemon.id));
-
-    return card;
 }
 
 // Open detail panel for a Pokemon
