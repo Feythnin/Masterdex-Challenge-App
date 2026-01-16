@@ -183,9 +183,17 @@ python app.py
 - [x] **Renamed "Original Gen" to "Obtained"** - Clearer label for the main collection checkbox
 - [x] **Location data from PokeAPI** - Shows where to catch each Pokemon in valid games
 - [x] **LGPE location data** - Manually added Let's Go Pikachu/Eevee locations from Bulbapedia (PokeAPI lacks this data)
-- [x] **Version exclusives handled** - LGPE exclusives only show for their respective game (e.g., Ekans = LGE only)
+- [x] **Version exclusives handled** - Version exclusives only show for their respective game (e.g., Ekans = LGE only, Yveltal = Y only)
+- [x] **Obtainable Games filtering** - Version exclusives are filtered from the Obtainable Games list
 - [x] **Clean location names** - Removed "Area" suffix and region prefixes for single-region gens
 - [x] **Games sorted chronologically** - Locations display in release order (RBY → FRLG → LGPE)
+- [x] **Gen 3 location data (ORAS_LOCATIONS)** - RSE and ORAS locations including Mirage Island, event Pokemon
+- [x] **Gen 4 location data (BDSP_LOCATIONS)** - DPPt and BDSP locations including Distortion World, events
+- [x] **Gen 5 location data (BW_LOCATIONS)** - BW/B2W2 locations with phenomenon encounters (rustling grass, dust clouds, rippling water, flying shadows)
+- [x] **Gen 6 location data (XY_LOCATIONS)** - X/Y locations with version exclusives (Xerneas/Yveltal)
+- [x] **Gen 7 location data (SM_LOCATIONS)** - SM/USUM locations including Ultra Beasts, version exclusives
+- [x] **Gen 8 location data (SWSH_LOCATIONS)** - SwSh locations including Wild Area, DLC content (Isle of Armor, Crown Tundra)
+- [x] **Gen 9 location data (SV_LOCATIONS)** - SV locations including Paradox Pokemon, DLC content (Kitakami, Indigo Disk)
 
 ## Completed Milestones
 - [x] Full National Pokédex (1025 Pokémon)
@@ -194,7 +202,7 @@ python app.py
 - [x] All collectible form variants
 - [x] Gender difference tracking
 - [x] Per-form shiny tracking
-- [x] Location data integration (PokeAPI + manual LGPE data)
+- [x] Location data integration for all generations (PokeAPI + manual data)
 
 ## Future Enhancements (Not Yet Implemented)
 - [ ] Export/Import data as JSON/CSV
