@@ -536,6 +536,12 @@ const STARTER_POKEMON = {
     912: { default: 'Starter gift' }, // Quaxly
 };
 
+// Pokemon that require glitches to obtain in certain games
+// Maps pokemon_id to array of games where glitch is required
+const GLITCH_POKEMON = {
+    151: ['Red', 'Blue', 'Yellow'], // Mew - requires Mew glitch in Gen 1
+};
+
 // Let's Go Pikachu/Eevee location data (PokeAPI doesn't have this)
 // null = evolve only, 'LGP'/'LGE' suffix = version exclusive
 const LGPE_LOCATIONS = {
@@ -1502,12 +1508,19 @@ async function fetchPokemonLocations(pokemonId, validGames, generation) {
         let html = '<div class="locations-by-game">';
         let hasContent = false;
 
+        // Helper to check if this Pokemon requires glitches in this game
+        const isGlitchOnly = (game) => {
+            return GLITCH_POKEMON[pokemonId] && GLITCH_POKEMON[pokemonId].includes(game);
+        };
+
         for (const game of sortedGames) {
+            const glitchSuffix = isGlitchOnly(game) ? ' <span class="glitch-warning">(Glitch required)</span>' : '';
+
             // Check manual location data FIRST (more accurate for special cases)
             const manualLocation = getManualLocation(game, pokemonId);
             if (manualLocation) {
                 html += `<div class="game-locations">
-                    <strong>${game}:</strong> ${manualLocation}
+                    <strong>${game}${glitchSuffix}:</strong> ${manualLocation}
                 </div>`;
                 hasContent = true;
             } else if (hasManualData(game, pokemonId)) {
@@ -1517,13 +1530,19 @@ async function fetchPokemonLocations(pokemonId, validGames, generation) {
                 // Fall back to PokeAPI data
                 const locations = locationsByGame[game];
                 html += `<div class="game-locations">
-                    <strong>${game}:</strong> ${[...locations].join(', ')}
+                    <strong>${game}${glitchSuffix}:</strong> ${[...locations].join(', ')}
                 </div>`;
                 hasContent = true;
             } else if (gamesWithoutAPIData.includes(game)) {
                 // Other games without API data - show "Available"
                 html += `<div class="game-locations">
-                    <strong>${game}:</strong> <em>Available</em>
+                    <strong>${game}${glitchSuffix}:</strong> <em>Available</em>
+                </div>`;
+                hasContent = true;
+            } else if (isGlitchOnly(game)) {
+                // Show glitch-only games even without other location data
+                html += `<div class="game-locations">
+                    <strong>${game}${glitchSuffix}:</strong> Mew Glitch
                 </div>`;
                 hasContent = true;
             }

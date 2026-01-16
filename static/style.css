@@ -1079,6 +1079,12 @@ body {
     color: var(--primary-color);
 }
 
+.glitch-warning {
+    color: #e67e22;
+    font-weight: normal;
+    font-size: 0.8rem;
+}
+
 .loading-text,
 .no-locations,
 .error-text {
