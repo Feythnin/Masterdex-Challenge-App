@@ -193,25 +193,21 @@ function getCompletionScore(pokemon) {
     const tracking = pokemon.tracking || {};
     if (tracking.original_gen) score++;
 
-    // Shiny
+    // Shiny (base form)
     total++;
     if (tracking.shiny) score++;
 
-    // Gender differences
-    if (pokemon.has_gender_diff) {
-        total += 2;
-        if (tracking.male) score++;
-        if (tracking.female) score++;
-    }
-
-    // Forms
+    // Forms (including gender forms) and their shinies
     const formTracking = pokemon.form_tracking || {};
-    if (pokemon.forms && pokemon.forms.length > 0) {
-        total += pokemon.forms.length;
-        pokemon.forms.forEach(form => {
-            if (formTracking[form]) score++;
-        });
-    }
+    const formShinyTracking = pokemon.form_shiny_tracking || {};
+    const genderForms = pokemon.has_gender_diff ? ['Male', 'Female'] : [];
+    const allForms = [...genderForms, ...(pokemon.forms || [])];
+
+    allForms.forEach(form => {
+        total += 2; // form obtained + form shiny
+        if (formTracking[form]) score++;
+        if (formShinyTracking[form]) score++;
+    });
 
     // Stars
     const starTracking = pokemon.star_tracking || {};
@@ -333,8 +329,11 @@ function createCompactCardHTML(pokemon) {
 
     // Calculate completion indicators
     const formTracking = pokemon.form_tracking || {};
-    const formsComplete = pokemon.forms.length > 0 ?
-        pokemon.forms.every(f => formTracking[f]) : true;
+    const genderForms = pokemon.has_gender_diff ? ['Male', 'Female'] : [];
+    const allForms = [...genderForms, ...pokemon.forms];
+    const totalForms = allForms.length;
+    const completedForms = allForms.filter(f => formTracking[f]).length;
+    const formsComplete = totalForms > 0 ? completedForms === totalForms : true;
 
     // Calculate stars progress
     const starTracking = pokemon.star_tracking || {};
@@ -342,10 +341,10 @@ function createCompactCardHTML(pokemon) {
     const completedStars = totalStars > 0 ? Object.values(starTracking).filter(v => v).length : 0;
     const starsComplete = totalStars > 0 && completedStars === totalStars;
 
-    // Shiny status - base form + all alternate forms
+    // Shiny status - base form + all forms (including gender forms)
     const formShinyTracking = pokemon.form_shiny_tracking || {};
-    const totalShinies = 1 + pokemon.forms.length; // base + each form
-    const completedShinies = (tracking.shiny ? 1 : 0) + Object.values(formShinyTracking).filter(v => v).length;
+    const totalShinies = 1 + totalForms; // base + each form (including gender forms)
+    const completedShinies = (tracking.shiny ? 1 : 0) + allForms.filter(f => formShinyTracking[f]).length;
     const allShiniesComplete = completedShinies === totalShinies;
 
     const isObtained = tracking.original_gen;
@@ -363,7 +362,7 @@ function createCompactCardHTML(pokemon) {
                 ${tracking.original_gen ? '<span class="indicator indicator-complete" title="Original Gen">✓</span>' : ''}
                 <span class="indicator indicator-shiny-box ${allShiniesComplete ? 'indicator-complete' : ''}" title="Shiny">✨${completedShinies}/${totalShinies}</span>
                 ${totalStars > 0 ? `<span class="indicator indicator-stars ${starsComplete ? 'indicator-complete' : ''}" title="Stars">★${completedStars}/${totalStars}</span>` : ''}
-                ${pokemon.forms.length > 0 ? `<span class="indicator indicator-forms ${formsComplete ? 'indicator-complete' : ''}" title="Forms">${Object.values(formTracking).filter(v => v).length}/${pokemon.forms.length}</span>` : ''}
+                ${totalForms > 0 ? `<span class="indicator indicator-forms ${formsComplete ? 'indicator-complete' : ''}" title="Forms">${completedForms}/${totalForms}</span>` : ''}
             </div>
         </div>
     `;
@@ -1676,20 +1675,6 @@ function createDetailContent(pokemon) {
                            ${tracking.original_gen ? 'checked' : ''}>
                     <span class="checkbox-label">Obtained</span>
                 </label>
-                ${pokemon.has_gender_diff ? `
-                    <label class="checkbox-item">
-                        <input type="checkbox"
-                               data-field="male"
-                               ${tracking.male ? 'checked' : ''}>
-                        <span class="checkbox-label">Male ♂</span>
-                    </label>
-                    <label class="checkbox-item">
-                        <input type="checkbox"
-                               data-field="female"
-                               ${tracking.female ? 'checked' : ''}>
-                        <span class="checkbox-label">Female ♀</span>
-                    </label>
-                ` : ''}
                 ${!pokemon.has_gender ? `
                     <span class="genderless-badge">Genderless</span>
                 ` : ''}
@@ -1702,11 +1687,41 @@ function createDetailContent(pokemon) {
             </div>
         </div>
 
-        ${pokemon.forms && pokemon.forms.length > 0 ? `
+        ${pokemon.has_gender_diff || (pokemon.forms && pokemon.forms.length > 0) ? `
             <div class="forms-section">
                 <h4>Forms</h4>
                 <div class="forms-list">
-                    ${pokemon.forms.map(form => `
+                    ${pokemon.has_gender_diff ? `
+                        <div class="form-row">
+                            <label class="checkbox-item form-checkbox">
+                                <input type="checkbox"
+                                       data-form="Male"
+                                       ${formTracking['Male'] ? 'checked' : ''}>
+                                <span class="checkbox-label">Male ♂</span>
+                            </label>
+                            <label class="checkbox-item form-shiny-checkbox">
+                                <input type="checkbox"
+                                       data-form-shiny="Male"
+                                       ${(pokemon.form_shiny_tracking || {})['Male'] ? 'checked' : ''}>
+                                <span class="checkbox-label">✨ Shiny</span>
+                            </label>
+                        </div>
+                        <div class="form-row">
+                            <label class="checkbox-item form-checkbox">
+                                <input type="checkbox"
+                                       data-form="Female"
+                                       ${formTracking['Female'] ? 'checked' : ''}>
+                                <span class="checkbox-label">Female ♀</span>
+                            </label>
+                            <label class="checkbox-item form-shiny-checkbox">
+                                <input type="checkbox"
+                                       data-form-shiny="Female"
+                                       ${(pokemon.form_shiny_tracking || {})['Female'] ? 'checked' : ''}>
+                                <span class="checkbox-label">✨ Shiny</span>
+                            </label>
+                        </div>
+                    ` : ''}
+                    ${pokemon.forms ? pokemon.forms.map(form => `
                         <div class="form-row">
                             <label class="checkbox-item form-checkbox">
                                 <input type="checkbox"
@@ -1721,7 +1736,7 @@ function createDetailContent(pokemon) {
                                 <span class="checkbox-label">✨ Shiny</span>
                             </label>
                         </div>
-                    `).join('')}
+                    `).join('') : ''}
                 </div>
             </div>
         ` : ''}

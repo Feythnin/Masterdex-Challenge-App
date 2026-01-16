@@ -1356,20 +1356,11 @@ def get_progress():
     total_forms = sum(len(p['forms']) for p in POKEMON_DATA)
     total_forms += sum(2 for p in POKEMON_DATA if p.get('has_gender_diff'))
 
+    # All forms (including Male/Female gender forms) are now tracked in FormTracking
     forms_completed = FormTracking.query.filter_by(
         user_id=current_user.id,
         completed=True
     ).count()
-
-    # Count male/female as completed forms for Pokemon with gender differences
-    for pokemon in POKEMON_DATA:
-        if pokemon.get('has_gender_diff'):
-            tracking = all_tracking.get(pokemon['id'])
-            if tracking:
-                if tracking.male:
-                    forms_completed += 1
-                if tracking.female:
-                    forms_completed += 1
 
     # Generation-specific progress
     gen_progress = {}
@@ -1448,8 +1439,8 @@ def export_data():
     output = io.StringIO()
     writer = csv.writer(output)
 
-    # Header row
-    writer.writerow(['pokemon_id', 'pokemon_name', 'obtained', 'male', 'female', 'shiny', 'notes', 'forms_completed', 'forms_shiny', 'stars_completed'])
+    # Header row (gender forms are now included in forms_completed/forms_shiny)
+    writer.writerow(['pokemon_id', 'pokemon_name', 'obtained', 'shiny', 'notes', 'forms_completed', 'forms_shiny', 'stars_completed'])
 
     # Data rows
     for pokemon in POKEMON_DATA:
@@ -1459,6 +1450,7 @@ def export_data():
         forms = all_forms.get(pid, [])
 
         # Get completed forms and shiny forms as pipe-separated lists
+        # This now includes Male/Female gender forms stored in FormTracking
         forms_completed = '|'.join([f.form_name for f in forms if f.completed])
         forms_shiny = '|'.join([f.form_name for f in forms if f.shiny])
         stars_completed = '|'.join([str(s.star_number) for s in stars if s.completed])
@@ -1467,8 +1459,6 @@ def export_data():
             pid,
             pokemon['name'],
             'true' if tracking and tracking.original_gen else 'false',
-            'true' if tracking and tracking.male else 'false',
-            'true' if tracking and tracking.female else 'false',
             'true' if tracking and tracking.shiny else 'false',
             tracking.notes if tracking and tracking.notes else '',
             forms_completed,
@@ -1518,12 +1508,36 @@ def import_data():
                 db.session.add(tracking)
 
             tracking.original_gen = row.get('obtained', '').lower() == 'true'
-            tracking.male = row.get('male', '').lower() == 'true'
-            tracking.female = row.get('female', '').lower() == 'true'
             tracking.shiny = row.get('shiny', '').lower() == 'true'
             tracking.notes = row.get('notes', '')
 
-            # Handle forms completed
+            # Backward compatibility: handle old CSV format with male/female columns
+            # Convert them to FormTracking entries
+            pokemon_data = next((p for p in POKEMON_DATA if p['id'] == pokemon_id), None)
+            if pokemon_data and pokemon_data.get('has_gender_diff'):
+                if row.get('male', '').lower() == 'true':
+                    form = FormTracking.query.filter_by(
+                        user_id=current_user.id,
+                        pokemon_id=pokemon_id,
+                        form_name='Male'
+                    ).first()
+                    if not form:
+                        form = FormTracking(user_id=current_user.id, pokemon_id=pokemon_id, form_name='Male')
+                        db.session.add(form)
+                    form.completed = True
+
+                if row.get('female', '').lower() == 'true':
+                    form = FormTracking.query.filter_by(
+                        user_id=current_user.id,
+                        pokemon_id=pokemon_id,
+                        form_name='Female'
+                    ).first()
+                    if not form:
+                        form = FormTracking(user_id=current_user.id, pokemon_id=pokemon_id, form_name='Female')
+                        db.session.add(form)
+                    form.completed = True
+
+            # Handle forms completed (includes Male/Female in new format)
             forms_completed = row.get('forms_completed', '')
             if forms_completed:
                 for form_name in forms_completed.split('|'):
@@ -1589,7 +1603,67 @@ def import_data():
         db.session.rollback()
         return jsonify({'error': str(e)}), 500
 
+def migrate_gender_to_forms():
+    """Migrate existing male/female tracking data to FormTracking entries."""
+    # Get all Pokemon with gender differences
+    gender_diff_pokemon_ids = {p['id'] for p in POKEMON_DATA if p.get('has_gender_diff')}
+
+    # Find all PokemonTracking entries with male or female checked
+    tracking_entries = PokemonTracking.query.filter(
+        db.or_(PokemonTracking.male == True, PokemonTracking.female == True)
+    ).all()
+
+    migrated_count = 0
+    for tracking in tracking_entries:
+        # Only migrate if this Pokemon actually has gender differences
+        if tracking.pokemon_id not in gender_diff_pokemon_ids:
+            continue
+
+        # Migrate male
+        if tracking.male:
+            existing = FormTracking.query.filter_by(
+                user_id=tracking.user_id,
+                pokemon_id=tracking.pokemon_id,
+                form_name='Male'
+            ).first()
+            if not existing:
+                form_entry = FormTracking(
+                    user_id=tracking.user_id,
+                    pokemon_id=tracking.pokemon_id,
+                    form_name='Male',
+                    completed=True,
+                    shiny=False
+                )
+                db.session.add(form_entry)
+                migrated_count += 1
+
+        # Migrate female
+        if tracking.female:
+            existing = FormTracking.query.filter_by(
+                user_id=tracking.user_id,
+                pokemon_id=tracking.pokemon_id,
+                form_name='Female'
+            ).first()
+            if not existing:
+                form_entry = FormTracking(
+                    user_id=tracking.user_id,
+                    pokemon_id=tracking.pokemon_id,
+                    form_name='Female',
+                    completed=True,
+                    shiny=False
+                )
+                db.session.add(form_entry)
+                migrated_count += 1
+
+    if migrated_count > 0:
+        db.session.commit()
+        print(f"Migrated {migrated_count} gender form entries to FormTracking")
+
+    return migrated_count
+
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
+        # Run migration for existing male/female data
+        migrate_gender_to_forms()
     app.run(debug=True, port=5000)
