@@ -673,6 +673,53 @@ const LGPE_LOCATIONS = {
     151: 'Poke Ball Plus (gift)', // Mew
 };
 
+// FireRed/LeafGreen location data (Gen 1 Pokemon)
+const FRLG_LOCATIONS = {
+    // Starters
+    1: 'Starter - Pallet Town (Professor Oak)', // Bulbasaur
+    4: 'Starter - Pallet Town (Professor Oak)', // Charmander
+    7: 'Starter - Pallet Town (Professor Oak)', // Squirtle
+    // Gift Pokemon
+    106: 'Fighting Dojo - Saffron City (choose one)', // Hitmonlee
+    107: 'Fighting Dojo - Saffron City (choose one)', // Hitmonchan
+    129: 'Pokemon Center - Route 4 (Magikarp salesman, 500 PokeDollars)', // Magikarp
+    131: 'Silph Co. (gift from employee)', // Lapras
+    133: 'Celadon Mansion (gift)', // Eevee
+    137: 'Silph Co. (gift from scientist)', // Porygon
+    138: 'Mt. Moon (Helix Fossil, revive at Cinnabar Lab)', // Omanyte
+    140: 'Mt. Moon (Dome Fossil, revive at Cinnabar Lab)', // Kabuto
+    142: 'Pewter Museum (Old Amber, revive at Cinnabar Lab)', // Aerodactyl
+    // Version Exclusives - FireRed
+    23: { 'FireRed': 'Route 4, Route 8, Route 9, Route 10, Route 11' }, // Ekans
+    24: { 'FireRed': 'Route 23, Victory Road' }, // Arbok
+    43: { 'FireRed': 'Route 5, Route 6, Route 7, Safari Zone' }, // Oddish
+    44: { 'FireRed': 'Route 12, Route 13, Route 14, Route 15, Safari Zone' }, // Gloom
+    58: { 'FireRed': 'Route 7, Route 8, Pokemon Mansion' }, // Growlithe
+    59: { 'FireRed': 'Pokemon Mansion (rare)' }, // Arcanine
+    123: { 'FireRed': 'Safari Zone' }, // Scyther
+    125: { 'FireRed': 'Power Plant' }, // Electabuzz
+    // Version Exclusives - LeafGreen
+    27: { 'LeafGreen': 'Route 4, Route 8, Route 9, Route 10, Route 11' }, // Sandshrew
+    28: { 'LeafGreen': 'Route 23, Victory Road' }, // Sandslash
+    37: { 'LeafGreen': 'Route 7, Route 8, Pokemon Mansion' }, // Vulpix
+    38: { 'LeafGreen': 'Pokemon Mansion (rare)' }, // Ninetales
+    69: { 'LeafGreen': 'Route 5, Route 6, Route 7, Safari Zone' }, // Bellsprout
+    70: { 'LeafGreen': 'Route 12, Route 13, Route 14, Route 15, Safari Zone' }, // Weepinbell
+    126: { 'LeafGreen': 'Pokemon Mansion' }, // Magmar
+    127: { 'LeafGreen': 'Safari Zone' }, // Pinsir
+    // Legendary Birds
+    144: 'Seafoam Islands', // Articuno
+    145: 'Power Plant', // Zapdos
+    146: 'Mt. Ember (Sevii Islands)', // Moltres
+    150: 'Cerulean Cave (post-game)', // Mewtwo
+    // Roaming Beasts (starter-dependent)
+    243: 'Roaming Kanto (post-game, if starter was Squirtle)', // Raikou
+    244: 'Roaming Kanto (post-game, if starter was Bulbasaur)', // Entei
+    245: 'Roaming Kanto (post-game, if starter was Charmander)', // Suicune
+    // Mythical
+    151: 'Event only', // Mew
+};
+
 // Omega Ruby/Alpha Sapphire location data (Gen 3 Pokemon)
 const ORAS_LOCATIONS = {
     // Starters
@@ -686,10 +733,10 @@ const ORAS_LOCATIONS = {
     265: 'Route 101, 102, 104, Petalburg Woods', // Wurmple
     266: 'Petalburg Woods', // Silcoon
     268: 'Petalburg Woods', // Cascoon
-    270: { 'Alpha Sapphire': 'Route 102, Route 114' }, // Lotad - AS exclusive
-    271: { 'Alpha Sapphire': 'Route 114' }, // Lombre - AS exclusive
-    273: { 'Omega Ruby': 'Route 102, Route 114' }, // Seedot - OR exclusive
-    274: { 'Omega Ruby': 'Route 114' }, // Nuzleaf - OR exclusive
+    270: { 'Sapphire': 'Route 102, Route 114', 'Emerald': 'Route 102, Route 114', 'Alpha Sapphire': 'Route 102, Route 114' }, // Lotad - Sapphire/Emerald/AS exclusive
+    271: { 'Sapphire': 'Route 114', 'Emerald': 'Route 114', 'Alpha Sapphire': 'Route 114' }, // Lombre - Sapphire/Emerald/AS exclusive
+    273: { 'Ruby': 'Route 102, Route 114', 'Emerald': 'Route 102, Route 114', 'Omega Ruby': 'Route 102, Route 114' }, // Seedot - Ruby/Emerald/OR exclusive
+    274: { 'Ruby': 'Route 114', 'Emerald': 'Route 114', 'Omega Ruby': 'Route 114' }, // Nuzleaf - Ruby/Emerald/OR exclusive
     276: 'Route 104, 115, 116, Petalburg Woods', // Taillow
     278: 'Route 103, 104, 110, 118-123', // Wingull
     279: 'Route 103, 104, 118-123', // Pelipper
@@ -705,8 +752,8 @@ const ORAS_LOCATIONS = {
     297: 'Victory Road', // Hariyama
     299: 'Granite Cave B2F', // Nosepass
     300: 'Route 116', // Skitty
-    302: { 'Alpha Sapphire': 'Granite Cave, Victory Road' }, // Sableye - AS exclusive
-    303: { 'Omega Ruby': 'Granite Cave, Victory Road' }, // Mawile - OR exclusive
+    302: { 'Sapphire': 'Granite Cave, Victory Road', 'Emerald': 'Granite Cave, Victory Road', 'Alpha Sapphire': 'Granite Cave, Victory Road' }, // Sableye - Sapphire/Emerald/AS exclusive
+    303: { 'Ruby': 'Granite Cave, Victory Road', 'Emerald': 'Granite Cave, Victory Road', 'Omega Ruby': 'Granite Cave, Victory Road' }, // Mawile - Ruby/Emerald/OR exclusive
     304: 'Granite Cave B1F/B2F, Victory Road', // Aron
     305: 'Victory Road', // Lairon
     307: 'Mt. Pyre', // Meditite
@@ -728,18 +775,18 @@ const ORAS_LOCATIONS = {
     328: 'Route 111 Desert', // Trapinch
     331: 'Route 111 Desert', // Cacnea
     333: 'Route 114, 115, Sky Pillar', // Swablu
-    335: { 'Omega Ruby': 'Route 114' }, // Zangoose - OR exclusive
-    336: { 'Alpha Sapphire': 'Route 114' }, // Seviper - AS exclusive
-    337: { 'Alpha Sapphire': 'Meteor Falls' }, // Lunatone - AS exclusive
-    338: { 'Omega Ruby': 'Meteor Falls' }, // Solrock - OR exclusive
+    335: { 'Ruby': 'Route 114', 'Emerald': 'Route 114', 'Omega Ruby': 'Route 114' }, // Zangoose - Ruby/Emerald/OR exclusive
+    336: { 'Sapphire': 'Route 114', 'Emerald': 'Route 114', 'Alpha Sapphire': 'Route 114' }, // Seviper - Sapphire/Emerald/AS exclusive
+    337: { 'Sapphire': 'Meteor Falls', 'Emerald': 'Meteor Falls', 'Alpha Sapphire': 'Meteor Falls' }, // Lunatone - Sapphire/Emerald/AS exclusive
+    338: { 'Ruby': 'Meteor Falls', 'Emerald': 'Meteor Falls', 'Omega Ruby': 'Meteor Falls' }, // Solrock - Ruby/Emerald/OR exclusive
     339: 'Route 111, 114, 120 (fishing)', // Barboach
     340: 'Route 111, 114 (super rod)', // Whiscash
     341: 'Route 102, 117, 123 (fishing)', // Corphish
     342: 'Route 102, 117 (super rod)', // Crawdaunt
     343: 'Route 111 Desert', // Baltoy
     344: 'Sky Pillar', // Claydol
-    345: 'Fossil revival - Route 111 Desert', // Lileep
-    347: 'Fossil revival - Route 111 Desert', // Anorith
+    345: { 'Ruby': 'Fossil revival - Route 111 Desert (Root Fossil)', 'Sapphire': 'Fossil revival - Route 111 Desert (Root Fossil)', 'Emerald': 'Fossil revival - Mirage Tower (Root Fossil)', 'Omega Ruby': 'Fossil revival - Route 111 Desert', 'Alpha Sapphire': 'Fossil revival - Route 111 Desert' }, // Lileep
+    347: { 'Ruby': 'Fossil revival - Route 111 Desert (Claw Fossil)', 'Sapphire': 'Fossil revival - Route 111 Desert (Claw Fossil)', 'Emerald': 'Fossil revival - Mirage Tower (Claw Fossil)', 'Omega Ruby': 'Fossil revival - Route 111 Desert', 'Alpha Sapphire': 'Fossil revival - Route 111 Desert' }, // Anorith
     349: 'Route 119 (fishing)', // Feebas
     351: 'Weather Institute gift', // Castform
     352: 'Route 118-121, Fortree City', // Kecleon
@@ -766,10 +813,10 @@ const ORAS_LOCATIONS = {
     377: 'Route 111 Desert Ruins', // Regirock
     378: 'Route 105 Island Cave', // Regice
     379: 'Route 120 Ancient Tomb', // Registeel
-    380: { 'Alpha Sapphire': 'Southern Island' }, // Latias - AS exclusive
-    381: { 'Omega Ruby': 'Southern Island' }, // Latios - OR exclusive
-    382: { 'Alpha Sapphire': 'Cave of Origin' }, // Kyogre - AS exclusive
-    383: { 'Omega Ruby': 'Cave of Origin' }, // Groudon - OR exclusive
+    380: { 'Ruby': 'Southern Island (Eon Ticket event)', 'Sapphire': 'Roaming Hoenn (post-game)', 'Emerald': 'Roaming or Southern Island (mother\'s question/Eon Ticket)', 'Alpha Sapphire': 'Southern Island (story)' }, // Latias
+    381: { 'Ruby': 'Roaming Hoenn (post-game)', 'Sapphire': 'Southern Island (Eon Ticket event)', 'Emerald': 'Roaming or Southern Island (mother\'s question/Eon Ticket)', 'Omega Ruby': 'Southern Island (story)' }, // Latios
+    382: { 'Sapphire': 'Cave of Origin', 'Emerald': 'Marine Cave (post-game, roaming location)', 'Alpha Sapphire': 'Cave of Origin' }, // Kyogre - Sapphire/Emerald/AS
+    383: { 'Ruby': 'Cave of Origin', 'Emerald': 'Terra Cave (post-game, roaming location)', 'Omega Ruby': 'Cave of Origin' }, // Groudon - Ruby/Emerald/OR
     384: 'Sky Pillar summit', // Rayquaza
     386: {
         'Ruby': 'Birth Island (event)',
@@ -798,8 +845,8 @@ const BDSP_LOCATIONS = {
     404: 'Route 222', // Luxio
     405: 'Route 222 (rare)', // Luxray
     406: 'Route 204, 212, Eterna Forest, Great Marsh', // Budew
-    408: 'Fossil revival - Oreburgh Mine', // Cranidos
-    410: 'Fossil revival - Oreburgh Mine', // Shieldon
+    408: { 'Diamond': 'Fossil revival - Underground (Skull Fossil)', 'Platinum': 'Fossil revival - Underground (Skull Fossil, odd Trainer ID only)', 'Brilliant Diamond': 'Fossil revival - Grand Underground (Skull Fossil)' }, // Cranidos - Diamond/BD exclusive, Platinum odd ID
+    410: { 'Pearl': 'Fossil revival - Underground (Armor Fossil)', 'Platinum': 'Fossil revival - Underground (Armor Fossil, even Trainer ID only)', 'Shining Pearl': 'Fossil revival - Grand Underground (Armor Fossil)' }, // Shieldon - Pearl/SP exclusive, Platinum even ID
     412: 'Honey trees', // Burmy
     415: 'Honey trees', // Combee
     417: 'Route 203, 204, Trophy Garden', // Pachirisu
@@ -811,10 +858,10 @@ const BDSP_LOCATIONS = {
     425: 'Valley Windworks (Friday)', // Drifloon
     426: 'Route 215 (rare)', // Drifblim
     427: 'Eterna Forest', // Buneary
-    431: { 'Shining Pearl': 'Route 218, 222' }, // Glameow - SP exclusive
-    432: { 'Shining Pearl': 'Route 222' }, // Purugly - SP exclusive
-    434: { 'Brilliant Diamond': 'Route 206, 214, 221' }, // Stunky - BD exclusive
-    435: { 'Brilliant Diamond': 'Route 221, 225' }, // Skuntank - BD exclusive
+    431: { 'Pearl': 'Route 218, 222', 'Shining Pearl': 'Route 218, 222' }, // Glameow - Pearl/SP exclusive
+    432: { 'Pearl': 'Route 222', 'Shining Pearl': 'Route 222' }, // Purugly - Pearl/SP exclusive
+    434: { 'Diamond': 'Route 206, 214, 221', 'Brilliant Diamond': 'Route 206, 214, 221' }, // Stunky - Diamond/BD exclusive
+    435: { 'Diamond': 'Route 221, 225', 'Brilliant Diamond': 'Route 221, 225' }, // Skuntank - Diamond/BD exclusive
     436: 'Wayward Cave', // Bronzor
     437: 'Mt. Coronet, Turnback Cave', // Bronzong
     438: 'Route 209 (rare), breed Sudowoodo', // Bonsly
@@ -839,11 +886,11 @@ const BDSP_LOCATIONS = {
     459: 'Route 216, 217, Acuity Lakefront', // Snover
     460: 'Route 217, Acuity Lakefront', // Abomasnow
     479: 'Old Chateau (special)', // Rotom
-    480: 'Lake Verity cavern', // Uxie
-    481: 'Lake Valor cavern', // Mesprit
-    482: 'Lake Acuity cavern', // Azelf
-    483: { 'Brilliant Diamond': 'Spear Pillar' }, // Dialga - BD exclusive
-    484: { 'Shining Pearl': 'Spear Pillar' }, // Palkia - SP exclusive
+    480: 'Lake Acuity cavern', // Uxie
+    481: 'Lake Verity cavern (then roams)', // Mesprit
+    482: 'Lake Valor cavern', // Azelf
+    483: { 'Diamond': 'Spear Pillar', 'Platinum': 'Spear Pillar (post-game, requires Adamant Orb)', 'Brilliant Diamond': 'Spear Pillar' }, // Dialga - Diamond/Platinum/BD
+    484: { 'Pearl': 'Spear Pillar', 'Platinum': 'Spear Pillar (post-game, requires Lustrous Orb)', 'Shining Pearl': 'Spear Pillar' }, // Palkia - Pearl/Platinum/SP
     485: 'Stark Mountain', // Heatran
     486: 'Snowpoint Temple', // Regigigas
     487: {
@@ -868,6 +915,172 @@ const BDSP_LOCATIONS = {
         'Brilliant Diamond': 'Flower Paradise (event)',
         'Shining Pearl': 'Flower Paradise (event)'
     }, // Shaymin
+};
+
+// HeartGold/SoulSilver location data (Gen 2 Pokemon)
+const HGSS_LOCATIONS = {
+    // Starters
+    152: 'Starter - New Bark Town (Professor Elm)', // Chikorita
+    155: 'Starter - New Bark Town (Professor Elm)', // Cyndaquil
+    158: 'Starter - New Bark Town (Professor Elm)', // Totodile
+    // Gift Pokemon
+    131: 'Union Cave B2F (Friday only)', // Lapras
+    133: 'Bill gift - Goldenrod City', // Eevee
+    175: 'Mystery Egg - Violet City (from Elm\'s aide)', // Togepi
+    236: 'Mt. Mortar (Karate King gift)', // Tyrogue
+    // Version Exclusives - HeartGold
+    56: { 'HeartGold': 'Route 9, Route 42' }, // Mankey
+    57: { 'HeartGold': 'Cerulean Cave' }, // Primeape
+    58: { 'HeartGold': 'Route 7, Route 8, Route 36, Route 37' }, // Growlithe
+    59: { 'HeartGold': 'Route 7, Route 8' }, // Arcanine
+    167: { 'HeartGold': 'Route 2, Route 30, Route 31, Ilex Forest, National Park' }, // Spinarak
+    168: { 'HeartGold': 'Route 2' }, // Ariados
+    207: { 'HeartGold': 'Route 45' }, // Gligar
+    226: { 'HeartGold': 'Route 41 (surfing)' }, // Mantine
+    231: { 'HeartGold': 'Route 45' }, // Phanpy
+    232: { 'HeartGold': 'Route 45, Mt. Silver' }, // Donphan
+    // Version Exclusives - SoulSilver
+    37: { 'SoulSilver': 'Route 7, Route 8, Route 36, Route 37, Route 48' }, // Vulpix
+    38: { 'SoulSilver': 'Route 7, Route 8' }, // Ninetales
+    52: { 'SoulSilver': 'Route 5, Route 6, Route 7, Route 8' }, // Meowth
+    53: { 'SoulSilver': 'Route 7' }, // Persian
+    165: { 'SoulSilver': 'Route 2, Route 30, Route 31, National Park' }, // Ledyba
+    166: { 'SoulSilver': 'Route 2' }, // Ledian
+    216: { 'SoulSilver': 'Route 45, Mt. Silver' }, // Teddiursa
+    217: { 'SoulSilver': 'Route 45, Mt. Silver' }, // Ursaring
+    225: { 'SoulSilver': 'Ice Path' }, // Delibird
+    227: { 'SoulSilver': 'Route 45' }, // Skarmory
+    // Fossils
+    138: { 'HeartGold': 'Ruins of Alph (Rock Smash - Helix Fossil)' }, // Omanyte
+    140: { 'SoulSilver': 'Ruins of Alph (Rock Smash - Dome Fossil)' }, // Kabuto
+    142: 'Ruins of Alph (Rock Smash - Old Amber)', // Aerodactyl
+    345: { 'SoulSilver': 'Cliff Cave (Rock Smash - Root Fossil, post-game)' }, // Lileep
+    347: { 'HeartGold': 'Cliff Cave (Rock Smash - Claw Fossil, post-game)' }, // Anorith
+    // Legendary Beasts
+    243: 'Roaming Johto (after Burned Tower)', // Raikou
+    244: 'Roaming Johto (after Burned Tower)', // Entei
+    245: 'Route 25 (after scripted encounters)', // Suicune
+    // Tower Duo
+    249: { 'HeartGold': 'Whirl Islands (post-game, Lv70)', 'SoulSilver': 'Whirl Islands (story, Lv45)' }, // Lugia
+    250: { 'HeartGold': 'Bell Tower (story, Lv45)', 'SoulSilver': 'Bell Tower (post-game, Lv70)' }, // Ho-Oh
+    // Mythical
+    251: 'Ilex Forest shrine (event only)', // Celebi
+    // Post-game Legendaries (Kanto)
+    144: 'Seafoam Islands', // Articuno
+    145: 'Route 10 (outside Power Plant)', // Zapdos
+    146: 'Mt. Silver', // Moltres
+    150: 'Cerulean Cave', // Mewtwo
+    // Post-game Legendaries (Hoenn - requires specific events)
+    380: { 'HeartGold': 'Roaming Kanto (Enigma Stone event)' }, // Latias - HG
+    381: { 'SoulSilver': 'Roaming Kanto (Enigma Stone event)' }, // Latios - SS
+    382: { 'HeartGold': 'Embedded Tower (requires Blue Orb from Mr. Pokemon)' }, // Kyogre - HG
+    383: { 'SoulSilver': 'Embedded Tower (requires Red Orb from Mr. Pokemon)' }, // Groudon - SS
+    384: 'Embedded Tower (requires both Kyogre and Groudon)', // Rayquaza
+};
+
+// Gold/Silver/Crystal location data (Gen 2 Pokemon)
+const GSC_LOCATIONS = {
+    // Starters
+    152: 'Starter - New Bark Town (Professor Elm)', // Chikorita
+    155: 'Starter - New Bark Town (Professor Elm)', // Cyndaquil
+    158: 'Starter - New Bark Town (Professor Elm)', // Totodile
+    // Gift Pokemon
+    131: 'Union Cave B2F (Friday only)', // Lapras
+    133: 'Bill gift - Goldenrod City', // Eevee
+    175: 'Mystery Egg - Violet City (from Elm\'s aide)', // Togepi
+    213: 'Cianwood City (temporary loan from Kirk)', // Shuckle
+    236: 'Mt. Mortar (Karate King gift)', // Tyrogue
+    // Version Exclusives - Gold
+    56: { 'Gold': 'Route 9, Route 42' }, // Mankey - Gold only (not in Crystal)
+    57: { 'Gold': 'Route 9, Cerulean Cave' }, // Primeape - Gold only (not in Crystal)
+    58: { 'Gold': 'Route 7, Route 8, Route 36, Route 37', 'Crystal': 'Route 36, Route 37' }, // Growlithe
+    167: { 'Gold': 'Route 2, Route 30, Route 31, Ilex Forest', 'Crystal': 'Route 2, Route 30, Route 31, Ilex Forest' }, // Spinarak
+    168: { 'Gold': 'Route 2', 'Crystal': 'Route 2' }, // Ariados
+    207: { 'Gold': 'Route 45' }, // Gligar - Gold only (not in Crystal)
+    216: { 'Gold': 'Route 45, Mt. Silver' }, // Teddiursa - Gold only
+    217: { 'Gold': 'Route 45, Mt. Silver' }, // Ursaring - Gold only
+    226: { 'Gold': 'Route 41 (surfing)', 'Crystal': 'Route 41 (surfing)' }, // Mantine
+    // Version Exclusives - Silver
+    37: { 'Silver': 'Route 7, Route 8, Route 36, Route 37' }, // Vulpix - Silver only (not in Crystal)
+    38: { 'Silver': 'Route 7, Route 8' }, // Ninetales - Silver only (not in Crystal)
+    52: { 'Silver': 'Route 5, Route 6, Route 7, Route 8', 'Crystal': 'Route 5, Route 6, Route 7, Route 8' }, // Meowth
+    53: { 'Silver': 'Route 7', 'Crystal': 'Route 7' }, // Persian
+    165: { 'Silver': 'Route 2, Route 30, Route 31, National Park', 'Crystal': 'Route 2, Route 30, Route 31, National Park' }, // Ledyba
+    166: { 'Silver': 'Route 2', 'Crystal': 'Route 2' }, // Ledian
+    225: { 'Silver': 'Ice Path', 'Crystal': 'Ice Path' }, // Delibird
+    227: { 'Silver': 'Route 45', 'Crystal': 'Route 45' }, // Skarmory
+    231: { 'Silver': 'Route 45', 'Crystal': 'Route 45' }, // Phanpy
+    232: { 'Silver': 'Route 45, Mt. Silver', 'Crystal': 'Route 45, Mt. Silver' }, // Donphan
+    // Legendary Beasts
+    243: 'Roaming Johto (after Burned Tower)', // Raikou
+    244: 'Roaming Johto (after Burned Tower)', // Entei
+    245: { 'Gold': 'Roaming Johto (after Burned Tower)', 'Silver': 'Roaming Johto (after Burned Tower)', 'Crystal': 'Tin Tower (after Burned Tower encounters)' }, // Suicune
+    // Tower Duo
+    249: { 'Gold': 'Whirl Islands (post-game, Lv70, requires Silver Wing)', 'Silver': 'Whirl Islands (story, Lv40)', 'Crystal': 'Whirl Islands (Lv60)' }, // Lugia
+    250: { 'Gold': 'Tin Tower (story, Lv40)', 'Silver': 'Tin Tower (post-game, Lv70, requires Rainbow Wing)', 'Crystal': 'Tin Tower (Lv60, after catching beasts)' }, // Ho-Oh
+    // Mythical
+    251: { 'Crystal': 'Ilex Forest shrine (GS Ball event - Japan only / Virtual Console)' }, // Celebi
+    // Kanto Legendaries (post-game)
+    144: 'Seafoam Islands', // Articuno
+    145: 'Route 10 (outside Power Plant)', // Zapdos
+    146: 'Mt. Silver (Silver Cave exterior)', // Moltres
+    150: 'Cerulean Cave', // Mewtwo
+};
+
+// Red/Blue/Yellow location data (Gen 1 Pokemon)
+const RBY_LOCATIONS = {
+    // Gift Pokemon (same across RBY)
+    106: 'Fighting Dojo - Saffron City (choose one)', // Hitmonlee
+    107: 'Fighting Dojo - Saffron City (choose one)', // Hitmonchan
+    129: 'Route 4 Pokemon Center (purchase $500)', // Magikarp
+    131: 'Silph Co. - Saffron City (gift after defeating rival)', // Lapras
+    133: 'Celadon Mansion (back entrance, top floor)', // Eevee
+    137: 'Celadon Game Corner (prize)', // Porygon
+    138: 'Revive Helix Fossil - Mt. Moon (choose one)', // Omanyte
+    140: 'Revive Dome Fossil - Mt. Moon (choose one)', // Kabuto
+    142: 'Revive Old Amber - Pewter Museum (Cut required)', // Aerodactyl
+    147: 'Celadon Game Corner (prize) / Safari Zone', // Dratini
+    // Static Encounters
+    143: 'Route 12, Route 16 (Poké Flute)', // Snorlax
+    144: 'Seafoam Islands (Strength puzzle)', // Articuno
+    145: 'Power Plant', // Zapdos
+    146: 'Victory Road', // Moltres
+    150: 'Cerulean Cave (post-game)', // Mewtwo
+    // In-game Trades
+    122: { 'Red': 'Route 2 (trade Abra)', 'Blue': 'Route 2 (trade Abra)', 'Yellow': 'Route 2 (trade Clefairy)' }, // Mr. Mime
+    124: { 'Red': 'Cerulean City (trade Poliwhirl)', 'Blue': 'Cerulean City (trade Poliwhirl)' }, // Jynx - RB trade only, not in Yellow
+    // Version Exclusives - Red Only
+    23: { 'Red': 'Route 4, Route 8, Route 9, Route 10, Route 11, Route 23', 'Yellow': 'Route 4, Route 8, Route 9, Route 10, Route 11, Route 23' }, // Ekans
+    24: { 'Red': 'Route 23', 'Yellow': 'Route 23' }, // Arbok
+    43: { 'Red': 'Route 5, Route 6, Route 7, Route 12, Route 13, Route 14, Route 15, Route 24, Route 25', 'Yellow': 'Route 5, Route 6, Route 7, Route 12, Route 13, Route 14, Route 15, Route 24, Route 25' }, // Oddish
+    44: { 'Red': 'Route 12, Route 13, Route 14, Route 15', 'Yellow': 'Route 12, Route 13, Route 14, Route 15' }, // Gloom
+    56: { 'Red': 'Route 5, Route 6, Route 7, Route 8', 'Yellow': 'Route 3, Route 4, Route 22, Route 23' }, // Mankey
+    57: { 'Red': 'Route 23', 'Yellow': 'Route 23' }, // Primeape
+    58: { 'Red': 'Route 7, Route 8, Pokemon Mansion', 'Yellow': 'Route 7, Route 8, Pokemon Mansion' }, // Growlithe
+    123: { 'Red': 'Safari Zone / Game Corner (5500 coins)', 'Yellow': 'Game Corner (5500 coins)' }, // Scyther
+    125: { 'Red': 'Power Plant' }, // Electabuzz - Red only
+    // Version Exclusives - Blue Only
+    27: { 'Blue': 'Route 4, Route 8, Route 9, Route 10, Route 11, Route 23', 'Yellow': 'Route 3, Route 4' }, // Sandshrew
+    28: { 'Blue': 'Route 23', 'Yellow': 'Route 23' }, // Sandslash
+    37: { 'Blue': 'Route 7, Route 8, Pokemon Mansion', 'Yellow': 'Game Corner (1000 coins)' }, // Vulpix
+    38: { 'Blue': 'Pokemon Mansion (rare)' }, // Ninetales - Blue only (evolve in Yellow)
+    52: { 'Blue': 'Route 5, Route 6, Route 7, Route 8' }, // Meowth - Blue only, not in Yellow
+    53: { 'Blue': 'Route 7, Route 8 (rare)' }, // Persian - Blue only, not in Yellow
+    69: { 'Blue': 'Route 5, Route 6, Route 7, Route 12, Route 13, Route 14, Route 15, Route 24, Route 25', 'Yellow': 'Route 5, Route 6, Route 7, Route 12, Route 13, Route 14, Route 15, Route 24, Route 25' }, // Bellsprout
+    70: { 'Blue': 'Route 12, Route 13, Route 14, Route 15', 'Yellow': 'Route 12, Route 13, Route 14, Route 15' }, // Weepinbell
+    126: { 'Blue': 'Pokemon Mansion' }, // Magmar - Blue only
+    127: { 'Blue': 'Safari Zone / Game Corner (2500 coins)', 'Yellow': 'Game Corner (2500 coins)' }, // Pinsir
+    // Yellow Unobtainable (require trade from Red/Blue)
+    13: { 'Red': 'Viridian Forest', 'Blue': 'Viridian Forest' }, // Weedle - not in Yellow
+    14: { 'Red': 'Viridian Forest', 'Blue': 'Viridian Forest' }, // Kakuna - not in Yellow
+    15: { 'Red': 'Route 25', 'Blue': 'Route 25' }, // Beedrill - not in Yellow (catch evolved)
+    109: { 'Red': 'Pokemon Mansion', 'Blue': 'Pokemon Mansion' }, // Koffing - not in Yellow
+    110: { 'Red': 'Pokemon Mansion', 'Blue': 'Pokemon Mansion' }, // Weezing - not in Yellow
+    // Yellow-specific (wild instead of trade-only)
+    83: { 'Red': 'Vermilion City (trade Spearow)', 'Blue': 'Vermilion City (trade Spearow)', 'Yellow': 'Route 12, Route 13' }, // Farfetch'd - wild in Yellow, trade-only in RB
+    108: { 'Red': 'Route 18 (trade Slowbro)', 'Blue': 'Route 18 (trade Slowbro)', 'Yellow': 'Route 18, Safari Zone' }, // Lickitung - wild in Yellow, trade in RB
+    // Yellow exclusive trade (Machoke for Cubone evolves to Machamp)
+    68: { 'Yellow': 'Route 5 Underground Path (trade Cubone, evolves)' }, // Machamp - Yellow in-game trade
 };
 
 // Black/White/Black 2/White 2 location data (Gen 5 Pokemon)
@@ -918,7 +1131,7 @@ const BW_LOCATIONS = {
     564: 'Relic Castle (fossil)', // Tirtouga
     566: 'Relic Castle (fossil)', // Archen
     568: 'Route 5, Route 16', // Trubbish
-    570: 'Driftveil City (gift)', // Zorua
+    570: { 'Black': 'Castelia City (Celebi event)', 'White': 'Castelia City (Celebi event)', 'Black 2': 'Driftveil City (gift from Rood)', 'White 2': 'Driftveil City (gift from Rood)' }, // Zorua
     572: 'Route 5, Cold Storage', // Minccino
     573: 'Route 5, Route 9, Route 16 (rustling grass)', // Cinccino
     574: { 'Black': 'Route 5, Route 16', 'Black 2': 'Route 5' }, // Gothita - Black exclusive
@@ -962,8 +1175,8 @@ const BW_LOCATIONS = {
     640: { 'Black': 'Pinwheel Forest', 'White': 'Pinwheel Forest', 'Black 2': 'Route 11', 'White 2': 'Route 11' }, // Virizion
     641: { 'Black': 'Roaming (post-game)', 'Black 2': 'Route 6 (Therian Shrine)' }, // Tornadus - Black exclusive
     642: { 'White': 'Roaming (post-game)', 'White 2': 'Route 6 (Therian Shrine)' }, // Thundurus - White exclusive
-    643: { 'Black': 'N\'s Castle / Dragonspiral Tower', 'White 2': 'Dragonspiral Tower' }, // Reshiram - Black/White 2
-    644: { 'White': 'N\'s Castle / Dragonspiral Tower', 'Black 2': 'Dragonspiral Tower' }, // Zekrom - White/Black 2
+    643: { 'White': 'N\'s Castle / Dragonspiral Tower', 'White 2': 'Dragonspiral Tower' }, // Reshiram - White/White 2
+    644: { 'Black': 'N\'s Castle / Dragonspiral Tower', 'Black 2': 'Dragonspiral Tower' }, // Zekrom - Black/Black 2
     645: 'Abundant Shrine', // Landorus
     646: 'Giant Chasm', // Kyurem
     647: 'Event only', // Keldeo
@@ -1385,10 +1598,18 @@ const SV_LOCATIONS = {
 function hasManualData(game, pokemonId) {
     if (game === "Let's Go Pikachu" || game === "Let's Go Eevee") {
         return LGPE_LOCATIONS[pokemonId] !== undefined;
+    } else if (game === "FireRed" || game === "LeafGreen") {
+        return FRLG_LOCATIONS[pokemonId] !== undefined;
     } else if (game === "Ruby" || game === "Sapphire" || game === "Emerald" || game === "Omega Ruby" || game === "Alpha Sapphire") {
         return ORAS_LOCATIONS[pokemonId] !== undefined;
     } else if (game === "Diamond" || game === "Pearl" || game === "Platinum" || game === "Brilliant Diamond" || game === "Shining Pearl") {
         return BDSP_LOCATIONS[pokemonId] !== undefined;
+    } else if (game === "HeartGold" || game === "SoulSilver") {
+        return HGSS_LOCATIONS[pokemonId] !== undefined;
+    } else if (game === "Gold" || game === "Silver" || game === "Crystal") {
+        return GSC_LOCATIONS[pokemonId] !== undefined;
+    } else if (game === "Red" || game === "Blue" || game === "Yellow") {
+        return RBY_LOCATIONS[pokemonId] !== undefined;
     } else if (game === "Black" || game === "White" || game === "Black 2" || game === "White 2") {
         return BW_LOCATIONS[pokemonId] !== undefined;
     } else if (game === "X" || game === "Y") {
@@ -1410,10 +1631,18 @@ function getManualLocation(game, pokemonId) {
 
     if (game === "Let's Go Pikachu" || game === "Let's Go Eevee") {
         data = LGPE_LOCATIONS[pokemonId];
+    } else if (game === "FireRed" || game === "LeafGreen") {
+        data = FRLG_LOCATIONS[pokemonId];
     } else if (game === "Ruby" || game === "Sapphire" || game === "Emerald" || game === "Omega Ruby" || game === "Alpha Sapphire") {
         data = ORAS_LOCATIONS[pokemonId];
     } else if (game === "Diamond" || game === "Pearl" || game === "Platinum" || game === "Brilliant Diamond" || game === "Shining Pearl") {
         data = BDSP_LOCATIONS[pokemonId];
+    } else if (game === "HeartGold" || game === "SoulSilver") {
+        data = HGSS_LOCATIONS[pokemonId];
+    } else if (game === "Gold" || game === "Silver" || game === "Crystal") {
+        data = GSC_LOCATIONS[pokemonId];
+    } else if (game === "Red" || game === "Blue" || game === "Yellow") {
+        data = RBY_LOCATIONS[pokemonId];
     } else if (game === "Black" || game === "White" || game === "Black 2" || game === "White 2") {
         data = BW_LOCATIONS[pokemonId];
     } else if (game === "X" || game === "Y") {

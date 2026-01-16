@@ -194,6 +194,31 @@ python app.py
 - [x] **Gen 7 location data (SM_LOCATIONS)** - SM/USUM locations including Ultra Beasts, version exclusives
 - [x] **Gen 8 location data (SWSH_LOCATIONS)** - SwSh locations including Wild Area, DLC content (Isle of Armor, Crown Tundra)
 - [x] **Gen 9 location data (SV_LOCATIONS)** - SV locations including Paradox Pokemon, DLC content (Kitakami, Indigo Disk)
+- [x] **PLA location data (PLA_LOCATIONS)** - Legends Arceus locations for Pokemon 899-905
+- [x] **HGSS location data (HGSS_LOCATIONS)** - HeartGold/SoulSilver locations with version exclusives, fossils, roaming beasts
+- [x] **FRLG location data (FRLG_LOCATIONS)** - FireRed/LeafGreen locations with version exclusives, starter-dependent roaming beasts
+- [x] **GSC location data (GSC_LOCATIONS)** - Gold/Silver/Crystal locations with version exclusives, Crystal-specific Suicune/Celebi events
+- [x] **RBY location data (RBY_LOCATIONS)** - Red/Blue/Yellow locations with version exclusives, Yellow-unobtainable Pokemon, in-game trades
+
+## Location Data Verification (January 2026)
+All location data has been verified against Serebii and Bulbapedia:
+
+| Game(s) | Status | Fixes Made |
+|---------|--------|------------|
+| Legends Arceus | ✓ Verified | Wyrdeer MMO location added |
+| Scarlet/Violet | ✓ Verified | Evolution methods fixed (Palafin, Dipplin, etc.) |
+| Sword/Shield | ✓ Verified | Crown Tundra locations fixed (Regieleki, Glastrier) |
+| Sun/Moon/USUM | ✓ Verified | Vikavolt evolution location differentiated |
+| X/Y | ✓ Verified | All correct |
+| RSE | ✓ Verified | Added Ruby/Sapphire/Emerald keys for version exclusives, legendaries, fossils |
+| ORAS | ✓ Verified | All correct |
+| Black/White/B2W2 | ✓ Verified | Zorua (game-specific), Reshiram/Zekrom version swap fixed |
+| BDSP | ✓ Verified | Fossils (Grand Underground), Lake Trio locations fixed |
+| DPPt | ✓ Verified | Added DPPt-specific entries, Platinum fossil Trainer ID noted |
+| HGSS | ✓ Created | New location object with 50+ entries |
+| GSC | ✓ Created | New location object with version exclusives, Crystal-specific Suicune/Celebi |
+| FRLG | ✓ Created | New location object with version exclusives, roaming beasts |
+| RBY | ✓ Created | New location object with version exclusives, Yellow-unobtainable Pokemon, in-game trades |
 
 ## Completed Milestones
 - [x] Full National Pokédex (1025 Pokémon)
@@ -203,6 +228,7 @@ python app.py
 - [x] Gender difference tracking
 - [x] Per-form shiny tracking
 - [x] Location data integration for all generations (PokeAPI + manual data)
+- [x] Location data verified and corrected for all games
 - [x] Export/Import data as CSV
 - [x] Sorting options (Dex #, Name, Completion %)
 - [x] Generation-specific progress bars
@@ -222,3 +248,37 @@ python app.py
   - Save file management
   - OT name tracking per save
   - Public profile view options to share collection progress
+
+### Bug Fixes Needed
+- [x] Female Hisuian Sneasel missing from forms (added "Hisuian Female" to forms array)
+- [ ] Alolan Raticate missing from Totem stars
+- [ ] All of Alcremie's Sweet arguments are missing
+- [ ] OK and Cancel buttons disappear on mobile
+
+### Form Handling Inconsistencies
+- [ ] **Inconsistent default form assumptions** - Some Pokemon assume a default form for "obtained" status while others don't:
+  - Unown lists all forms (including A) in forms section
+  - Burmy, Unown, Vivillon should not use top-level "obtained" mark - any form obtained should constitute "obtained" status
+  - Tatsugiri assumes curly form as default (not clear to user)
+  - Flabebe doesn't assume a default, but Squawkabilly assumes green as default
+  - Pumpkaboo assumes average as default
+  - Lycanroc assumes midday form as default
+  - Minior assumes red as default
+- [ ] **Technical forms opt-in** - Technical forms should be an opt-in option with consistent handling
+  - SM demo Greninja is a star, doesn't need the form exception
+
+### Star System Improvements
+- [ ] **Star Filters** - Filter by stars to easily see missing ones
+- [ ] **Cross-gen evolution stars** - Currently only appear on base form, should apply to whole evolutionary chain and be marked off across the board once completed
+- [ ] **Star info tooltips** - Add tooltips explaining each star challenge (community help offered)
+
+### UI Enhancements
+- [ ] **Location links to Bulbapedia** - Catchable locations should link to their respective Bulbapedia pages
+- [ ] **Game title logos** - Use title logos instead of text names
+  - Resource: https://www.deviantart.com/jormxdos/gallery (high quality assets for each game and DLC)
+- [ ] **Sprites for forms** - Currently no sprites for females or other forms
+  - Female sprites: PokeAPI path `sprites/pokemon/female/3.png`
+  - Form sprites: append form name (e.g., `666-sun`, `666-fancy` for Vivillon)
+  - Regional forms use veekun numbering (10,000s) - e.g., Hisuian Sneasel is 10235
+- [ ] **Opt-in toggle buttons** - Add opt-in buttons for stars, shinies, and forms with opt all/none
+  - When checked, would remove counters and checkboxes for cleaner view
