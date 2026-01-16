@@ -205,9 +205,9 @@ python app.py
 - [x] Location data integration for all generations (PokeAPI + manual data)
 - [x] Export/Import data as CSV
 - [x] Sorting options (Dex #, Name, Completion %)
+- [x] Generation-specific progress bars
 
 ## Future Enhancements (Not Yet Implemented)
-- [ ] Generation-specific progress bars
 - [ ] PWA offline support
 - [ ] Bulk editing tools
 - [ ] Statistics dashboard

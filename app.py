@@ -1332,11 +1332,11 @@ def update_form(pokemon_id, form_name):
 def get_progress():
     total_pokemon = len(POKEMON_DATA)
 
+    # Get all user tracking data in one query for efficiency
+    all_tracking = {t.pokemon_id: t for t in PokemonTracking.query.filter_by(user_id=current_user.id).all()}
+
     # Master Dex Completion - only counts original_gen checkbox
-    master_dex_completed = PokemonTracking.query.filter_by(
-        user_id=current_user.id,
-        original_gen=True
-    ).count()
+    master_dex_completed = sum(1 for t in all_tracking.values() if t.original_gen)
 
     # Stars completed
     stars_completed = StarTracking.query.filter_by(
@@ -1345,10 +1345,7 @@ def get_progress():
     ).count()
 
     # Ghost Stars - counts shiny Pokemon (base form + all form shinies)
-    ghost_stars = PokemonTracking.query.filter_by(
-        user_id=current_user.id,
-        shiny=True
-    ).count()
+    ghost_stars = sum(1 for t in all_tracking.values() if t.shiny)
     ghost_stars += FormTracking.query.filter_by(
         user_id=current_user.id,
         shiny=True
@@ -1367,15 +1364,24 @@ def get_progress():
     # Count male/female as completed forms for Pokemon with gender differences
     for pokemon in POKEMON_DATA:
         if pokemon.get('has_gender_diff'):
-            tracking = PokemonTracking.query.filter_by(
-                user_id=current_user.id,
-                pokemon_id=pokemon['id']
-            ).first()
+            tracking = all_tracking.get(pokemon['id'])
             if tracking:
                 if tracking.male:
                     forms_completed += 1
                 if tracking.female:
                     forms_completed += 1
+
+    # Generation-specific progress
+    gen_progress = {}
+    for gen in range(1, 10):
+        gen_pokemon = [p for p in POKEMON_DATA if p['generation'] == gen]
+        gen_total = len(gen_pokemon)
+        gen_completed = sum(1 for p in gen_pokemon if all_tracking.get(p['id']) and all_tracking[p['id']].original_gen)
+        gen_progress[gen] = {
+            'total': gen_total,
+            'completed': gen_completed,
+            'percentage': (gen_completed / gen_total * 100) if gen_total > 0 else 0
+        }
 
     return jsonify({
         'total_pokemon': total_pokemon,
@@ -1385,7 +1391,8 @@ def get_progress():
         'ghost_stars': ghost_stars,
         'total_forms': total_forms,
         'forms_completed': forms_completed,
-        'form_dex_percentage': (forms_completed / total_forms * 100) if total_forms > 0 else 0
+        'form_dex_percentage': (forms_completed / total_forms * 100) if total_forms > 0 else 0,
+        'gen_progress': gen_progress
     })
 
 @app.route('/api/export', methods=['GET'])

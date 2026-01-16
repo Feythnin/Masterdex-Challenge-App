@@ -23,6 +23,23 @@
             <span class="stat-label">Ghost Stars</span>
         </div>
     </div>
+    <div class="gen-progress-section">
+        <button class="gen-progress-toggle" id="genProgressToggle">
+            <span>Generation Progress</span>
+            <span class="toggle-icon" id="toggleIcon">▼</span>
+        </button>
+        <div class="gen-progress-bars" id="genProgressBars" style="display: none;">
+            <div class="gen-bar" data-gen="1"><span class="gen-label">Gen 1</span><div class="bar-container"><div class="bar-fill" id="genBar1"></div></div><span class="gen-count" id="genCount1">0/151</span></div>
+            <div class="gen-bar" data-gen="2"><span class="gen-label">Gen 2</span><div class="bar-container"><div class="bar-fill" id="genBar2"></div></div><span class="gen-count" id="genCount2">0/100</span></div>
+            <div class="gen-bar" data-gen="3"><span class="gen-label">Gen 3</span><div class="bar-container"><div class="bar-fill" id="genBar3"></div></div><span class="gen-count" id="genCount3">0/135</span></div>
+            <div class="gen-bar" data-gen="4"><span class="gen-label">Gen 4</span><div class="bar-container"><div class="bar-fill" id="genBar4"></div></div><span class="gen-count" id="genCount4">0/107</span></div>
+            <div class="gen-bar" data-gen="5"><span class="gen-label">Gen 5</span><div class="bar-container"><div class="bar-fill" id="genBar5"></div></div><span class="gen-count" id="genCount5">0/156</span></div>
+            <div class="gen-bar" data-gen="6"><span class="gen-label">Gen 6</span><div class="bar-container"><div class="bar-fill" id="genBar6"></div></div><span class="gen-count" id="genCount6">0/72</span></div>
+            <div class="gen-bar" data-gen="7"><span class="gen-label">Gen 7</span><div class="bar-container"><div class="bar-fill" id="genBar7"></div></div><span class="gen-count" id="genCount7">0/88</span></div>
+            <div class="gen-bar" data-gen="8"><span class="gen-label">Gen 8</span><div class="bar-container"><div class="bar-fill" id="genBar8"></div></div><span class="gen-count" id="genCount8">0/96</span></div>
+            <div class="gen-bar" data-gen="9"><span class="gen-label">Gen 9</span><div class="bar-container"><div class="bar-fill" id="genBar9"></div></div><span class="gen-count" id="genCount9">0/120</span></div>
+        </div>
+    </div>
 </div>
 
 <div class="filters-bar">
@@ -129,6 +146,19 @@ async function loadProgress() {
             `${progress.forms_completed}/${progress.total_forms} forms`;
         document.getElementById('starsCompleted').textContent = progress.stars_completed;
         document.getElementById('ghostStars').textContent = progress.ghost_stars;
+
+        // Update generation progress bars
+        if (progress.gen_progress) {
+            for (let gen = 1; gen <= 9; gen++) {
+                const genData = progress.gen_progress[gen];
+                if (genData) {
+                    const bar = document.getElementById(`genBar${gen}`);
+                    const count = document.getElementById(`genCount${gen}`);
+                    if (bar) bar.style.width = genData.percentage + '%';
+                    if (count) count.textContent = `${genData.completed}/${genData.total}`;
+                }
+            }
+        }
     } catch (error) {
         console.error('Error loading progress:', error);
     }
@@ -1818,6 +1848,19 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('importFile').click();
     });
     document.getElementById('importFile').addEventListener('change', importData);
+
+    // Generation progress toggle
+    document.getElementById('genProgressToggle').addEventListener('click', () => {
+        const bars = document.getElementById('genProgressBars');
+        const icon = document.getElementById('toggleIcon');
+        if (bars.style.display === 'none') {
+            bars.style.display = 'block';
+            icon.textContent = '▲';
+        } else {
+            bars.style.display = 'none';
+            icon.textContent = '▼';
+        }
+    });
 });
 
 // Export data to CSV
