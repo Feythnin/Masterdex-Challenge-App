@@ -211,3 +211,14 @@ python app.py
 - [ ] PWA offline support
 - [ ] Bulk editing tools
 - [ ] Statistics dashboard
+
+### User-Requested Features
+- [ ] **Friends System** - Add friends and see updates on their collection progress
+- [ ] **Smart Filters by Game** - Quick highlight/filter options for:
+  - Challenge Pokemon available in a specific game
+  - Missable Pokemon in that game (version exclusives, one-time encounters)
+  - One-off Pokemon (legendaries, gift Pokemon, static encounters)
+- [ ] **Hall of Fame & Save Organizer** - Track save files and Original Trainers (OT) with:
+  - Save file management
+  - OT name tracking per save
+  - Public profile view options to share collection progress
