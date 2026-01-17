@@ -239,6 +239,7 @@ All location data has been verified against Serebii and Bulbapedia:
 ## Future Enhancements (Not Yet Implemented)
 - [ ] PWA offline support
 - [ ] Statistics dashboard
+- [ ] **Forgot Password** - Email-based password reset flow
 
 ### User-Requested Features
 - [ ] **Friends System** - Add friends and see updates on their collection progress
