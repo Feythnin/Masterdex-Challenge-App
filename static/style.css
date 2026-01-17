@@ -1158,6 +1158,31 @@ body {
 }
 
 /* Locations Section */
+.locations-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+}
+
+.locations-header h4 {
+    margin-bottom: 0;
+}
+
+.location-type-selector {
+    padding: 0.35rem 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-size: 0.8rem;
+    background: var(--card-bg);
+    color: var(--text-color);
+    cursor: pointer;
+}
+
+.location-type-selector:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
 
 .locations-by-game {
     display: flex;

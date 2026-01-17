@@ -2148,33 +2148,43 @@ function createDetailContent(pokemon) {
             </div>
         ` : ''}
 
-        ${(() => {
-            const regionalForms = getFormLocationInfo(pokemon.forms || []);
-            if (regionalForms.length === 0) return '';
-            return `
-                <div class="form-locations-section">
-                    <h4>Form Locations</h4>
-                    <div class="form-locations-list">
-                        ${regionalForms.map(rf => `
-                            <div class="form-location-item">
-                                <span class="form-location-name">${rf.form}</span>
-                                <span class="form-location-games">${rf.games.join(', ')}</span>
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
-            `;
-        })()}
-
         <div class="games-section">
             <h4>Obtainable Games</h4>
             <p class="games-list">${pokemon.valid_games ? filterValidGames(pokemon.valid_games, pokemon.id).join(', ') : 'Unknown'}</p>
         </div>
 
         <div class="locations-section">
-            <h4>Locations</h4>
+            <div class="locations-header">
+                <h4>Locations</h4>
+                ${(() => {
+                    const regionalForms = getFormLocationInfo(pokemon.forms || []);
+                    if (regionalForms.length === 0) return '';
+                    return `
+                        <select class="location-type-selector" id="locationTypeSelector">
+                            <option value="catch">Catch Locations</option>
+                            <option value="form">Form Locations</option>
+                        </select>
+                    `;
+                })()}
+            </div>
             <div class="locations-content" id="locationsContent">
                 <p class="loading-text">Loading locations...</p>
+            </div>
+            <div class="form-locations-content" id="formLocationsContent" style="display: none;">
+                ${(() => {
+                    const regionalForms = getFormLocationInfo(pokemon.forms || []);
+                    if (regionalForms.length === 0) return '';
+                    return `
+                        <div class="form-locations-list">
+                            ${regionalForms.map(rf => `
+                                <div class="form-location-item">
+                                    <span class="form-location-name">${rf.form}</span>
+                                    <span class="form-location-games">${rf.games.join(', ')}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                })()}
             </div>
         </div>
 
@@ -2227,6 +2237,22 @@ function attachDetailEventListeners(container, pokemon) {
     if (notesTextarea) {
         notesTextarea.addEventListener('input', (e) => {
             pendingChanges.tracking.notes = e.target.value;
+        });
+    }
+
+    // Location type selector - toggle between catch and form locations
+    const locationSelector = container.querySelector('#locationTypeSelector');
+    if (locationSelector) {
+        locationSelector.addEventListener('change', (e) => {
+            const catchLocations = container.querySelector('#locationsContent');
+            const formLocations = container.querySelector('#formLocationsContent');
+            if (e.target.value === 'form') {
+                catchLocations.style.display = 'none';
+                formLocations.style.display = 'block';
+            } else {
+                catchLocations.style.display = 'block';
+                formLocations.style.display = 'none';
+            }
         });
     }
 }
