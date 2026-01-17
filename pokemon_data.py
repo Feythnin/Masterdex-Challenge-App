@@ -223,8 +223,38 @@ FORM_LOCATIONS = {
     'Rainbow Swirl': {'games': ['Sword', 'Shield'], 'notes': 'Spin counterclockwise 5+ sec at dusk'},
 }
 
-def get_form_location(form_name):
-    """Get the location info for any form."""
+# Pokemon whose forms are obtained via evolution (not catching)
+# Maps Pokemon ID to their pre-evolution name for form inheritance
+FORM_EVOLUTION_SOURCES = {
+    # Flabébé line - flower forms carry through evolution
+    670: 'Flabébé',      # Floette evolves from Flabébé
+    671: 'Floette',      # Florges evolves from Floette
+    # Burmy/Wormadam - cloak carries through
+    413: 'Burmy',        # Wormadam evolves from female Burmy (keeps cloak)
+    # Shellos/Gastrodon - form carries through
+    423: 'Shellos',      # Gastrodon evolves from Shellos
+    # Deerling/Sawsbuck - season carries through
+    586: 'Deerling',     # Sawsbuck evolves from Deerling
+    # Pumpkaboo/Gourgeist - size carries through
+    711: 'Pumpkaboo',    # Gourgeist evolves from Pumpkaboo
+    # Sinistea/Polteageist - authenticity carries through
+    855: 'Sinistea',     # Polteageist evolves from Sinistea
+    # Alcremie evolves from Milcery (but Milcery has no forms, Alcremie gets form at evolution)
+    # Toxtricity forms determined at evolution (nature-based)
+    # Lycanroc forms determined at evolution (time/ability-based)
+}
+
+def get_form_location(form_name, pokemon_id=None, pokemon_name=None):
+    """Get the location info for any form. Pokemon ID used to check if form is from evolution."""
+    # Check if this Pokemon gets the form via evolution
+    if pokemon_id and pokemon_id in FORM_EVOLUTION_SOURCES:
+        pre_evo = FORM_EVOLUTION_SOURCES[pokemon_id]
+        return {
+            'form': form_name,
+            'games': ['Evolution'],
+            'notes': f'Evolve from {form_name} {pre_evo}'
+        }
+
     # First check exact match
     if form_name in FORM_LOCATIONS:
         return {'form': form_name, **FORM_LOCATIONS[form_name]}

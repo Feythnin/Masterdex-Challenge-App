@@ -285,10 +285,32 @@ const FORM_LOCATIONS = {
     'Rainbow Swirl': { games: ['Sword', 'Shield'], notes: 'Spin counterclockwise 5+ sec at dusk' }
 };
 
+// Pokemon whose forms are obtained via evolution (not catching)
+const FORM_EVOLUTION_SOURCES = {
+    670: 'Flabébé',      // Floette evolves from Flabébé
+    671: 'Floette',      // Florges evolves from Floette
+    413: 'Burmy',        // Wormadam evolves from female Burmy
+    423: 'Shellos',      // Gastrodon evolves from Shellos
+    586: 'Deerling',     // Sawsbuck evolves from Deerling
+    711: 'Pumpkaboo',    // Gourgeist evolves from Pumpkaboo
+    855: 'Sinistea',     // Polteageist evolves from Sinistea
+};
+
 // Helper function to get form location info for ALL forms
-function getFormLocationInfo(forms) {
+function getFormLocationInfo(forms, pokemonId = null) {
     const formInfos = [];
     for (const form of forms) {
+        // Check if this Pokemon gets the form via evolution
+        if (pokemonId && FORM_EVOLUTION_SOURCES[pokemonId]) {
+            const preEvo = FORM_EVOLUTION_SOURCES[pokemonId];
+            formInfos.push({
+                form: form,
+                games: ['Evolution'],
+                notes: `Evolve from ${form} ${preEvo}`
+            });
+            continue;
+        }
+
         // Check exact match first
         if (FORM_LOCATIONS[form]) {
             formInfos.push({
@@ -2304,7 +2326,7 @@ function createDetailContent(pokemon) {
             <div class="locations-header">
                 <h4>Locations</h4>
                 ${(() => {
-                    const formLocations = getFormLocationInfo(pokemon.forms || []);
+                    const formLocations = getFormLocationInfo(pokemon.forms || [], pokemon.id);
                     if (formLocations.length === 0) return '';
                     return `
                         <select class="location-type-selector" id="locationTypeSelector">
@@ -2319,7 +2341,7 @@ function createDetailContent(pokemon) {
             </div>
             <div class="form-locations-content" id="formLocationsContent" style="display: none;">
                 ${(() => {
-                    const formLocations = getFormLocationInfo(pokemon.forms || []);
+                    const formLocations = getFormLocationInfo(pokemon.forms || [], pokemon.id);
                     if (formLocations.length === 0) return '<p class="no-locations">No alternate forms</p>';
                     return `
                         <div class="locations-by-game">
