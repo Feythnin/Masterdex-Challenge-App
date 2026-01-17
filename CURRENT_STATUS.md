@@ -13,6 +13,7 @@ A full-stack web application for tracking Pokémon collection progress across ge
 ```
 E:\Master Dex App\
 ├── app.py                 # Flask backend (routes, API, models)
+├── pokemon_data.py        # Pokemon data (1025 entries, generation games)
 ├── requirements.txt       # Python dependencies
 ├── Instructions.md        # Full project requirements
 ├── CURRENT_STATUS.md      # This file
