@@ -51,32 +51,189 @@ def get_chain_members(pokemon_id):
         return EVOLUTION_CHAINS[chain_name]
     return [pokemon_id]
 
-# Regional form locations - maps form prefix to obtainable games
+# Form locations - maps form names to obtainable games
 FORM_LOCATIONS = {
-    'Alolan': {
-        'games': ['Sun', 'Moon', 'Ultra Sun', 'Ultra Moon'],
-        'notes': 'Native to Alola region'
-    },
-    'Galarian': {
-        'games': ['Sword', 'Shield'],
-        'notes': 'Native to Galar region'
-    },
-    'Hisuian': {
-        'games': ['Legends Arceus'],
-        'notes': 'Native to ancient Hisui region'
-    },
-    'Paldean': {
-        'games': ['Scarlet', 'Violet'],
-        'notes': 'Native to Paldea region'
-    }
+    # Regional variants
+    'Alolan': {'games': ['Sun', 'Moon', 'Ultra Sun', 'Ultra Moon'], 'notes': 'Native to Alola region'},
+    'Galarian': {'games': ['Sword', 'Shield'], 'notes': 'Native to Galar region'},
+    'Hisuian': {'games': ['Legends Arceus'], 'notes': 'Native to ancient Hisui region'},
+    'Paldean': {'games': ['Scarlet', 'Violet'], 'notes': 'Native to Paldea region'},
+
+    # Dynamax/Gigantamax
+    'Gigantamax': {'games': ['Sword', 'Shield'], 'notes': 'Max Raid Dens or events'},
+    'Gigantamax Single Strike': {'games': ['Sword', 'Shield'], 'notes': 'Isle of Armor DLC Max Soup'},
+    'Gigantamax Rapid Strike': {'games': ['Sword', 'Shield'], 'notes': 'Isle of Armor DLC Max Soup'},
+
+    # Event-exclusive forms
+    'Partner Cap': {'games': ['Event'], 'notes': 'Mystery Gift event'},
+    'Fancy': {'games': ['Event'], 'notes': 'GTS 100 million trades event (Vivillon)'},
+    'Dada': {'games': ['Event'], 'notes': 'Mystery Gift event (Zarude)'},
+
+    # Legendary/Mythical forms
+    'Origin Forme': {'games': ['Legends Arceus', 'ORAS'], 'notes': 'Requires Origin form item'},
+    'Sky Forme': {'games': ['Diamond', 'Pearl', 'Platinum'], 'notes': 'Requires Gracidea flower'},
+    'Therian Forme': {'games': ['Black 2', 'White 2'], 'notes': 'Requires Reveal Glass'},
+    'Resolute Form': {'games': ['Black 2', 'White 2'], 'notes': 'Requires Secret Sword move'},
+    'Unbound': {'games': ['X', 'Y', 'ORAS'], 'notes': 'Prison Bottle transformation (Hoopa)'},
+    'Ultra': {'games': ['Ultra Sun', 'Ultra Moon'], 'notes': 'Ultra Wormhole (Necrozma)'},
+    'Dusk Mane': {'games': ['Ultra Sun', 'Ultra Moon'], 'notes': 'N-Solarizer fusion'},
+    'Dawn Wings': {'games': ['Ultra Sun', 'Ultra Moon'], 'notes': 'N-Lunarizer fusion'},
+    'Bloodmoon': {'games': ['Scarlet', 'Violet'], 'notes': 'Teal Mask DLC exclusive'},
+    '10% Forme': {'games': ['X', 'Y', 'Sun', 'Moon'], 'notes': 'Zygarde Cube collection'},
+
+    # Style forms (Oricorio)
+    'Baile Style': {'games': ['Sun', 'Moon', 'Ultra Sun', 'Ultra Moon'], 'notes': 'Ula\'ula Meadow nectar'},
+    'Pom-Pom Style': {'games': ['Sun', 'Moon', 'Ultra Sun', 'Ultra Moon'], 'notes': 'Melemele Meadow nectar'},
+    'Pau Style': {'games': ['Sun', 'Moon', 'Ultra Sun', 'Ultra Moon'], 'notes': 'Poni Meadow nectar'},
+    'Sensu Style': {'games': ['Sun', 'Moon', 'Ultra Sun', 'Ultra Moon'], 'notes': 'Royal Avenue nectar'},
+
+    # Battle styles (Urshifu)
+    'Single Strike Style': {'games': ['Sword', 'Shield'], 'notes': 'Isle of Armor DLC choice'},
+    'Rapid Strike Style': {'games': ['Sword', 'Shield'], 'notes': 'Isle of Armor DLC choice'},
+
+    # Lycanroc forms
+    'Midday Form': {'games': ['Sun', 'Ultra Sun'], 'notes': 'Evolve during day'},
+    'Midnight Form': {'games': ['Moon', 'Ultra Moon'], 'notes': 'Evolve during night'},
+    'Dusk Form': {'games': ['Ultra Sun', 'Ultra Moon'], 'notes': 'Special Own Tempo Rockruff'},
+
+    # Toxtricity forms
+    'Amped Form': {'games': ['Sword', 'Shield'], 'notes': 'Certain natures when evolving'},
+    'Low Key Form': {'games': ['Sword', 'Shield'], 'notes': 'Certain natures when evolving'},
+
+    # Rotom forms
+    'Heat': {'games': ['Diamond', 'Pearl', 'Platinum'], 'notes': 'Rotom Catalog'},
+    'Wash': {'games': ['Diamond', 'Pearl', 'Platinum'], 'notes': 'Rotom Catalog'},
+    'Frost': {'games': ['Diamond', 'Pearl', 'Platinum'], 'notes': 'Rotom Catalog'},
+    'Fan': {'games': ['Diamond', 'Pearl', 'Platinum'], 'notes': 'Rotom Catalog'},
+    'Mow': {'games': ['Diamond', 'Pearl', 'Platinum'], 'notes': 'Rotom Catalog'},
+
+    # Deoxys forms
+    'Attack': {'games': ['FireRed', 'ORAS'], 'notes': 'Meteorite interaction'},
+    'Defense': {'games': ['LeafGreen', 'ORAS'], 'notes': 'Meteorite interaction'},
+    'Speed': {'games': ['Emerald', 'ORAS'], 'notes': 'Meteorite interaction'},
+
+    # Shellos/Gastrodon
+    'East Sea': {'games': ['Diamond', 'Pearl', 'Platinum'], 'notes': 'East of Mt. Coronet'},
+    'West Sea': {'games': ['Diamond', 'Pearl', 'Platinum'], 'notes': 'West of Mt. Coronet'},
+
+    # Basculin forms
+    'Red-Striped': {'games': ['Black', 'White', 'Black 2', 'White 2'], 'notes': 'Version-dependent'},
+    'Blue-Striped': {'games': ['Black', 'White', 'Black 2', 'White 2'], 'notes': 'Version-dependent'},
+    'White-Striped': {'games': ['Legends Arceus'], 'notes': 'Hisui exclusive'},
+
+    # Burmy/Wormadam cloak
+    'Plant Cloak': {'games': ['Diamond', 'Pearl', 'Platinum'], 'notes': 'Battle in grass/forest'},
+    'Sandy Cloak': {'games': ['Diamond', 'Pearl', 'Platinum'], 'notes': 'Battle in caves/desert'},
+    'Trash Cloak': {'games': ['Diamond', 'Pearl', 'Platinum'], 'notes': 'Battle in buildings'},
+
+    # Deerling/Sawsbuck seasons
+    'Spring': {'games': ['Black', 'White', 'Black 2', 'White 2'], 'notes': 'March/April/May'},
+    'Summer': {'games': ['Black', 'White', 'Black 2', 'White 2'], 'notes': 'June/July/August'},
+    'Autumn': {'games': ['Black', 'White', 'Black 2', 'White 2'], 'notes': 'Sept/Oct/Nov'},
+    'Winter': {'games': ['Black', 'White', 'Black 2', 'White 2'], 'notes': 'Dec/Jan/Feb'},
+
+    # Pumpkaboo/Gourgeist sizes
+    'Small': {'games': ['X', 'Y'], 'notes': 'Random when caught'},
+    'Average': {'games': ['X', 'Y'], 'notes': 'Random when caught'},
+    'Large': {'games': ['X', 'Y'], 'notes': 'Random when caught'},
+    'Super': {'games': ['X', 'Y'], 'notes': 'Random when caught'},
+
+    # Sinistea/Polteageist
+    'Antique': {'games': ['Sword', 'Shield'], 'notes': 'Rare authentic form'},
+
+    # Minior cores
+    'Red Core': {'games': ['Sun', 'Moon', 'Ultra Sun', 'Ultra Moon'], 'notes': 'Random core color'},
+    'Orange Core': {'games': ['Sun', 'Moon', 'Ultra Sun', 'Ultra Moon'], 'notes': 'Random core color'},
+    'Yellow Core': {'games': ['Sun', 'Moon', 'Ultra Sun', 'Ultra Moon'], 'notes': 'Random core color'},
+    'Green Core': {'games': ['Sun', 'Moon', 'Ultra Sun', 'Ultra Moon'], 'notes': 'Random core color'},
+    'Blue Core': {'games': ['Sun', 'Moon', 'Ultra Sun', 'Ultra Moon'], 'notes': 'Random core color'},
+    'Indigo Core': {'games': ['Sun', 'Moon', 'Ultra Sun', 'Ultra Moon'], 'notes': 'Random core color'},
+    'Violet Core': {'games': ['Sun', 'Moon', 'Ultra Sun', 'Ultra Moon'], 'notes': 'Random core color'},
+
+    # Magearna
+    'Original Color': {'games': ['Home'], 'notes': 'Complete National Dex in Pokemon Home'},
+
+    # Squawkabilly plumage
+    'Green Plumage': {'games': ['Scarlet', 'Violet'], 'notes': 'Random encounter'},
+    'Blue Plumage': {'games': ['Scarlet', 'Violet'], 'notes': 'Random encounter'},
+    'Yellow Plumage': {'games': ['Scarlet', 'Violet'], 'notes': 'Random encounter'},
+    'White Plumage': {'games': ['Scarlet', 'Violet'], 'notes': 'Random encounter'},
+
+    # Tatsugiri forms
+    'Curly Form': {'games': ['Scarlet', 'Violet'], 'notes': 'Random encounter'},
+    'Droopy Form': {'games': ['Scarlet', 'Violet'], 'notes': 'Random encounter'},
+    'Stretchy Form': {'games': ['Scarlet', 'Violet'], 'notes': 'Random encounter'},
+
+    # Dudunsparce segments
+    'Two-Segment Form': {'games': ['Scarlet', 'Violet'], 'notes': 'Common evolution'},
+    'Three-Segment Form': {'games': ['Scarlet', 'Violet'], 'notes': 'Rare evolution (1/100)'},
+
+    # Maushold forms
+    'Family of Three': {'games': ['Scarlet', 'Violet'], 'notes': 'Rare evolution'},
+    'Family of Four': {'games': ['Scarlet', 'Violet'], 'notes': 'Common evolution'},
+
+    # Vivillon patterns (selection of main ones)
+    'Meadow': {'games': ['X', 'Y'], 'notes': 'Region-based pattern'},
+    'Polar': {'games': ['X', 'Y'], 'notes': 'Region-based pattern'},
+    'Tundra': {'games': ['X', 'Y'], 'notes': 'Region-based pattern'},
+    'Continental': {'games': ['X', 'Y'], 'notes': 'Region-based pattern'},
+    'Garden': {'games': ['X', 'Y'], 'notes': 'Region-based pattern'},
+    'Elegant': {'games': ['X', 'Y'], 'notes': 'Region-based pattern'},
+    'Modern': {'games': ['X', 'Y'], 'notes': 'Region-based pattern'},
+    'Marine': {'games': ['X', 'Y'], 'notes': 'Region-based pattern'},
+    'Archipelago': {'games': ['X', 'Y'], 'notes': 'Region-based pattern'},
+    'High Plains': {'games': ['X', 'Y'], 'notes': 'Region-based pattern'},
+    'Sandstorm': {'games': ['X', 'Y'], 'notes': 'Region-based pattern'},
+    'River': {'games': ['X', 'Y'], 'notes': 'Region-based pattern'},
+    'Monsoon': {'games': ['X', 'Y'], 'notes': 'Region-based pattern'},
+    'Savanna': {'games': ['X', 'Y'], 'notes': 'Region-based pattern'},
+    'Sun': {'games': ['X', 'Y'], 'notes': 'Region-based pattern'},
+    'Ocean': {'games': ['X', 'Y'], 'notes': 'Region-based pattern'},
+    'Jungle': {'games': ['X', 'Y'], 'notes': 'Region-based pattern'},
+    'Icy Snow': {'games': ['X', 'Y'], 'notes': 'Region-based pattern'},
+
+    # Flabébé/Floette/Florges colors
+    'Red Flower': {'games': ['X', 'Y'], 'notes': 'Route 4 (X) or Friend Safari'},
+    'Yellow Flower': {'games': ['X', 'Y'], 'notes': 'Route 4 (Y) or Friend Safari'},
+    'Orange Flower': {'games': ['X', 'Y'], 'notes': 'Route 4 or Friend Safari'},
+    'Blue Flower': {'games': ['X', 'Y'], 'notes': 'Route 4 or Friend Safari'},
+    'White Flower': {'games': ['X', 'Y'], 'notes': 'Route 4 or Friend Safari'},
+
+    # Furfrou trims
+    'Natural': {'games': ['X', 'Y'], 'notes': 'Default trim'},
+    'Heart Trim': {'games': ['X', 'Y'], 'notes': 'Friseur Furfrou grooming'},
+    'Star Trim': {'games': ['X', 'Y'], 'notes': 'Friseur Furfrou grooming'},
+    'Diamond Trim': {'games': ['X', 'Y'], 'notes': 'Friseur Furfrou grooming'},
+    'Debutante Trim': {'games': ['X', 'Y'], 'notes': 'Friseur Furfrou grooming'},
+    'Matron Trim': {'games': ['X', 'Y'], 'notes': 'Friseur Furfrou grooming'},
+    'Dandy Trim': {'games': ['X', 'Y'], 'notes': 'Friseur Furfrou grooming'},
+    'La Reine Trim': {'games': ['X', 'Y'], 'notes': 'Friseur Furfrou grooming'},
+    'Kabuki Trim': {'games': ['X', 'Y'], 'notes': 'Friseur Furfrou grooming'},
+    'Pharaoh Trim': {'games': ['X', 'Y'], 'notes': 'Friseur Furfrou grooming'},
+
+    # Alcremie - simplified (there are 63 forms)
+    'Vanilla Cream': {'games': ['Sword', 'Shield'], 'notes': 'Spin clockwise during day'},
+    'Ruby Cream': {'games': ['Sword', 'Shield'], 'notes': 'Spin counterclockwise at night'},
+    'Matcha Cream': {'games': ['Sword', 'Shield'], 'notes': 'Spin counterclockwise during day'},
+    'Mint Cream': {'games': ['Sword', 'Shield'], 'notes': 'Spin counterclockwise at night 5+ sec'},
+    'Lemon Cream': {'games': ['Sword', 'Shield'], 'notes': 'Spin clockwise at night'},
+    'Salted Cream': {'games': ['Sword', 'Shield'], 'notes': 'Spin counterclockwise during day 5+ sec'},
+    'Ruby Swirl': {'games': ['Sword', 'Shield'], 'notes': 'Spin at dusk'},
+    'Caramel Swirl': {'games': ['Sword', 'Shield'], 'notes': 'Spin clockwise at night 5+ sec'},
+    'Rainbow Swirl': {'games': ['Sword', 'Shield'], 'notes': 'Spin counterclockwise 5+ sec at dusk'},
 }
 
 def get_form_location(form_name):
-    """Get the location info for a regional form."""
+    """Get the location info for any form."""
+    # First check exact match
+    if form_name in FORM_LOCATIONS:
+        return {'form': form_name, **FORM_LOCATIONS[form_name]}
+    # Then check prefix match for regional variants and Alcremie varieties
     for prefix, info in FORM_LOCATIONS.items():
         if form_name.startswith(prefix):
             return {'form': form_name, 'prefix': prefix, **info}
-    return None
+    # Default fallback for unlisted forms
+    return {'form': form_name, 'games': ['Various'], 'notes': 'Check specific game guides'}
 
 # Pokemon data
 # has_gender_diff: True if Pokemon has visual gender differences (affects male/female checkboxes display)

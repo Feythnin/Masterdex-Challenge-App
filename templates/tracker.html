@@ -138,43 +138,190 @@ let pendingChanges = {
     formShinies: {}
 };
 
-// Regional form locations - maps form prefix to obtainable games
+// Form locations - maps form names to obtainable games
 const FORM_LOCATIONS = {
-    'Alolan': {
-        games: ['Sun', 'Moon', 'Ultra Sun', 'Ultra Moon'],
-        notes: 'Native to Alola region'
-    },
-    'Galarian': {
-        games: ['Sword', 'Shield'],
-        notes: 'Native to Galar region'
-    },
-    'Hisuian': {
-        games: ['Legends Arceus'],
-        notes: 'Native to ancient Hisui region'
-    },
-    'Paldean': {
-        games: ['Scarlet', 'Violet'],
-        notes: 'Native to Paldea region'
-    }
+    // Regional variants
+    'Alolan': { games: ['Sun', 'Moon', 'Ultra Sun', 'Ultra Moon'], notes: 'Native to Alola region' },
+    'Galarian': { games: ['Sword', 'Shield'], notes: 'Native to Galar region' },
+    'Hisuian': { games: ['Legends Arceus'], notes: 'Native to ancient Hisui region' },
+    'Paldean': { games: ['Scarlet', 'Violet'], notes: 'Native to Paldea region' },
+    // Dynamax/Gigantamax
+    'Gigantamax': { games: ['Sword', 'Shield'], notes: 'Max Raid Dens or events' },
+    'Gigantamax Single Strike': { games: ['Sword', 'Shield'], notes: 'Isle of Armor DLC Max Soup' },
+    'Gigantamax Rapid Strike': { games: ['Sword', 'Shield'], notes: 'Isle of Armor DLC Max Soup' },
+    // Event forms
+    'Partner Cap': { games: ['Event'], notes: 'Mystery Gift event' },
+    'Fancy': { games: ['Event'], notes: 'GTS 100M trades event (Vivillon)' },
+    'Dada': { games: ['Event'], notes: 'Mystery Gift event (Zarude)' },
+    // Legendary/Mythical forms
+    'Origin Forme': { games: ['Legends Arceus', 'ORAS'], notes: 'Requires Origin form item' },
+    'Sky Forme': { games: ['DPPt'], notes: 'Requires Gracidea flower' },
+    'Therian Forme': { games: ['B2W2'], notes: 'Requires Reveal Glass' },
+    'Resolute Form': { games: ['B2W2'], notes: 'Requires Secret Sword move' },
+    'Unbound': { games: ['X', 'Y', 'ORAS'], notes: 'Prison Bottle (Hoopa)' },
+    'Ultra': { games: ['Ultra Sun', 'Ultra Moon'], notes: 'Ultra Wormhole (Necrozma)' },
+    'Dusk Mane': { games: ['Ultra Sun', 'Ultra Moon'], notes: 'N-Solarizer fusion' },
+    'Dawn Wings': { games: ['Ultra Sun', 'Ultra Moon'], notes: 'N-Lunarizer fusion' },
+    'Bloodmoon': { games: ['Scarlet', 'Violet'], notes: 'Teal Mask DLC' },
+    '10% Forme': { games: ['X', 'Y', 'Sun', 'Moon'], notes: 'Zygarde Cube collection' },
+    // Oricorio styles
+    'Baile Style': { games: ['SM', 'USUM'], notes: "Ula'ula Meadow nectar" },
+    'Pom-Pom Style': { games: ['SM', 'USUM'], notes: 'Melemele Meadow nectar' },
+    'Pau Style': { games: ['SM', 'USUM'], notes: 'Poni Meadow nectar' },
+    'Sensu Style': { games: ['SM', 'USUM'], notes: 'Royal Avenue nectar' },
+    // Urshifu
+    'Single Strike Style': { games: ['Sword', 'Shield'], notes: 'Isle of Armor DLC choice' },
+    'Rapid Strike Style': { games: ['Sword', 'Shield'], notes: 'Isle of Armor DLC choice' },
+    // Lycanroc
+    'Midday Form': { games: ['Sun', 'Ultra Sun'], notes: 'Evolve during day' },
+    'Midnight Form': { games: ['Moon', 'Ultra Moon'], notes: 'Evolve during night' },
+    'Dusk Form': { games: ['Ultra Sun', 'Ultra Moon'], notes: 'Special Own Tempo Rockruff' },
+    // Toxtricity
+    'Amped Form': { games: ['Sword', 'Shield'], notes: 'Certain natures when evolving' },
+    'Low Key Form': { games: ['Sword', 'Shield'], notes: 'Certain natures when evolving' },
+    // Rotom
+    'Heat': { games: ['DPPt+'], notes: 'Rotom Catalog' },
+    'Wash': { games: ['DPPt+'], notes: 'Rotom Catalog' },
+    'Frost': { games: ['DPPt+'], notes: 'Rotom Catalog' },
+    'Fan': { games: ['DPPt+'], notes: 'Rotom Catalog' },
+    'Mow': { games: ['DPPt+'], notes: 'Rotom Catalog' },
+    // Deoxys
+    'Attack': { games: ['FireRed', 'ORAS'], notes: 'Meteorite interaction' },
+    'Defense': { games: ['LeafGreen', 'ORAS'], notes: 'Meteorite interaction' },
+    'Speed': { games: ['Emerald', 'ORAS'], notes: 'Meteorite interaction' },
+    // Shellos/Gastrodon
+    'East Sea': { games: ['DPPt'], notes: 'East of Mt. Coronet' },
+    'West Sea': { games: ['DPPt'], notes: 'West of Mt. Coronet' },
+    // Basculin
+    'Red-Striped': { games: ['BW', 'B2W2'], notes: 'Version-dependent' },
+    'Blue-Striped': { games: ['BW', 'B2W2'], notes: 'Version-dependent' },
+    'White-Striped': { games: ['Legends Arceus'], notes: 'Hisui exclusive' },
+    // Burmy/Wormadam
+    'Plant Cloak': { games: ['DPPt'], notes: 'Battle in grass/forest' },
+    'Sandy Cloak': { games: ['DPPt'], notes: 'Battle in caves/desert' },
+    'Trash Cloak': { games: ['DPPt'], notes: 'Battle in buildings' },
+    // Deerling/Sawsbuck
+    'Spring': { games: ['BW', 'B2W2'], notes: 'March/April/May' },
+    'Summer': { games: ['BW', 'B2W2'], notes: 'June/July/August' },
+    'Autumn': { games: ['BW', 'B2W2'], notes: 'Sept/Oct/Nov' },
+    'Winter': { games: ['BW', 'B2W2'], notes: 'Dec/Jan/Feb' },
+    // Pumpkaboo/Gourgeist
+    'Small': { games: ['X', 'Y'], notes: 'Random when caught' },
+    'Average': { games: ['X', 'Y'], notes: 'Random when caught' },
+    'Large': { games: ['X', 'Y'], notes: 'Random when caught' },
+    'Super': { games: ['X', 'Y'], notes: 'Random when caught' },
+    // Sinistea/Polteageist
+    'Antique': { games: ['Sword', 'Shield'], notes: 'Rare authentic form' },
+    // Minior
+    'Red Core': { games: ['SM', 'USUM'], notes: 'Random core color' },
+    'Orange Core': { games: ['SM', 'USUM'], notes: 'Random core color' },
+    'Yellow Core': { games: ['SM', 'USUM'], notes: 'Random core color' },
+    'Green Core': { games: ['SM', 'USUM'], notes: 'Random core color' },
+    'Blue Core': { games: ['SM', 'USUM'], notes: 'Random core color' },
+    'Indigo Core': { games: ['SM', 'USUM'], notes: 'Random core color' },
+    'Violet Core': { games: ['SM', 'USUM'], notes: 'Random core color' },
+    // Magearna
+    'Original Color': { games: ['Home'], notes: 'Complete National Dex in Pokemon Home' },
+    // Squawkabilly
+    'Green Plumage': { games: ['Scarlet', 'Violet'], notes: 'Random encounter' },
+    'Blue Plumage': { games: ['Scarlet', 'Violet'], notes: 'Random encounter' },
+    'Yellow Plumage': { games: ['Scarlet', 'Violet'], notes: 'Random encounter' },
+    'White Plumage': { games: ['Scarlet', 'Violet'], notes: 'Random encounter' },
+    // Tatsugiri
+    'Curly Form': { games: ['Scarlet', 'Violet'], notes: 'Random encounter' },
+    'Droopy Form': { games: ['Scarlet', 'Violet'], notes: 'Random encounter' },
+    'Stretchy Form': { games: ['Scarlet', 'Violet'], notes: 'Random encounter' },
+    // Dudunsparce
+    'Two-Segment Form': { games: ['Scarlet', 'Violet'], notes: 'Common evolution' },
+    'Three-Segment Form': { games: ['Scarlet', 'Violet'], notes: 'Rare evolution (1/100)' },
+    // Maushold
+    'Family of Three': { games: ['Scarlet', 'Violet'], notes: 'Rare evolution' },
+    'Family of Four': { games: ['Scarlet', 'Violet'], notes: 'Common evolution' },
+    // Vivillon patterns
+    'Meadow': { games: ['X', 'Y'], notes: 'Region-based pattern' },
+    'Polar': { games: ['X', 'Y'], notes: 'Region-based pattern' },
+    'Tundra': { games: ['X', 'Y'], notes: 'Region-based pattern' },
+    'Continental': { games: ['X', 'Y'], notes: 'Region-based pattern' },
+    'Garden': { games: ['X', 'Y'], notes: 'Region-based pattern' },
+    'Elegant': { games: ['X', 'Y'], notes: 'Region-based pattern' },
+    'Modern': { games: ['X', 'Y'], notes: 'Region-based pattern' },
+    'Marine': { games: ['X', 'Y'], notes: 'Region-based pattern' },
+    'Archipelago': { games: ['X', 'Y'], notes: 'Region-based pattern' },
+    'High Plains': { games: ['X', 'Y'], notes: 'Region-based pattern' },
+    'Sandstorm': { games: ['X', 'Y'], notes: 'Region-based pattern' },
+    'River': { games: ['X', 'Y'], notes: 'Region-based pattern' },
+    'Monsoon': { games: ['X', 'Y'], notes: 'Region-based pattern' },
+    'Savanna': { games: ['X', 'Y'], notes: 'Region-based pattern' },
+    'Sun': { games: ['X', 'Y'], notes: 'Region-based pattern' },
+    'Ocean': { games: ['X', 'Y'], notes: 'Region-based pattern' },
+    'Jungle': { games: ['X', 'Y'], notes: 'Region-based pattern' },
+    'Icy Snow': { games: ['X', 'Y'], notes: 'Region-based pattern' },
+    // Flabébé/Floette/Florges
+    'Red Flower': { games: ['X', 'Y'], notes: 'Route 4 (X) or Friend Safari' },
+    'Yellow Flower': { games: ['X', 'Y'], notes: 'Route 4 (Y) or Friend Safari' },
+    'Orange Flower': { games: ['X', 'Y'], notes: 'Route 4 or Friend Safari' },
+    'Blue Flower': { games: ['X', 'Y'], notes: 'Route 4 or Friend Safari' },
+    'White Flower': { games: ['X', 'Y'], notes: 'Route 4 or Friend Safari' },
+    // Furfrou trims
+    'Natural': { games: ['X', 'Y'], notes: 'Default trim' },
+    'Heart Trim': { games: ['X', 'Y'], notes: 'Friseur Furfrou grooming' },
+    'Star Trim': { games: ['X', 'Y'], notes: 'Friseur Furfrou grooming' },
+    'Diamond Trim': { games: ['X', 'Y'], notes: 'Friseur Furfrou grooming' },
+    'Debutante Trim': { games: ['X', 'Y'], notes: 'Friseur Furfrou grooming' },
+    'Matron Trim': { games: ['X', 'Y'], notes: 'Friseur Furfrou grooming' },
+    'Dandy Trim': { games: ['X', 'Y'], notes: 'Friseur Furfrou grooming' },
+    'La Reine Trim': { games: ['X', 'Y'], notes: 'Friseur Furfrou grooming' },
+    'Kabuki Trim': { games: ['X', 'Y'], notes: 'Friseur Furfrou grooming' },
+    'Pharaoh Trim': { games: ['X', 'Y'], notes: 'Friseur Furfrou grooming' },
+    // Alcremie (base flavors - sweets add decoration)
+    'Vanilla Cream': { games: ['Sword', 'Shield'], notes: 'Spin clockwise during day' },
+    'Ruby Cream': { games: ['Sword', 'Shield'], notes: 'Spin counterclockwise at night' },
+    'Matcha Cream': { games: ['Sword', 'Shield'], notes: 'Spin counterclockwise during day' },
+    'Mint Cream': { games: ['Sword', 'Shield'], notes: 'Spin counterclockwise at night 5+ sec' },
+    'Lemon Cream': { games: ['Sword', 'Shield'], notes: 'Spin clockwise at night' },
+    'Salted Cream': { games: ['Sword', 'Shield'], notes: 'Spin counterclockwise during day 5+ sec' },
+    'Ruby Swirl': { games: ['Sword', 'Shield'], notes: 'Spin at dusk' },
+    'Caramel Swirl': { games: ['Sword', 'Shield'], notes: 'Spin clockwise at night 5+ sec' },
+    'Rainbow Swirl': { games: ['Sword', 'Shield'], notes: 'Spin counterclockwise 5+ sec at dusk' }
 };
 
-// Helper function to get form location info
+// Helper function to get form location info for ALL forms
 function getFormLocationInfo(forms) {
-    const regionalForms = [];
+    const formInfos = [];
     for (const form of forms) {
+        // Check exact match first
+        if (FORM_LOCATIONS[form]) {
+            formInfos.push({
+                form: form,
+                games: FORM_LOCATIONS[form].games,
+                notes: FORM_LOCATIONS[form].notes
+            });
+            continue;
+        }
+        // Check prefix match
+        let found = false;
         for (const [prefix, info] of Object.entries(FORM_LOCATIONS)) {
             if (form.startsWith(prefix)) {
-                regionalForms.push({
+                formInfos.push({
                     form: form,
                     prefix: prefix,
                     games: info.games,
                     notes: info.notes
                 });
+                found = true;
                 break;
             }
         }
+        // Fallback for unlisted forms
+        if (!found) {
+            formInfos.push({
+                form: form,
+                games: ['Various'],
+                notes: 'Check specific game guides'
+            });
+        }
     }
-    return regionalForms;
+    return formInfos;
 }
 
 let originalState = null;
@@ -2157,8 +2304,8 @@ function createDetailContent(pokemon) {
             <div class="locations-header">
                 <h4>Locations</h4>
                 ${(() => {
-                    const regionalForms = getFormLocationInfo(pokemon.forms || []);
-                    if (regionalForms.length === 0) return '';
+                    const formLocations = getFormLocationInfo(pokemon.forms || []);
+                    if (formLocations.length === 0) return '';
                     return `
                         <select class="location-type-selector" id="locationTypeSelector">
                             <option value="catch">Catch Locations</option>
@@ -2172,14 +2319,14 @@ function createDetailContent(pokemon) {
             </div>
             <div class="form-locations-content" id="formLocationsContent" style="display: none;">
                 ${(() => {
-                    const regionalForms = getFormLocationInfo(pokemon.forms || []);
-                    if (regionalForms.length === 0) return '';
+                    const formLocations = getFormLocationInfo(pokemon.forms || []);
+                    if (formLocations.length === 0) return '<p class="no-locations">No alternate forms</p>';
                     return `
-                        <div class="form-locations-list">
-                            ${regionalForms.map(rf => `
-                                <div class="form-location-item">
-                                    <span class="form-location-name">${rf.form}</span>
-                                    <span class="form-location-games">${rf.games.join(', ')}</span>
+                        <div class="locations-by-game">
+                            ${formLocations.map(fl => `
+                                <div class="game-locations">
+                                    <strong>${fl.form}:</strong> ${fl.games.join(', ')}
+                                    ${fl.notes ? ` <span class="form-location-note">(${fl.notes})</span>` : ''}
                                 </div>
                             `).join('')}
                         </div>
