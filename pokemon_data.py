@@ -225,7 +225,7 @@ FORM_LOCATIONS = {
 
 # Star locations - maps star_number to game/location info
 STAR_LOCATIONS = {
-    1: {'games': ['Yellow'], 'notes': 'Gift from NPCs in Cerulean, Vermilion, Route 24'},
+    1: {'games': ['Yellow'], 'notes': 'Gift from NPC', 'pokemon_notes': {1: 'Cerulean City - from Melanie', 4: 'Route 24 - from NPC after defeating trainers', 7: 'Vermilion City - from Officer Jenny'}},
     2: {'games': ['SM', 'USUM'], 'notes': 'Evolve Pikachu with Thunder Stone in Alola'},
     3: {'games': ['SM', 'USUM'], 'notes': 'Evolve Exeggcute with Leaf Stone in Alola'},
     4: {'games': ['Diamond', 'Pearl', 'Platinum'], 'notes': 'Old Chateau with GBA dual slot'},

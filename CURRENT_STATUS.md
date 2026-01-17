@@ -224,6 +224,9 @@ Then click "Reload" in the PythonAnywhere Web tab.
   - Galarian forms: Sword, Shield
   - Hisuian forms: Legends Arceus
   - Paldean forms: Scarlet, Violet
+- [x] **Star Locations section** - Location dropdown now includes "Star Locations" option for Pokemon with stars:
+  - Shows game and location info for completing each star challenge
+  - Pokemon-specific notes (e.g., Bulbasaur shows "Cerulean City - from Melanie", Charmander shows "Route 24", Squirtle shows "Vermilion City")
 
 ## Location Data Verification (January 2026)
 All location data has been verified against Serebii and Bulbapedia:

@@ -298,7 +298,7 @@ const FORM_EVOLUTION_SOURCES = {
 
 // Star locations - maps star_number to game/location info
 const STAR_LOCATIONS = {
-    1: { games: ['Yellow'], notes: 'Gift from NPCs in Cerulean, Vermilion, Route 24' },
+    1: { games: ['Yellow'], notes: 'Gift from NPC', pokemon_notes: { 1: 'Cerulean City - from Melanie', 4: 'Route 24 - from NPC after defeating trainers', 7: 'Vermilion City - from Officer Jenny' } },
     2: { games: ['SM', 'USUM'], notes: 'Evolve Pikachu with Thunder Stone in Alola' },
     3: { games: ['SM', 'USUM'], notes: 'Evolve Exeggcute with Leaf Stone in Alola' },
     4: { games: ['DPPt'], notes: 'Old Chateau with GBA dual slot' },
@@ -410,17 +410,22 @@ const STAR_LOCATIONS = {
 };
 
 // Helper function to get star location info
-function getStarLocationInfo(stars) {
+function getStarLocationInfo(stars, pokemonId = null) {
     const starInfos = [];
     for (const star of stars) {
         const starNum = star.star_number;
         if (STAR_LOCATIONS[starNum]) {
+            // Check for pokemon-specific notes
+            let notes = STAR_LOCATIONS[starNum].notes;
+            if (pokemonId && STAR_LOCATIONS[starNum].pokemon_notes && STAR_LOCATIONS[starNum].pokemon_notes[pokemonId]) {
+                notes = STAR_LOCATIONS[starNum].pokemon_notes[pokemonId];
+            }
             starInfos.push({
                 starNumber: starNum,
                 requirement: star.requirement,
                 tier: star.tier,
                 games: STAR_LOCATIONS[starNum].games,
-                notes: STAR_LOCATIONS[starNum].notes
+                notes: notes
             });
         } else {
             starInfos.push({
@@ -2338,6 +2343,7 @@ async function saveAndCloseDetailPanel() {
 
 // Create detail content for panel
 function createDetailContent(pokemon) {
+    console.log('DEBUG createDetailContent called for:', pokemon.name, 'stars:', pokemon.stars, 'effective_stars:', pokemon.effective_stars);
     const tracking = pokemon.tracking || {};
     const starTracking = pokemon.star_tracking || {};
     const formTracking = pokemon.form_tracking || {};
@@ -2502,7 +2508,7 @@ function createDetailContent(pokemon) {
                 ${(() => {
                     const effectiveStars = pokemon.effective_stars || pokemon.stars || [];
                     if (effectiveStars.length === 0) return '<p class="no-locations">No star challenges</p>';
-                    const starLocations = getStarLocationInfo(effectiveStars);
+                    const starLocations = getStarLocationInfo(effectiveStars, pokemon.id);
                     return `
                         <div class="locations-by-game">
                             ${starLocations.map(sl => `
