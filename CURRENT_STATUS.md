@@ -218,6 +218,12 @@ Then click "Reload" in the PythonAnywhere Web tab.
 - [x] **Star filter dropdown** - Filter Pokemon by star status (has/no stars, complete/incomplete, by tier)
 - [x] **Collapsible filter panel** - Toggle button to show/hide filter dropdowns, with active filter count badge
 - [x] **Security hardening** - Added CSRF protection, rate limiting (5/min on login/register), secure session cookies, restricted CORS
+- [x] **Cross-gen evolution stars** - Chain-shared stars (like "Alolan Raichu Evolution") now appear on all evolution chain members (Pichu, Pikachu, Raichu) and sync completion status. Progress only counts each chain-shared star once.
+- [x] **Form Locations section** - New section in detail panel showing where to obtain regional forms:
+  - Alolan forms: Sun, Moon, Ultra Sun, Ultra Moon
+  - Galarian forms: Sword, Shield
+  - Hisuian forms: Legends Arceus
+  - Paldean forms: Scarlet, Violet
 
 ## Location Data Verification (January 2026)
 All location data has been verified against Serebii and Bulbapedia:
@@ -290,7 +296,7 @@ All location data has been verified against Serebii and Bulbapedia:
 
 ### Star System Improvements
 - [x] **Star Filters** - Filter by stars to easily see missing ones
-- [ ] **Cross-gen evolution stars** - Currently only appear on base form, should apply to whole evolutionary chain and be marked off across the board once completed
+- [x] **Cross-gen evolution stars** - Evolution stars now appear on all chain members and sync completion across the chain (e.g., "Alolan Raichu Evolution" shows on Pichu, Pikachu, and Raichu)
 - [ ] **Star info tooltips** - Add tooltips explaining each star challenge (community help offered)
 
 ### UI Enhancements
