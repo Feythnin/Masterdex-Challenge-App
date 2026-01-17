@@ -251,19 +251,22 @@ All location data has been verified against Serebii and Bulbapedia:
 
 ### Bug Fixes Needed
 - [x] Female Hisuian Sneasel missing from forms (added "Hisuian Female" to forms array)
-- [ ] Alolan Raticate missing from Totem stars
-- [ ] All of Alcremie's Sweet arguments are missing
-- [ ] OK and Cancel buttons disappear on mobile
+- [x] Alolan Raticate missing from Totem stars (added "Alolan Totem" form and Silver star #14)
+- [x] All of Alcremie's Sweet arguments are missing (added all 64 forms: 9 creams × 7 sweets + Gigantamax)
+- [x] OK and Cancel buttons disappear on mobile (fixed with dynamic viewport height + sticky positioning)
+- [x] Totem forms incorrectly showing shiny checkbox (Totem Pokemon can't be shiny - removed checkbox and excluded from shiny totals)
 
 ### Form Handling Inconsistencies
+- [x] **Missing default forms for Form Dex** - Added default forms to 20 Pokemon that were missing them:
+  - Gen 4: Burmy/Wormadam (Plant Cloak), Shellos/Gastrodon (West Sea)
+  - Gen 5: Basculin (Red-Striped), Deerling/Sawsbuck (Spring)
+  - Gen 6: Furfrou (Natural), Pumpkaboo/Gourgeist (Average)
+  - Gen 7: Oricorio (Baile Style), Lycanroc (Midday Form), Minior (Red Core)
+  - Gen 8: Toxtricity (Amped Form), Alcremie (Vanilla Cream), Urshifu (Single Strike Style)
+  - Gen 9: Maushold (Family of Four), Squawkabilly (Green Plumage), Tatsugiri (Curly Form), Dudunsparce (Two-Segment Form)
 - [ ] **Inconsistent default form assumptions** - Some Pokemon assume a default form for "obtained" status while others don't:
   - Unown lists all forms (including A) in forms section
   - Burmy, Unown, Vivillon should not use top-level "obtained" mark - any form obtained should constitute "obtained" status
-  - Tatsugiri assumes curly form as default (not clear to user)
-  - Flabebe doesn't assume a default, but Squawkabilly assumes green as default
-  - Pumpkaboo assumes average as default
-  - Lycanroc assumes midday form as default
-  - Minior assumes red as default
 - [ ] **Technical forms opt-in** - Technical forms should be an opt-in option with consistent handling
   - SM demo Greninja is a star, doesn't need the form exception
 
