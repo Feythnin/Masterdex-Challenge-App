@@ -199,6 +199,7 @@ python app.py
 - [x] **FRLG location data (FRLG_LOCATIONS)** - FireRed/LeafGreen locations with version exclusives, starter-dependent roaming beasts
 - [x] **GSC location data (GSC_LOCATIONS)** - Gold/Silver/Crystal locations with version exclusives, Crystal-specific Suicune/Celebi events
 - [x] **RBY location data (RBY_LOCATIONS)** - Red/Blue/Yellow locations with version exclusives, Yellow-unobtainable Pokemon, in-game trades
+- [x] **Star filter dropdown** - Filter Pokemon by star status (has/no stars, complete/incomplete, by tier)
 
 ## Location Data Verification (January 2026)
 All location data has been verified against Serebii and Bulbapedia:
@@ -269,7 +270,7 @@ All location data has been verified against Serebii and Bulbapedia:
   - SM demo Greninja is a star, doesn't need the form exception
 
 ### Star System Improvements
-- [ ] **Star Filters** - Filter by stars to easily see missing ones
+- [x] **Star Filters** - Filter by stars to easily see missing ones
 - [ ] **Cross-gen evolution stars** - Currently only appear on base form, should apply to whole evolutionary chain and be marked off across the board once completed
 - [ ] **Star info tooltips** - Add tooltips explaining each star challenge (community help offered)
 
