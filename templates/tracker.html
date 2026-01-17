@@ -296,6 +296,145 @@ const FORM_EVOLUTION_SOURCES = {
     855: 'Sinistea',     // Polteageist evolves from Sinistea
 };
 
+// Star locations - maps star_number to game/location info
+const STAR_LOCATIONS = {
+    1: { games: ['Yellow'], notes: 'Gift from NPCs in Cerulean, Vermilion, Route 24' },
+    2: { games: ['SM', 'USUM'], notes: 'Evolve Pikachu with Thunder Stone in Alola' },
+    3: { games: ['SM', 'USUM'], notes: 'Evolve Exeggcute with Leaf Stone in Alola' },
+    4: { games: ['DPPt'], notes: 'Old Chateau with GBA dual slot' },
+    5: { games: ['Sword', 'Shield'], notes: 'Evolve Koffing in Galar' },
+    6: { games: ['GSC+'], notes: 'Evolve Golbat with high friendship' },
+    7: { games: ['GSC+'], notes: 'Evolve Gloom with Sun Stone' },
+    8: { games: ['GSC+'], notes: "Evolve Poliwhirl with King's Rock trade" },
+    9: { games: ['B2W2'], notes: 'Nature Preserve - Level 1 Magikarp' },
+    10: { games: ['B2W2'], notes: 'Nature Preserve - Level 100 Magikarp' },
+    11: { games: ['GSC+'], notes: "Evolve Slowpoke with King's Rock trade" },
+    12: { games: ['GSC+'], notes: 'Evolve Onix with Metal Coat trade' },
+    13: { games: ['GSC+'], notes: 'Evolve Scyther with Metal Coat trade' },
+    14: { games: ['USUM'], notes: 'Totem Sticker reward gift' },
+    15: { games: ['GSC+'], notes: 'Evolve Porygon with Up-Grade trade' },
+    16: { games: ['GSC+'], notes: 'Evolve Chansey with high friendship' },
+    17: { games: ['DPPt+'], notes: 'Evolve Magneton at magnetic location' },
+    18: { games: ['DPPt+'], notes: 'Evolve Lickitung knowing Rollout' },
+    19: { games: ['DPPt+'], notes: 'Evolve Rhydon with Protector trade' },
+    20: { games: ['DPPt+'], notes: 'Evolve Tangela knowing Ancient Power' },
+    21: { games: ['DPPt+'], notes: 'Evolve Electabuzz with Electirizer trade' },
+    22: { games: ['Battle Revolution'], notes: 'Transfer gift Pikachu from PBR' },
+    23: { games: ['DPPt+'], notes: 'Evolve Eevee near Moss Rock' },
+    24: { games: ['DPPt+'], notes: 'Evolve Eevee near Ice Rock' },
+    25: { games: ['DPPt+'], notes: 'Evolve Porygon2 with Dubious Disc trade' },
+    26: { games: ['XY+'], notes: 'Evolve Eevee with high affection + Fairy move' },
+    27: { games: ['Legends Arceus'], notes: 'Evolve Scyther with Black Augurite' },
+    28: { games: ['Scarlet', 'Violet'], notes: 'Evolve Primeape after 20 Rage Fist uses' },
+    29: { games: ['GSC', 'HGSS'], notes: 'Lake of Rage - guaranteed shiny encounter' },
+    30: { games: ['GSC', 'HGSS'], notes: "Dragon's Den Elder gift after quiz" },
+    31: { games: ['Legends Arceus'], notes: 'Evolve Quilava in Hisui' },
+    32: { games: ['DPPt+'], notes: 'Evolve Aipom knowing Double Hit' },
+    33: { games: ['DPPt+'], notes: 'Evolve Misdreavus with Dusk Stone' },
+    34: { games: ['DPPt+'], notes: 'Evolve Murkrow with Dusk Stone' },
+    35: { games: ['DPPt+'], notes: 'Evolve Sneasel with Razor Claw at night' },
+    36: { games: ['DPPt+'], notes: 'Evolve Togetic with Shiny Stone' },
+    37: { games: ['Colosseum'], notes: 'Shadow Pokemon at Outskirt Stand' },
+    38: { games: ['Battle Revolution'], notes: 'Transfer gift Electivire from PBR' },
+    39: { games: ['Battle Revolution'], notes: 'Transfer gift Magmortar from PBR' },
+    40: { games: ['Legends Arceus'], notes: 'Evolve Stantler using Psyshield Bash' },
+    41: { games: ['Legends Arceus'], notes: 'Evolve Ursaring with Peat Block during full moon' },
+    42: { games: ['Scarlet', 'Violet'], notes: 'Evolve Girafarig knowing Twin Beam' },
+    43: { games: ['Scarlet', 'Violet'], notes: 'Evolve Dunsparce knowing Hyper Drill' },
+    44: { games: ['Emerald', 'ORAS', 'BDSP'], notes: 'Breed Ninjask with Baton Pass onto Shedinja' },
+    45: { games: ['Pokemon GO'], notes: 'Regional exclusive - varies by location' },
+    46: { games: ['Pokemon GO'], notes: 'Regional exclusive - varies by location' },
+    47: { games: ['Pokemon GO'], notes: 'Regional exclusive - varies by location' },
+    48: { games: ['Pokemon GO'], notes: 'Regional exclusive - varies by location' },
+    49: { games: ['Pokemon GO'], notes: 'Special Research reward' },
+    50: { games: ['Pokemon GO'], notes: 'Special Research reward' },
+    51: { games: ['Sword', 'Shield'], notes: 'Evolve Mime Jr. with high friendship in Galar' },
+    52: { games: ['DPPt'], notes: 'Mt. Coronet B1F fishing tiles (rare)' },
+    53: { games: ['Platinum'], notes: 'Wi-Fi event distribution' },
+    54: { games: ['Sword', 'Shield'], notes: 'Evolve Galarian Mr. Mime at level 42' },
+    55: { games: ['HGSS'], notes: 'Bug Catching Contest - National Park' },
+    56: { games: ['HGSS'], notes: 'Bug Catching Contest - National Park' },
+    57: { games: ['HGSS'], notes: "Pokewalker - Night Sky's Edge course" },
+    58: { games: ['HGSS'], notes: "Pokewalker - Night Sky's Edge course" },
+    59: { games: ['White 2'], notes: 'Pinwheel Forest Hidden Grotto' },
+    60: { games: ['Black 2'], notes: 'Pinwheel Forest Hidden Grotto' },
+    61: { games: ['B2W2'], notes: 'Underground Ruins - special encounter' },
+    62: { games: ['Legends Arceus'], notes: 'Evolve Dewott in Hisui' },
+    63: { games: ['B2W2'], notes: "N's Pokemon - special memory link" },
+    64: { games: ['B2W2'], notes: "N's Pokemon - special memory link" },
+    65: { games: ['B2W2'], notes: "N's Pokemon - special memory link" },
+    66: { games: ['B2W2'], notes: "N's Pokemon - special memory link" },
+    67: { games: ['B2W2'], notes: "N's Pokemon - special memory link" },
+    68: { games: ['B2W2'], notes: "N's Pokemon - special memory link" },
+    69: { games: ['Legends Arceus'], notes: 'Evolve Petilil with Sun Stone in Hisui' },
+    70: { games: ['B2W2'], notes: "N's Pokemon - special memory link" },
+    71: { games: ['B2W2'], notes: "N's Pokemon - special memory link" },
+    72: { games: ['B2W2'], notes: "N's Pokemon - special memory link" },
+    73: { games: ['B2W2'], notes: "N's Pokemon - special memory link" },
+    74: { games: ['B2W2'], notes: "N's Pokemon - special memory link" },
+    75: { games: ['B2W2'], notes: "N's Pokemon - special memory link" },
+    76: { games: ['B2W2'], notes: "N's Pokemon - special memory link" },
+    77: { games: ['B2W2'], notes: "N's Pokemon - special memory link" },
+    78: { games: ['B2W2'], notes: "N's Pokemon - special memory link" },
+    79: { games: ['Legends Arceus'], notes: 'Evolve Rufflet in Hisui' },
+    80: { games: ['Scarlet', 'Violet'], notes: 'Evolve Bisharp with 3 Pawniard + Leader Crest' },
+    81: { games: ['X', 'Y'], notes: 'Trade with Hiker in Cyllage City Hotel' },
+    82: { games: ['Legends Arceus'], notes: 'Evolve Goomy in Hisui' },
+    83: { games: ['Legends Arceus'], notes: 'Evolve Hisuian Sliggoo during rain' },
+    84: { games: ['Legends Arceus'], notes: 'Evolve Bergmite in Hisui' },
+    85: { games: ['SM', 'USUM'], notes: 'Zygarde Cube collection in Alola' },
+    86: { games: ['ORAS'], notes: 'Southern Island with Eon Ticket' },
+    87: { games: ['Legends Arceus'], notes: 'Evolve Dartrix in Hisui' },
+    88: { games: ['SM', 'USUM'], notes: 'QR Code scan Mystery Gift' },
+    89: { games: ["Let's Go Pikachu"], notes: 'Gift from NPC in game' },
+    90: { games: ['Sword', 'Shield'], notes: "Requires Let's Go Pikachu save" },
+    91: { games: ['Sword', 'Shield'], notes: "Requires Let's Go Eevee save" },
+    92: { games: ['BDSP'], notes: "Requires Let's Go save data" },
+    93: { games: ['BDSP'], notes: 'Requires Sword/Shield save data' },
+    94: { games: ['Sword', 'Shield'], notes: 'Crown Tundra DLC - talk to 32 players' },
+    95: { games: ['BDSP'], notes: 'Ramanas Park Secret Room' },
+    96: { games: ['Legends Arceus'], notes: 'Request 83: Snow-White Vulpix' },
+    97: { games: ['Legends Arceus'], notes: 'Request 19: A Peculiar Ponyta (shiny)' },
+    98: { games: ['Legends Arceus'], notes: 'Alpha encounter in Alabaster Icelands' },
+    99: { games: ['Legends Arceus'], notes: 'Alpha encounter - various locations' },
+    100: { games: ['Legends Arceus'], notes: 'Alpha encounter - Grueling Grove' },
+    101: { games: ['Legends Arceus'], notes: 'Alpha encounter in Bonechill Wastes' },
+    102: { games: ['Scarlet', 'Violet'], notes: 'Gift from Salvatore after language class' },
+    103: { games: ['Scarlet', 'Violet'], notes: 'Stony Cliff Titan - South Province Area 3' },
+    104: { games: ['Scarlet', 'Violet'], notes: 'Open Sky Titan - West Province Area 1' },
+    105: { games: ['Scarlet', 'Violet'], notes: 'Lurking Steel Titan - East Province Area 3' },
+    106: { games: ['Scarlet', 'Violet'], notes: 'False Dragon Titan - Casseroya Lake' },
+    107: { games: ['Scarlet'], notes: 'Quaking Earth Titan - Asado Desert' },
+    108: { games: ['Violet'], notes: 'Quaking Earth Titan - Asado Desert' },
+    109: { games: ['LGPE', 'SwSh'], notes: 'Pokeball Plus accessory gift' },
+};
+
+// Helper function to get star location info
+function getStarLocationInfo(stars) {
+    const starInfos = [];
+    for (const star of stars) {
+        const starNum = star.star_number;
+        if (STAR_LOCATIONS[starNum]) {
+            starInfos.push({
+                starNumber: starNum,
+                requirement: star.requirement,
+                tier: star.tier,
+                games: STAR_LOCATIONS[starNum].games,
+                notes: STAR_LOCATIONS[starNum].notes
+            });
+        } else {
+            starInfos.push({
+                starNumber: starNum,
+                requirement: star.requirement,
+                tier: star.tier,
+                games: ['Unknown'],
+                notes: star.description || 'Check star description'
+            });
+        }
+    }
+    return starInfos;
+}
+
 // Helper function to get form location info for ALL forms
 function getFormLocationInfo(forms, pokemonId = null) {
     const formInfos = [];
@@ -2327,11 +2466,15 @@ function createDetailContent(pokemon) {
                 <h4>Locations</h4>
                 ${(() => {
                     const formLocations = getFormLocationInfo(pokemon.forms || [], pokemon.id);
-                    if (formLocations.length === 0) return '';
+                    const effectiveStars = pokemon.effective_stars || pokemon.stars || [];
+                    const hasForms = formLocations.length > 0;
+                    const hasStars = effectiveStars.length > 0;
+                    if (!hasForms && !hasStars) return '';
                     return `
                         <select class="location-type-selector" id="locationTypeSelector">
                             <option value="catch">Catch Locations</option>
-                            <option value="form">Form Locations</option>
+                            ${hasForms ? '<option value="form">Form Locations</option>' : ''}
+                            ${hasStars ? '<option value="star">Star Locations</option>' : ''}
                         </select>
                     `;
                 })()}
@@ -2349,6 +2492,23 @@ function createDetailContent(pokemon) {
                                 <div class="game-locations">
                                     <strong>${fl.form}:</strong> ${fl.games.join(', ')}
                                     ${fl.notes ? ` <span class="form-location-note">(${fl.notes})</span>` : ''}
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                })()}
+            </div>
+            <div class="star-locations-content" id="starLocationsContent" style="display: none;">
+                ${(() => {
+                    const effectiveStars = pokemon.effective_stars || pokemon.stars || [];
+                    if (effectiveStars.length === 0) return '<p class="no-locations">No star challenges</p>';
+                    const starLocations = getStarLocationInfo(effectiveStars);
+                    return `
+                        <div class="locations-by-game">
+                            ${starLocations.map(sl => `
+                                <div class="game-locations">
+                                    <strong>★${sl.starNumber} ${sl.requirement}:</strong> ${sl.games.join(', ')}
+                                    ${sl.notes ? ` <span class="form-location-note">(${sl.notes})</span>` : ''}
                                 </div>
                             `).join('')}
                         </div>
@@ -2415,12 +2575,18 @@ function attachDetailEventListeners(container, pokemon) {
         locationSelector.addEventListener('change', (e) => {
             const catchLocations = container.querySelector('#locationsContent');
             const formLocations = container.querySelector('#formLocationsContent');
-            if (e.target.value === 'form') {
-                catchLocations.style.display = 'none';
+            const starLocations = container.querySelector('#starLocationsContent');
+            // Hide all first
+            catchLocations.style.display = 'none';
+            if (formLocations) formLocations.style.display = 'none';
+            if (starLocations) starLocations.style.display = 'none';
+            // Show selected
+            if (e.target.value === 'form' && formLocations) {
                 formLocations.style.display = 'block';
+            } else if (e.target.value === 'star' && starLocations) {
+                starLocations.style.display = 'block';
             } else {
                 catchLocations.style.display = 'block';
-                formLocations.style.display = 'none';
             }
         });
     }
