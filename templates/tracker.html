@@ -137,6 +137,46 @@ let pendingChanges = {
     forms: {},
     formShinies: {}
 };
+
+// Regional form locations - maps form prefix to obtainable games
+const FORM_LOCATIONS = {
+    'Alolan': {
+        games: ['Sun', 'Moon', 'Ultra Sun', 'Ultra Moon'],
+        notes: 'Native to Alola region'
+    },
+    'Galarian': {
+        games: ['Sword', 'Shield'],
+        notes: 'Native to Galar region'
+    },
+    'Hisuian': {
+        games: ['Legends Arceus'],
+        notes: 'Native to ancient Hisui region'
+    },
+    'Paldean': {
+        games: ['Scarlet', 'Violet'],
+        notes: 'Native to Paldea region'
+    }
+};
+
+// Helper function to get form location info
+function getFormLocationInfo(forms) {
+    const regionalForms = [];
+    for (const form of forms) {
+        for (const [prefix, info] of Object.entries(FORM_LOCATIONS)) {
+            if (form.startsWith(prefix)) {
+                regionalForms.push({
+                    form: form,
+                    prefix: prefix,
+                    games: info.games,
+                    notes: info.notes
+                });
+                break;
+            }
+        }
+    }
+    return regionalForms;
+}
+
 let originalState = null;
 
 // Pagination settings
@@ -2107,6 +2147,24 @@ function createDetailContent(pokemon) {
                 </div>
             </div>
         ` : ''}
+
+        ${(() => {
+            const regionalForms = getFormLocationInfo(pokemon.forms || []);
+            if (regionalForms.length === 0) return '';
+            return `
+                <div class="form-locations-section">
+                    <h4>Form Locations</h4>
+                    <div class="form-locations-list">
+                        ${regionalForms.map(rf => `
+                            <div class="form-location-item">
+                                <span class="form-location-name">${rf.form}</span>
+                                <span class="form-location-games">${rf.games.join(', ')}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        })()}
 
         <div class="games-section">
             <h4>Obtainable Games</h4>

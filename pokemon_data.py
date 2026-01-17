@@ -51,6 +51,33 @@ def get_chain_members(pokemon_id):
         return EVOLUTION_CHAINS[chain_name]
     return [pokemon_id]
 
+# Regional form locations - maps form prefix to obtainable games
+FORM_LOCATIONS = {
+    'Alolan': {
+        'games': ['Sun', 'Moon', 'Ultra Sun', 'Ultra Moon'],
+        'notes': 'Native to Alola region'
+    },
+    'Galarian': {
+        'games': ['Sword', 'Shield'],
+        'notes': 'Native to Galar region'
+    },
+    'Hisuian': {
+        'games': ['Legends Arceus'],
+        'notes': 'Native to ancient Hisui region'
+    },
+    'Paldean': {
+        'games': ['Scarlet', 'Violet'],
+        'notes': 'Native to Paldea region'
+    }
+}
+
+def get_form_location(form_name):
+    """Get the location info for a regional form."""
+    for prefix, info in FORM_LOCATIONS.items():
+        if form_name.startswith(prefix):
+            return {'form': form_name, 'prefix': prefix, **info}
+    return None
+
 # Pokemon data
 # has_gender_diff: True if Pokemon has visual gender differences (affects male/female checkboxes display)
 # has_gender: True if Pokemon can be male/female (not genderless)
