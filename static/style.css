@@ -1234,6 +1234,27 @@ body {
     .pokemon-detail-panel {
         width: 100%;
         right: -100%;
+        /* Fix for mobile browsers where 100vh includes hidden address bar */
+        height: 100dvh;
+        height: -webkit-fill-available;
+        max-height: 100vh;
+    }
+
+    /* Ensure buttons are always visible on mobile */
+    .panel-buttons {
+        position: sticky;
+        bottom: 0;
+        padding: 1rem;
+        background: #f8f9fa;
+        box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+        z-index: 10;
+    }
+
+    .btn-cancel,
+    .btn-ok {
+        flex: 1;
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
     }
 
     .detail-header {
