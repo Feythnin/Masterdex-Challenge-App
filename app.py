@@ -9,7 +9,17 @@ import csv
 import io
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-secret-key-change-in-production')
+
+# Security: SECRET_KEY must be set in production
+# In development, a random key is generated (sessions won't persist across restarts)
+secret_key = os.environ.get('SECRET_KEY')
+if not secret_key:
+    import secrets
+    secret_key = secrets.token_hex(32)
+    if os.environ.get('FLASK_ENV') == 'production':
+        raise RuntimeError("SECRET_KEY environment variable must be set in production!")
+app.config['SECRET_KEY'] = secret_key
+
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///pokemon_tracker.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -618,4 +628,6 @@ if __name__ == '__main__':
         db.create_all()
         # Run migration for existing male/female data
         migrate_gender_to_forms()
-    app.run(debug=True, port=5000)
+    # Security: Debug mode only enabled if FLASK_DEBUG=1 is set
+    debug_mode = os.environ.get('FLASK_DEBUG', '0') == '1'
+    app.run(debug=debug_mode, port=5000)

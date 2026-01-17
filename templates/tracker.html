@@ -44,6 +44,17 @@
 
 <div class="filters-bar">
     <input type="text" id="searchInput" placeholder="Search Pokémon..." class="search-input">
+    <button class="btn-filters-toggle" id="filtersToggle">
+        Filters <span class="filter-count" id="filterCount"></span>
+    </button>
+    <div class="data-buttons">
+        <button class="btn-export" id="exportBtn" title="Export data to CSV">Export</button>
+        <button class="btn-import" id="importBtn" title="Import data from CSV">Import</button>
+        <input type="file" id="importFile" accept=".csv" style="display: none;">
+    </div>
+</div>
+
+<div class="filters-panel" id="filtersPanel" style="display: none;">
     <select id="generationFilter" class="filter-select">
         <option value="">All Generations</option>
         <option value="1">Gen 1</option>
@@ -80,11 +91,6 @@
         <option value="completion-desc">Most Complete</option>
         <option value="completion-asc">Least Complete</option>
     </select>
-    <div class="data-buttons">
-        <button class="btn-export" id="exportBtn" title="Export data to CSV">Export</button>
-        <button class="btn-import" id="importBtn" title="Import data from CSV">Import</button>
-        <input type="file" id="importFile" accept=".csv" style="display: none;">
-    </div>
 </div>
 
 <div class="bulk-actions-bar">
@@ -231,6 +237,21 @@ function getCompletionScore(pokemon) {
     }
 
     return score / total;
+}
+
+// Update filter count badge
+function updateFilterCount() {
+    const genFilter = document.getElementById('generationFilter').value;
+    const statusFilter = document.getElementById('statusFilter').value;
+    const starFilter = document.getElementById('starFilter').value;
+
+    let count = 0;
+    if (genFilter) count++;
+    if (statusFilter) count++;
+    if (starFilter) count++;
+
+    const countEl = document.getElementById('filterCount');
+    countEl.textContent = count > 0 ? count : '';
 }
 
 function getFilteredPokemon() {
@@ -2232,6 +2253,19 @@ document.addEventListener('DOMContentLoaded', () => {
             icon.textContent = '▼';
         }
     });
+
+    // Filters panel toggle
+    document.getElementById('filtersToggle').addEventListener('click', function() {
+        const panel = document.getElementById('filtersPanel');
+        const isVisible = panel.style.display !== 'none';
+        panel.style.display = isVisible ? 'none' : 'flex';
+        this.classList.toggle('active', !isVisible);
+    });
+
+    // Update filter count when filters change
+    document.getElementById('generationFilter').addEventListener('change', updateFilterCount);
+    document.getElementById('statusFilter').addEventListener('change', updateFilterCount);
+    document.getElementById('starFilter').addEventListener('change', updateFilterCount);
 
     // Selection mode buttons
     document.getElementById('selectModeBtn').addEventListener('click', toggleSelectMode);
