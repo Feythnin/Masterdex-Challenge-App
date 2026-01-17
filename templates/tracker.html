@@ -204,9 +204,10 @@ function getCompletionScore(pokemon) {
     const allForms = [...genderForms, ...(pokemon.forms || [])];
 
     allForms.forEach(form => {
-        total += 2; // form obtained + form shiny
+        const isTotem = form.includes('Totem');
+        total += isTotem ? 1 : 2; // Totem forms can't be shiny
         if (formTracking[form]) score++;
-        if (formShinyTracking[form]) score++;
+        if (!isTotem && formShinyTracking[form]) score++;
     });
 
     // Stars
@@ -341,10 +342,11 @@ function createCompactCardHTML(pokemon) {
     const completedStars = totalStars > 0 ? Object.values(starTracking).filter(v => v).length : 0;
     const starsComplete = totalStars > 0 && completedStars === totalStars;
 
-    // Shiny status - base form + all forms (including gender forms)
+    // Shiny status - base form + all forms (excluding Totem forms which can't be shiny)
     const formShinyTracking = pokemon.form_shiny_tracking || {};
-    const totalShinies = 1 + totalForms; // base + each form (including gender forms)
-    const completedShinies = (tracking.shiny ? 1 : 0) + allForms.filter(f => formShinyTracking[f]).length;
+    const shinyableForms = allForms.filter(f => !f.includes('Totem'));
+    const totalShinies = 1 + shinyableForms.length; // base + each shinyable form
+    const completedShinies = (tracking.shiny ? 1 : 0) + shinyableForms.filter(f => formShinyTracking[f]).length;
     const allShiniesComplete = completedShinies === totalShinies;
 
     const isObtained = tracking.original_gen;
@@ -1976,12 +1978,14 @@ function createDetailContent(pokemon) {
                                        ${formTracking[form] ? 'checked' : ''}>
                                 <span class="checkbox-label">${form}</span>
                             </label>
+                            ${!form.includes('Totem') ? `
                             <label class="checkbox-item form-shiny-checkbox">
                                 <input type="checkbox"
                                        data-form-shiny="${form}"
                                        ${(pokemon.form_shiny_tracking || {})[form] ? 'checked' : ''}>
                                 <span class="checkbox-label">✨ Shiny</span>
                             </label>
+                            ` : ''}
                         </div>
                     `).join('') : ''}
                 </div>
