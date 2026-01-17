@@ -156,6 +156,20 @@ python app.py
 # Access at http://127.0.0.1:5000
 ```
 
+## PythonAnywhere Deployment
+
+When deploying updates to PythonAnywhere:
+
+```bash
+cd ~/Masterdex-Challenge-App
+git pull
+
+# IMPORTANT: Always use python3.10 for installing new packages
+python3.10 -m pip install --user -r requirements.txt
+```
+
+Then click "Reload" in the PythonAnywhere Web tab.
+
 ## Recent Updates
 - [x] Added Gen 1 starters (Charmander line, Squirtle line)
 - [x] Added Mew with 4 stars across all tiers (Bronze, Silver, Gold, Platinum)
