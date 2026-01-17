@@ -227,6 +227,7 @@ Then click "Reload" in the PythonAnywhere Web tab.
 - [x] **Star Locations section** - Location dropdown now includes "Star Locations" option for Pokemon with stars:
   - Shows game and location info for completing each star challenge
   - Pokemon-specific notes (e.g., Bulbasaur shows "Cerulean City - from Melanie", Charmander shows "Route 24", Squirtle shows "Vermilion City")
+  - Star locations keyed by (tier, star_number) - star numbers are unique per tier (Bronze/Silver/Gold/Platinum), not globally
 
 ## Location Data Verification (January 2026)
 All location data has been verified against Serebii and Bulbapedia:
