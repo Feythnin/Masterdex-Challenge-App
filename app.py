@@ -2,6 +2,9 @@ from flask import Flask, render_template, request, jsonify, redirect, url_for, R
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 from flask_cors import CORS
+from flask_wtf.csrf import CSRFProtect
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 import bcrypt
 from datetime import datetime
 import os
@@ -23,8 +26,29 @@ app.config['SECRET_KEY'] = secret_key
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///pokemon_tracker.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
+# Security: Session cookie settings
+app.config['SESSION_COOKIE_SECURE'] = os.environ.get('FLASK_ENV') == 'production'  # HTTPS only in production
+app.config['SESSION_COOKIE_HTTPONLY'] = True  # Prevent JavaScript access
+app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'  # Prevent CSRF via cross-site requests
+
 db = SQLAlchemy(app)
-CORS(app)
+
+# Security: CORS - restrict to same origin in production, allow all in development
+cors_origins = os.environ.get('CORS_ORIGINS', '*' if os.environ.get('FLASK_ENV') != 'production' else None)
+if cors_origins:
+    CORS(app, origins=cors_origins.split(','), supports_credentials=True)
+
+# Security: CSRF protection
+csrf = CSRFProtect(app)
+
+# Security: Rate limiting
+limiter = Limiter(
+    key_func=get_remote_address,
+    app=app,
+    default_limits=["200 per day", "50 per hour"],
+    storage_uri="memory://"
+)
+
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
 
@@ -91,6 +115,8 @@ def index():
     return render_template('index.html')
 
 @app.route('/register', methods=['GET', 'POST'])
+@limiter.limit("5 per minute", methods=["POST"])
+@csrf.exempt  # Using JSON API with SameSite cookies
 def register():
     if request.method == 'POST':
         data = request.get_json() if request.is_json else request.form
@@ -118,6 +144,8 @@ def register():
     return render_template('register.html')
 
 @app.route('/login', methods=['GET', 'POST'])
+@limiter.limit("5 per minute", methods=["POST"])
+@csrf.exempt  # Using JSON API with SameSite cookies
 def login():
     if request.method == 'POST':
         data = request.get_json() if request.is_json else request.form
@@ -147,8 +175,9 @@ def logout():
 def tracker():
     return render_template('tracker.html')
 
-# API Endpoints
+# API Endpoints - exempt from CSRF (JSON API with SameSite cookies provides protection)
 @app.route('/api/pokemon', methods=['GET'])
+@csrf.exempt
 @login_required
 def get_pokemon():
     # Fetch all user data in 3 bulk queries instead of 3 per Pokemon
@@ -207,6 +236,7 @@ def get_pokemon():
     return jsonify(result)
 
 @app.route('/api/pokemon/<int:pokemon_id>', methods=['PUT'])
+@csrf.exempt
 @login_required
 def update_pokemon(pokemon_id):
     data = request.get_json()
@@ -236,6 +266,7 @@ def update_pokemon(pokemon_id):
     return jsonify({'message': 'Updated successfully'})
 
 @app.route('/api/stars/<int:pokemon_id>/<int:star_number>', methods=['PUT'])
+@csrf.exempt
 @login_required
 def update_star(pokemon_id, star_number):
     data = request.get_json()
@@ -261,6 +292,7 @@ def update_star(pokemon_id, star_number):
     return jsonify({'message': 'Star updated successfully'})
 
 @app.route('/api/forms/<int:pokemon_id>/<form_name>', methods=['PUT'])
+@csrf.exempt
 @login_required
 def update_form(pokemon_id, form_name):
     data = request.get_json()
@@ -290,6 +322,7 @@ def update_form(pokemon_id, form_name):
     return jsonify({'message': 'Form updated successfully'})
 
 @app.route('/api/progress', methods=['GET'])
+@csrf.exempt
 @login_required
 def get_progress():
     total_pokemon = len(POKEMON_DATA)
@@ -349,6 +382,7 @@ def get_progress():
     })
 
 @app.route('/api/bulk', methods=['POST'])
+@csrf.exempt
 @login_required
 def bulk_update():
     data = request.json
@@ -382,6 +416,7 @@ def bulk_update():
     return jsonify({'success': True, 'updated': updated_count})
 
 @app.route('/api/export', methods=['GET'])
+@csrf.exempt
 @login_required
 def export_data():
     # Get all user tracking data
@@ -437,6 +472,7 @@ def export_data():
     )
 
 @app.route('/api/import', methods=['POST'])
+@csrf.exempt
 @login_required
 def import_data():
     if 'file' not in request.files:

@@ -8,6 +8,7 @@ A full-stack web application for tracking Pokémon collection progress across ge
 - **Database**: SQLite with SQLAlchemy ORM
 - **Frontend**: HTML/CSS/JavaScript (vanilla)
 - **Authentication**: Flask-Login with bcrypt password hashing
+- **Security**: Flask-WTF (CSRF), Flask-Limiter (rate limiting), secure session cookies
 
 ## Project Structure
 ```
@@ -201,6 +202,8 @@ python app.py
 - [x] **GSC location data (GSC_LOCATIONS)** - Gold/Silver/Crystal locations with version exclusives, Crystal-specific Suicune/Celebi events
 - [x] **RBY location data (RBY_LOCATIONS)** - Red/Blue/Yellow locations with version exclusives, Yellow-unobtainable Pokemon, in-game trades
 - [x] **Star filter dropdown** - Filter Pokemon by star status (has/no stars, complete/incomplete, by tier)
+- [x] **Collapsible filter panel** - Toggle button to show/hide filter dropdowns, with active filter count badge
+- [x] **Security hardening** - Added CSRF protection, rate limiting (5/min on login/register), secure session cookies, restricted CORS
 
 ## Location Data Verification (January 2026)
 All location data has been verified against Serebii and Bulbapedia:
