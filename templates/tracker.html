@@ -61,6 +61,17 @@
         <option value="complete">Completed</option>
         <option value="incomplete">Incomplete</option>
     </select>
+    <select id="starFilter" class="filter-select">
+        <option value="">All Stars</option>
+        <option value="has-stars">Has Stars</option>
+        <option value="no-stars">No Stars</option>
+        <option value="stars-incomplete">Incomplete Stars</option>
+        <option value="stars-complete">All Stars Complete</option>
+        <option value="tier-bronze">Has Bronze Stars</option>
+        <option value="tier-silver">Has Silver Stars</option>
+        <option value="tier-gold">Has Gold Stars</option>
+        <option value="tier-platinum">Has Platinum Stars</option>
+    </select>
     <select id="sortOrder" class="filter-select">
         <option value="dex-asc">Dex # (Low to High)</option>
         <option value="dex-desc">Dex # (High to Low)</option>
@@ -226,6 +237,7 @@ function getFilteredPokemon() {
     const searchTerm = document.getElementById('searchInput').value.toLowerCase();
     const genFilter = document.getElementById('generationFilter').value;
     const statusFilter = document.getElementById('statusFilter').value;
+    const starFilter = document.getElementById('starFilter').value;
     const sortOrder = document.getElementById('sortOrder').value;
 
     let filtered = pokemonData.filter(pokemon => {
@@ -245,7 +257,32 @@ function getFilteredPokemon() {
             matchesStatus = statusFilter === 'complete' ? hasProgress : !hasProgress;
         }
 
-        return matchesSearch && matchesGen && matchesStatus;
+        // Filter by star status
+        let matchesStars = true;
+        if (starFilter) {
+            const starTracking = pokemon.star_tracking || {};
+            const totalStars = pokemon.stars ? pokemon.stars.length : 0;
+            const completedStars = totalStars > 0 ? Object.values(starTracking).filter(v => v).length : 0;
+
+            if (starFilter === 'has-stars') {
+                matchesStars = totalStars > 0;
+            } else if (starFilter === 'no-stars') {
+                matchesStars = totalStars === 0;
+            } else if (starFilter === 'stars-complete') {
+                matchesStars = totalStars > 0 && completedStars === totalStars;
+            } else if (starFilter === 'stars-incomplete') {
+                matchesStars = totalStars > 0 && completedStars < totalStars;
+            } else if (starFilter.startsWith('tier-')) {
+                const tier = starFilter.replace('tier-', '');
+                const tierName = tier.charAt(0).toUpperCase() + tier.slice(1);
+                // Has incomplete stars of this tier
+                matchesStars = pokemon.stars && pokemon.stars.some(s =>
+                    s.tier === tierName && !starTracking[s.star_number]
+                );
+            }
+        }
+
+        return matchesSearch && matchesGen && matchesStatus && matchesStars;
     });
 
     // Apply sorting
@@ -2170,6 +2207,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('searchInput').addEventListener('input', renderPokemon);
     document.getElementById('generationFilter').addEventListener('change', renderPokemon);
     document.getElementById('statusFilter').addEventListener('change', renderPokemon);
+    document.getElementById('starFilter').addEventListener('change', renderPokemon);
     document.getElementById('sortOrder').addEventListener('change', renderPokemon);
 
     // Load More button
