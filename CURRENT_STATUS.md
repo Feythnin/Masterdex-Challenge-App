@@ -264,9 +264,7 @@ All location data has been verified against Serebii and Bulbapedia:
   - Gen 7: Oricorio (Baile Style), Lycanroc (Midday Form), Minior (Red Core)
   - Gen 8: Toxtricity (Amped Form), Alcremie (Vanilla Cream), Urshifu (Single Strike Style)
   - Gen 9: Maushold (Family of Four), Squawkabilly (Green Plumage), Tatsugiri (Curly Form), Dudunsparce (Two-Segment Form)
-- [ ] **Inconsistent default form assumptions** - Some Pokemon assume a default form for "obtained" status while others don't:
-  - Unown lists all forms (including A) in forms section
-  - Burmy, Unown, Vivillon should not use top-level "obtained" mark - any form obtained should constitute "obtained" status
+- [x] **Inconsistent default form assumptions** - Fixed by adding default forms to all Pokemon with multiple forms (see above)
 - [ ] **Technical forms opt-in** - Technical forms should be an opt-in option with consistent handling
   - SM demo Greninja is a star, doesn't need the form exception
 
