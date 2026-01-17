@@ -1106,6 +1106,18 @@ body {
     flex: 1;
 }
 
+/* Inherited chain-shared stars */
+.star-item.inherited-star {
+    border-left: 3px solid #8b5cf6;
+    background: rgba(139, 92, 246, 0.05);
+}
+
+.inherited-badge {
+    margin-left: 0.5rem;
+    font-size: 0.8rem;
+    opacity: 0.7;
+}
+
 /* Games Section */
 .games-list {
     font-size: 0.9rem;

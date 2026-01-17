@@ -105,7 +105,7 @@ def load_user(user_id):
 
 
 # Import Pokemon data from separate module
-from pokemon_data import GENERATION_GAMES, POKEMON_DATA, POKEMON_BY_ID
+from pokemon_data import GENERATION_GAMES, POKEMON_DATA, POKEMON_BY_ID, get_chain_members, POKEMON_TO_CHAIN
 
 # Routes
 @app.route('/')
@@ -222,9 +222,40 @@ def get_pokemon():
             'shiny': tracking.shiny if tracking else False,
             'notes': tracking.notes if tracking else ''
         }
-        pokemon_data['star_tracking'] = {
-            s.star_number: s.completed for s in star_tracking
-        }
+
+        # Build effective_stars (including inherited chain_shared stars from evolution chain members)
+        effective_stars = list(pokemon.get('stars', []))
+        chain_members = get_chain_members(pokemon_id)
+
+        # Add inherited chain_shared stars from other chain members
+        for member_id in chain_members:
+            if member_id == pokemon_id:
+                continue
+            member = POKEMON_BY_ID.get(member_id)
+            if member:
+                for star in member.get('stars', []):
+                    if star.get('chain_shared'):
+                        inherited_star = star.copy()
+                        inherited_star['inherited_from'] = member_id
+                        inherited_star['inherited_from_name'] = member['name']
+                        effective_stars.append(inherited_star)
+
+        pokemon_data['effective_stars'] = effective_stars
+
+        # Build effective_star_tracking (include chain member completions for chain_shared stars)
+        effective_star_tracking = {s.star_number: s.completed for s in star_tracking}
+        for member_id in chain_members:
+            if member_id != pokemon_id:
+                member_stars = stars_by_id.get(member_id, [])
+                for s in member_stars:
+                    member = POKEMON_BY_ID.get(member_id)
+                    if member:
+                        star_def = next((star for star in member.get('stars', [])
+                            if star['star_number'] == s.star_number and star.get('chain_shared')), None)
+                        if star_def and s.completed:
+                            effective_star_tracking[s.star_number] = True
+
+        pokemon_data['star_tracking'] = effective_star_tracking
         pokemon_data['form_tracking'] = {
             f.form_name: f.completed for f in form_tracking
         }
@@ -289,7 +320,17 @@ def update_star(pokemon_id, star_number):
     star.completed = data.get('completed', False)
     db.session.commit()
 
-    return jsonify({'message': 'Star updated successfully'})
+    # Determine if this star is chain_shared and return chain info
+    pokemon = POKEMON_BY_ID.get(pokemon_id)
+    star_def = next((s for s in pokemon.get('stars', []) if s['star_number'] == star_number), None) if pokemon else None
+    chain_shared = star_def.get('chain_shared', False) if star_def else False
+    chain_members = get_chain_members(pokemon_id) if chain_shared else [pokemon_id]
+
+    return jsonify({
+        'message': 'Star updated successfully',
+        'chain_members': chain_members,
+        'chain_shared': chain_shared
+    })
 
 @app.route('/api/forms/<int:pokemon_id>/<form_name>', methods=['PUT'])
 @csrf.exempt
@@ -333,11 +374,27 @@ def get_progress():
     # Master Dex Completion - only counts original_gen checkbox
     master_dex_completed = sum(1 for t in all_tracking.values() if t.original_gen)
 
-    # Stars completed
-    stars_completed = StarTracking.query.filter_by(
-        user_id=current_user.id,
-        completed=True
-    ).count()
+    # Stars completed - avoid double-counting chain-shared stars
+    all_stars = StarTracking.query.filter_by(user_id=current_user.id, completed=True).all()
+    counted_star_keys = set()
+    stars_completed = 0
+
+    for star in all_stars:
+        pokemon = POKEMON_BY_ID.get(star.pokemon_id)
+        if not pokemon:
+            continue
+        star_def = next((s for s in pokemon.get('stars', []) if s['star_number'] == star.star_number), None)
+        if star_def:
+            if star_def.get('chain_shared'):
+                # For chain_shared stars, use chain name as key to avoid double-counting
+                chain_name = POKEMON_TO_CHAIN.get(star.pokemon_id, str(star.pokemon_id))
+                key = (star.star_number, chain_name)
+            else:
+                # For regular stars, use pokemon_id as key
+                key = (star.star_number, star.pokemon_id)
+            if key not in counted_star_keys:
+                counted_star_keys.add(key)
+                stars_completed += 1
 
     # Ghost Stars - counts shiny Pokemon (base form + all form shinies)
     ghost_stars = sum(1 for t in all_tracking.values() if t.shiny)

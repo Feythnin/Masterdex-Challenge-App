@@ -227,12 +227,13 @@ function getCompletionScore(pokemon) {
         if (!isTotem && formShinyTracking[form]) score++;
     });
 
-    // Stars
+    // Stars (using effective_stars which includes inherited chain stars)
     const starTracking = pokemon.star_tracking || {};
-    if (pokemon.stars && pokemon.stars.length > 0) {
-        total += pokemon.stars.length;
-        Object.values(starTracking).forEach(completed => {
-            if (completed) score++;
+    const effectiveStars = pokemon.effective_stars || pokemon.stars || [];
+    if (effectiveStars.length > 0) {
+        total += effectiveStars.length;
+        effectiveStars.forEach(star => {
+            if (starTracking[star.star_number]) score++;
         });
     }
 
@@ -278,12 +279,13 @@ function getFilteredPokemon() {
             matchesStatus = statusFilter === 'complete' ? hasProgress : !hasProgress;
         }
 
-        // Filter by star status
+        // Filter by star status (using effective_stars which includes inherited chain stars)
         let matchesStars = true;
         if (starFilter) {
             const starTracking = pokemon.star_tracking || {};
-            const totalStars = pokemon.stars ? pokemon.stars.length : 0;
-            const completedStars = totalStars > 0 ? Object.values(starTracking).filter(v => v).length : 0;
+            const effectiveStars = pokemon.effective_stars || pokemon.stars || [];
+            const totalStars = effectiveStars.length;
+            const completedStars = totalStars > 0 ? effectiveStars.filter(s => starTracking[s.star_number]).length : 0;
 
             if (starFilter === 'has-stars') {
                 matchesStars = totalStars > 0;
@@ -297,7 +299,7 @@ function getFilteredPokemon() {
                 const tier = starFilter.replace('tier-', '');
                 const tierName = tier.charAt(0).toUpperCase() + tier.slice(1);
                 // Has incomplete stars of this tier
-                matchesStars = pokemon.stars && pokemon.stars.some(s =>
+                matchesStars = effectiveStars.some(s =>
                     s.tier === tierName && !starTracking[s.star_number]
                 );
             }
@@ -394,10 +396,11 @@ function createCompactCardHTML(pokemon) {
     const completedForms = allForms.filter(f => formTracking[f]).length;
     const formsComplete = totalForms > 0 ? completedForms === totalForms : true;
 
-    // Calculate stars progress
+    // Calculate stars progress (using effective_stars which includes inherited chain stars)
     const starTracking = pokemon.star_tracking || {};
-    const totalStars = pokemon.stars ? pokemon.stars.length : 0;
-    const completedStars = totalStars > 0 ? Object.values(starTracking).filter(v => v).length : 0;
+    const effectiveStars = pokemon.effective_stars || pokemon.stars || [];
+    const totalStars = effectiveStars.length;
+    const completedStars = totalStars > 0 ? effectiveStars.filter(s => starTracking[s.star_number]).length : 0;
     const starsComplete = totalStars > 0 && completedStars === totalStars;
 
     // Shiny status - base form + all forms (excluding Totem forms which can't be shiny)
@@ -1902,6 +1905,8 @@ async function saveAndCloseDetailPanel() {
     const pokemon = pokemonData.find(p => p.id === selectedPokemonId);
     if (!pokemon) return;
 
+    let chainMembersToRefresh = new Set();
+
     try {
         // Save tracking changes
         for (const [field, value] of Object.entries(pendingChanges.tracking)) {
@@ -1915,12 +1920,32 @@ async function saveAndCloseDetailPanel() {
 
         // Save star changes
         for (const [starNumber, data] of Object.entries(pendingChanges.stars)) {
-            await fetch(`/api/stars/${selectedPokemonId}/${starNumber}`, {
+            // Get the source pokemon for this star (could be inherited)
+            const sourcePokemonId = data.sourcePokemon || selectedPokemonId;
+            const result = await fetch(`/api/stars/${sourcePokemonId}/${starNumber}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ tier: data.tier, completed: data.completed })
-            });
+            }).then(r => r.json());
+
+            // Update local data
+            const sourcePokemon = pokemonData.find(p => p.id === sourcePokemonId);
+            if (sourcePokemon) {
+                sourcePokemon.star_tracking[starNumber] = data.completed;
+            }
             pokemon.star_tracking[starNumber] = data.completed;
+
+            // If chain_shared, track all members to refresh
+            if (result.chain_members && result.chain_members.length > 1) {
+                result.chain_members.forEach(memberId => {
+                    chainMembersToRefresh.add(memberId);
+                    // Update star_tracking for all chain members
+                    const memberPokemon = pokemonData.find(p => p.id === memberId);
+                    if (memberPokemon) {
+                        memberPokemon.star_tracking[starNumber] = data.completed;
+                    }
+                });
+            }
         }
 
         // Save form changes
@@ -1943,7 +1968,18 @@ async function saveAndCloseDetailPanel() {
             pokemon.form_shiny_tracking[formName] = shiny;
         }
 
+        // Refresh the current Pokemon card
         refreshCompactCard(selectedPokemonId);
+
+        // Refresh all chain members if any chain_shared stars were changed
+        if (chainMembersToRefresh.size > 0) {
+            chainMembersToRefresh.forEach(memberId => {
+                if (memberId !== selectedPokemonId) {
+                    refreshCompactCard(memberId);
+                }
+            });
+        }
+
         loadProgress();
     } catch (error) {
         console.error('Error saving changes:', error);
@@ -2050,19 +2086,22 @@ function createDetailContent(pokemon) {
             </div>
         ` : ''}
 
-        ${pokemon.stars && pokemon.stars.length > 0 ? `
+        ${(pokemon.effective_stars || pokemon.stars || []).length > 0 ? `
             <div class="stars-section">
                 <h4>Star Challenges</h4>
                 <div class="stars-list">
-                    ${sortStarsByTier(pokemon.stars).map(star => `
-                        <label class="star-item tier-${star.tier.toLowerCase()}">
+                    ${sortStarsByTier(pokemon.effective_stars || pokemon.stars || []).map(star => `
+                        <label class="star-item tier-${star.tier.toLowerCase()}${star.inherited_from ? ' inherited-star' : ''}">
                             <input type="checkbox"
                                    data-star="${star.star_number}"
                                    data-tier="${star.tier}"
+                                   data-source-pokemon="${star.inherited_from || pokemon.id}"
+                                   data-chain-shared="${star.chain_shared || false}"
                                    ${starTracking[star.star_number] ? 'checked' : ''}>
                             <span class="star-badge">★${star.star_number}</span>
                             <span class="star-tier">${star.tier}</span>
                             <span class="star-requirement" title="${star.description}">${star.requirement}</span>
+                            ${star.inherited_from ? `<span class="inherited-badge" title="From ${star.inherited_from_name}">&#128279;</span>` : ''}
                         </label>
                     `).join('')}
                 </div>
@@ -2099,12 +2138,14 @@ function attachDetailEventListeners(container, pokemon) {
         });
     });
 
-    // Star checkboxes - store locally
+    // Star checkboxes - store locally (with source pokemon for inherited stars)
     container.querySelectorAll('input[type="checkbox"][data-star]').forEach(checkbox => {
         checkbox.addEventListener('change', (e) => {
+            const sourcePokemon = parseInt(e.target.dataset.sourcePokemon) || pokemon.id;
             pendingChanges.stars[e.target.dataset.star] = {
                 tier: e.target.dataset.tier,
-                completed: e.target.checked
+                completed: e.target.checked,
+                sourcePokemon: sourcePokemon
             };
         });
     });
