@@ -638,6 +638,10 @@ async function loadPokemon() {
 async function loadProgress() {
     try {
         const response = await fetch('/api/progress');
+        if (!response.ok) {
+            console.warn('Progress fetch failed with status:', response.status);
+            return; // Keep existing stats displayed rather than resetting to 0
+        }
         const progress = await response.json();
         console.log('Progress data:', progress); // Debug logging
         document.getElementById('masterDexPercent').textContent =

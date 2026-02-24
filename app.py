@@ -42,10 +42,12 @@ if cors_origins:
 csrf = CSRFProtect(app)
 
 # Security: Rate limiting
+# Note: default_limits apply to ALL routes. Keep them generous for authenticated API usage
+# (checkbox toggles, progress refreshes). Login/register have their own strict limits.
 limiter = Limiter(
     key_func=get_remote_address,
     app=app,
-    default_limits=["200 per day", "50 per hour"],
+    default_limits=["5000 per hour"],
     storage_uri="memory://"
 )
 
