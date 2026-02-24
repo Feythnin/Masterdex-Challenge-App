@@ -1540,6 +1540,11 @@ body {
 }
 
 /* Friends Page */
+.friends-page {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
 .friends-page h1 {
     color: var(--primary-color);
     margin-bottom: 1.5rem;
