@@ -1091,11 +1091,16 @@ def migrate_gender_to_forms():
 
     return migrated_count
 
-if __name__ == '__main__':
+def init_db():
+    """Create tables and run migrations. Called on startup regardless of entry point."""
     with app.app_context():
         db.create_all()
         # Run migration for existing male/female data
         migrate_gender_to_forms()
+
+init_db()
+
+if __name__ == '__main__':
     # Security: Debug mode only enabled if FLASK_DEBUG=1 is set
     debug_mode = os.environ.get('FLASK_DEBUG', '0') == '1'
     app.run(debug=debug_mode, port=5000)
