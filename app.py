@@ -725,7 +725,7 @@ def search_users():
     if len(q) < 2:
         return jsonify([])
     users = User.query.filter(
-        db.func.lower(User.username).contains(q.lower()),
+        User.username.ilike(f'%{q}%'),
         User.id != current_user.id
     ).limit(20).all()
     results = []

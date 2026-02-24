@@ -156,7 +156,10 @@ document.getElementById('userSearchInput').addEventListener('input', function() 
     searchTimeout = setTimeout(async () => {
         try {
             const res = await fetch(`/api/users/search?q=${encodeURIComponent(q)}`);
-            if (!res.ok) return;
+            if (!res.ok) {
+                resultsDiv.innerHTML = '<p class="no-results">Search failed. Please try again.</p>';
+                return;
+            }
             const users = await res.json();
             if (users.length === 0) {
                 resultsDiv.innerHTML = '<p class="no-results">No users found</p>';
