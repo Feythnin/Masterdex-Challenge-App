@@ -15,6 +15,7 @@
             {% if current_user.is_authenticated %}
                 <span class="nav-user">Welcome, {{ current_user.username }}</span>
                 <a href="/tracker" class="nav-link">Tracker</a>
+                <a href="/friends" class="nav-link">Friends <span class="nav-badge" id="friendRequestBadge" style="display: none;"></span></a>
                 <a href="/logout" class="nav-link">Logout</a>
             {% else %}
                 <a href="/login" class="nav-link">Login</a>
@@ -31,6 +32,23 @@
         <p>&copy; 2026 Pokémon Home Challenge Tracker</p>
     </footer>
 
+    {% if current_user.is_authenticated %}
+    <script>
+    (async function() {
+        try {
+            const res = await fetch('/api/friends/request-count');
+            if (res.ok) {
+                const data = await res.json();
+                const badge = document.getElementById('friendRequestBadge');
+                if (data.count > 0) {
+                    badge.textContent = data.count;
+                    badge.style.display = 'inline';
+                }
+            }
+        } catch(e) {}
+    })();
+    </script>
+    {% endif %}
     {% block scripts %}{% endblock %}
 </body>
 </html>

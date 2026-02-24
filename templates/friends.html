@@ -1,0 +1,314 @@
+{% extends 'base.html' %}
+
+{% block title %}Friends - Pokemon Home Challenge{% endblock %}
+
+{% block content %}
+<div class="friends-page">
+    <h1>Friends</h1>
+
+    <!-- Search -->
+    <div class="friends-section">
+        <h2>Find Friends</h2>
+        <div class="search-bar-row">
+            <input type="text" id="userSearchInput" placeholder="Search by username (min 2 characters)..." class="search-input">
+        </div>
+        <div id="searchResults" class="search-results"></div>
+    </div>
+
+    <!-- Privacy Settings -->
+    <div class="friends-section">
+        <button class="privacy-toggle-btn" id="privacyToggleBtn">
+            Privacy Settings <span class="toggle-icon" id="privacyToggleIcon">&#9660;</span>
+        </button>
+        <div class="privacy-panel" id="privacyPanel" style="display: none;">
+            <div class="privacy-group">
+                <h3>Profile Visibility</h3>
+                <label class="privacy-radio"><input type="radio" name="visibility" value="public"> Public (anyone can view)</label>
+                <label class="privacy-radio"><input type="radio" name="visibility" value="friends" checked> Friends Only</label>
+                <label class="privacy-radio"><input type="radio" name="visibility" value="private"> Private (nobody can view)</label>
+            </div>
+            <div class="privacy-group">
+                <h3>Visible Sections</h3>
+                <label class="privacy-toggle-item"><input type="checkbox" id="privShowStats" checked> Stats &amp; Progress</label>
+                <label class="privacy-toggle-item"><input type="checkbox" id="privShowForms" checked> Forms</label>
+                <label class="privacy-toggle-item"><input type="checkbox" id="privShowStars" checked> Stars</label>
+                <label class="privacy-toggle-item"><input type="checkbox" id="privShowShinies" checked> Shinies</label>
+                <label class="privacy-toggle-item"><input type="checkbox" id="privShowNotes"> Notes</label>
+            </div>
+            <button class="btn btn-primary" id="savePrivacyBtn">Save Settings</button>
+        </div>
+    </div>
+
+    <!-- Incoming Requests -->
+    <div class="friends-section" id="incomingSection" style="display: none;">
+        <h2>Incoming Requests <span class="badge" id="incomingCount">0</span></h2>
+        <div id="incomingRequests" class="requests-list"></div>
+    </div>
+
+    <!-- Outgoing Requests -->
+    <div class="friends-section" id="outgoingSection" style="display: none;">
+        <h2>Outgoing Requests <span class="badge" id="outgoingCount">0</span></h2>
+        <div id="outgoingRequests" class="requests-list"></div>
+    </div>
+
+    <!-- Friends List -->
+    <div class="friends-section">
+        <h2>Friends <span class="badge" id="friendsCount">0</span></h2>
+        <div id="friendsList" class="friends-list">
+            <p class="no-results" id="noFriendsMsg">No friends yet. Search for users above to get started!</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+let searchTimeout;
+
+// Load friends data
+async function loadFriends() {
+    try {
+        const res = await fetch('/api/friends');
+        if (!res.ok) return;
+        const data = await res.json();
+
+        // Render friends
+        const friendsList = document.getElementById('friendsList');
+        const noMsg = document.getElementById('noFriendsMsg');
+        document.getElementById('friendsCount').textContent = data.friends.length;
+
+        if (data.friends.length === 0) {
+            friendsList.innerHTML = '';
+            friendsList.appendChild(noMsg);
+            noMsg.style.display = '';
+        } else {
+            noMsg.style.display = 'none';
+            friendsList.innerHTML = data.friends.map(f => `
+                <div class="friend-card">
+                    <div class="friend-card-info">
+                        <a href="/friends/${encodeURIComponent(f.username)}" class="friend-name">${escapeHtml(f.username)}</a>
+                        <span class="friend-since">Friends since ${new Date(f.since).toLocaleDateString()}</span>
+                    </div>
+                    <button class="btn-remove" onclick="removeFriend(${f.id}, '${escapeHtml(f.username)}')">Remove</button>
+                </div>
+            `).join('');
+        }
+
+        // Incoming requests
+        const incomingSection = document.getElementById('incomingSection');
+        const incomingContainer = document.getElementById('incomingRequests');
+        document.getElementById('incomingCount').textContent = data.incoming.length;
+        if (data.incoming.length > 0) {
+            incomingSection.style.display = '';
+            incomingContainer.innerHTML = data.incoming.map(r => `
+                <div class="request-card">
+                    <span class="request-username">${escapeHtml(r.username)}</span>
+                    <span class="request-date">${new Date(r.created_at).toLocaleDateString()}</span>
+                    <div class="request-actions">
+                        <button class="btn-accept" onclick="respondRequest(${r.id}, 'accept')">Accept</button>
+                        <button class="btn-decline" onclick="respondRequest(${r.id}, 'decline')">Decline</button>
+                    </div>
+                </div>
+            `).join('');
+        } else {
+            incomingSection.style.display = 'none';
+        }
+
+        // Outgoing requests
+        const outgoingSection = document.getElementById('outgoingSection');
+        const outgoingContainer = document.getElementById('outgoingRequests');
+        document.getElementById('outgoingCount').textContent = data.outgoing.length;
+        if (data.outgoing.length > 0) {
+            outgoingSection.style.display = '';
+            outgoingContainer.innerHTML = data.outgoing.map(r => `
+                <div class="request-card">
+                    <span class="request-username">${escapeHtml(r.username)}</span>
+                    <span class="request-date">${new Date(r.created_at).toLocaleDateString()}</span>
+                    <button class="btn-cancel-req" onclick="cancelRequest(${r.id})">Cancel</button>
+                </div>
+            `).join('');
+        } else {
+            outgoingSection.style.display = 'none';
+        }
+
+        // Update nav badge
+        const badge = document.getElementById('friendRequestBadge');
+        if (data.incoming.length > 0) {
+            badge.textContent = data.incoming.length;
+            badge.style.display = 'inline';
+        } else {
+            badge.style.display = 'none';
+        }
+    } catch(e) {
+        console.error('Failed to load friends:', e);
+    }
+}
+
+// Search users
+document.getElementById('userSearchInput').addEventListener('input', function() {
+    clearTimeout(searchTimeout);
+    const q = this.value.trim();
+    const resultsDiv = document.getElementById('searchResults');
+    if (q.length < 2) {
+        resultsDiv.innerHTML = '';
+        return;
+    }
+    searchTimeout = setTimeout(async () => {
+        try {
+            const res = await fetch(`/api/users/search?q=${encodeURIComponent(q)}`);
+            if (!res.ok) return;
+            const users = await res.json();
+            if (users.length === 0) {
+                resultsDiv.innerHTML = '<p class="no-results">No users found</p>';
+                return;
+            }
+            resultsDiv.innerHTML = users.map(u => {
+                let actionHtml = '';
+                if (u.friendship_status === 'friends') {
+                    actionHtml = '<span class="status-tag status-friends">Friends</span>';
+                } else if (u.friendship_status === 'pending_sent') {
+                    actionHtml = '<span class="status-tag status-pending">Request Sent</span>';
+                } else if (u.friendship_status === 'pending_received') {
+                    actionHtml = '<span class="status-tag status-pending">Sent You Request</span>';
+                } else {
+                    actionHtml = `<button class="btn-add-friend" onclick="sendRequest('${escapeHtml(u.username)}')">Add Friend</button>`;
+                }
+                return `<div class="search-result-card">
+                    <span class="result-username">${escapeHtml(u.username)}</span>
+                    ${actionHtml}
+                </div>`;
+            }).join('');
+        } catch(e) {
+            console.error('Search failed:', e);
+        }
+    }, 300);
+});
+
+async function sendRequest(username) {
+    try {
+        const res = await fetch('/api/friends/request', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({username})
+        });
+        const data = await res.json();
+        if (!res.ok) {
+            alert(data.error);
+            return;
+        }
+        if (data.auto_accepted) {
+            alert('You are now friends! (They had already sent you a request)');
+        }
+        // Refresh search results and friends list
+        document.getElementById('userSearchInput').dispatchEvent(new Event('input'));
+        loadFriends();
+    } catch(e) {
+        console.error('Send request failed:', e);
+    }
+}
+
+async function respondRequest(requestId, action) {
+    try {
+        const res = await fetch(`/api/friends/request/${requestId}`, {
+            method: 'PUT',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({action})
+        });
+        if (!res.ok) {
+            const data = await res.json();
+            alert(data.error);
+            return;
+        }
+        loadFriends();
+    } catch(e) {
+        console.error('Respond failed:', e);
+    }
+}
+
+async function cancelRequest(requestId) {
+    try {
+        const res = await fetch(`/api/friends/request/${requestId}`, {method: 'DELETE'});
+        if (!res.ok) {
+            const data = await res.json();
+            alert(data.error);
+            return;
+        }
+        loadFriends();
+    } catch(e) {
+        console.error('Cancel failed:', e);
+    }
+}
+
+async function removeFriend(userId, username) {
+    if (!confirm(`Remove ${username} from friends?`)) return;
+    try {
+        const res = await fetch(`/api/friends/${userId}`, {method: 'DELETE'});
+        if (!res.ok) {
+            const data = await res.json();
+            alert(data.error);
+            return;
+        }
+        loadFriends();
+    } catch(e) {
+        console.error('Remove failed:', e);
+    }
+}
+
+// Privacy settings
+const privacyToggleBtn = document.getElementById('privacyToggleBtn');
+const privacyPanel = document.getElementById('privacyPanel');
+const privacyToggleIcon = document.getElementById('privacyToggleIcon');
+privacyToggleBtn.addEventListener('click', () => {
+    const isOpen = privacyPanel.style.display !== 'none';
+    privacyPanel.style.display = isOpen ? 'none' : '';
+    privacyToggleIcon.innerHTML = isOpen ? '&#9660;' : '&#9650;';
+});
+
+async function loadPrivacy() {
+    try {
+        const res = await fetch('/api/privacy');
+        if (!res.ok) return;
+        const data = await res.json();
+        document.querySelector(`input[name="visibility"][value="${data.profile_visibility}"]`).checked = true;
+        document.getElementById('privShowStats').checked = data.show_stats;
+        document.getElementById('privShowForms').checked = data.show_forms;
+        document.getElementById('privShowStars').checked = data.show_stars;
+        document.getElementById('privShowShinies').checked = data.show_shinies;
+        document.getElementById('privShowNotes').checked = data.show_notes;
+    } catch(e) {}
+}
+
+document.getElementById('savePrivacyBtn').addEventListener('click', async () => {
+    const visibility = document.querySelector('input[name="visibility"]:checked').value;
+    try {
+        const res = await fetch('/api/privacy', {
+            method: 'PUT',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                profile_visibility: visibility,
+                show_stats: document.getElementById('privShowStats').checked,
+                show_forms: document.getElementById('privShowForms').checked,
+                show_stars: document.getElementById('privShowStars').checked,
+                show_shinies: document.getElementById('privShowShinies').checked,
+                show_notes: document.getElementById('privShowNotes').checked,
+            })
+        });
+        if (res.ok) {
+            alert('Privacy settings saved');
+        }
+    } catch(e) {
+        console.error('Save privacy failed:', e);
+    }
+});
+
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+// Init
+loadFriends();
+loadPrivacy();
+</script>
+{% endblock %}

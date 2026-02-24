@@ -1,0 +1,227 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ profile_username }}'s Collection - Pokemon Home Challenge{% endblock %}
+
+{% block content %}
+<div class="profile-page">
+    <div class="profile-header">
+        <a href="/friends" class="back-link">&larr; Back to Friends</a>
+        <h1 id="profileTitle">{{ profile_username }}'s Collection</h1>
+    </div>
+
+    <div id="profileError" class="profile-private-message" style="display: none;"></div>
+
+    <div id="profileContent" style="display: none;">
+        <!-- Stats Summary -->
+        <div id="profileStats" class="progress-summary" style="display: none;">
+            <div class="progress-stat">
+                <span class="stat-value" id="pMasterDex">0%</span>
+                <span class="stat-label">Master Dex</span>
+            </div>
+            <div class="progress-stat">
+                <span class="stat-value" id="pFormDex">0%</span>
+                <span class="stat-label">Form Dex</span>
+            </div>
+            <div class="progress-stat">
+                <span class="stat-value" id="pStars">0</span>
+                <span class="stat-label">Stars</span>
+            </div>
+            <div class="progress-stat">
+                <span class="stat-value" id="pGhostStars">0</span>
+                <span class="stat-label">Ghost Stars</span>
+            </div>
+        </div>
+
+        <!-- Generation Progress -->
+        <div id="profileGenProgress" class="gen-progress-section" style="display: none;">
+            <button class="gen-progress-toggle" id="profileGenToggle">
+                <span>Generation Progress</span>
+                <span class="toggle-icon" id="profileToggleIcon">&#9660;</span>
+            </button>
+            <div class="gen-progress-bars" id="profileGenBars" style="display: none;"></div>
+        </div>
+
+        <!-- Search/Filter -->
+        <div class="filters-bar" style="margin-top: 1.5rem;">
+            <input type="text" id="profileSearchInput" placeholder="Search Pokemon..." class="search-input">
+        </div>
+
+        <!-- Pokemon Grid -->
+        <div class="pokemon-grid" id="profileGrid"></div>
+
+        <!-- Load More -->
+        <div class="load-more-container" id="profileLoadMore" style="display: none; text-align: center; padding: 20px;">
+            <button class="btn-load-more" id="profileLoadMoreBtn">Load More</button>
+            <p class="load-more-info" id="profileLoadMoreInfo"></p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+const PROFILE_USERNAME = {{ profile_username | tojson }};
+const PAGE_SIZE = 50;
+let profilePokemon = [];
+let filteredPokemon = [];
+let displayedCount = 0;
+
+async function loadProfile() {
+    try {
+        const res = await fetch(`/api/friends/${encodeURIComponent(PROFILE_USERNAME)}/profile`);
+        if (res.status === 403) {
+            const data = await res.json();
+            document.getElementById('profileError').textContent = 'This profile is private.';
+            document.getElementById('profileError').style.display = '';
+            return;
+        }
+        if (res.status === 404) {
+            document.getElementById('profileError').textContent = 'User not found.';
+            document.getElementById('profileError').style.display = '';
+            return;
+        }
+        if (!res.ok) {
+            document.getElementById('profileError').textContent = 'Could not load profile.';
+            document.getElementById('profileError').style.display = '';
+            return;
+        }
+
+        const data = await res.json();
+        document.getElementById('profileContent').style.display = '';
+
+        // Stats
+        if (data.stats && data.privacy.show_stats) {
+            const statsDiv = document.getElementById('profileStats');
+            statsDiv.style.display = '';
+            document.getElementById('pMasterDex').textContent = data.stats.master_dex_percentage.toFixed(1) + '%';
+            document.getElementById('pFormDex').textContent = data.stats.form_dex_percentage.toFixed(1) + '%';
+            document.getElementById('pStars').textContent = data.stats.stars_completed;
+            document.getElementById('pGhostStars').textContent = data.stats.ghost_stars;
+
+            // Gen progress
+            if (data.stats.gen_progress) {
+                const genSection = document.getElementById('profileGenProgress');
+                genSection.style.display = '';
+                const genBars = document.getElementById('profileGenBars');
+                let barsHtml = '';
+                for (let gen = 1; gen <= 9; gen++) {
+                    const gp = data.stats.gen_progress[gen];
+                    if (!gp) continue;
+                    barsHtml += `<div class="gen-bar">
+                        <span class="gen-label">Gen ${gen}</span>
+                        <div class="bar-container"><div class="bar-fill" style="width: ${gp.percentage}%"></div></div>
+                        <span class="gen-count">${gp.completed}/${gp.total}</span>
+                    </div>`;
+                }
+                genBars.innerHTML = barsHtml;
+            }
+        }
+
+        // Pokemon grid
+        profilePokemon = data.pokemon || [];
+        filteredPokemon = profilePokemon;
+        displayedCount = 0;
+        renderProfileGrid();
+    } catch(e) {
+        console.error('Load profile failed:', e);
+        document.getElementById('profileError').textContent = 'Failed to load profile.';
+        document.getElementById('profileError').style.display = '';
+    }
+}
+
+function renderProfileGrid() {
+    const grid = document.getElementById('profileGrid');
+    const batch = filteredPokemon.slice(displayedCount, displayedCount + PAGE_SIZE);
+
+    if (displayedCount === 0) {
+        grid.innerHTML = '';
+    }
+
+    if (filteredPokemon.length === 0) {
+        grid.innerHTML = '<div class="no-results">No Pokemon to display</div>';
+        document.getElementById('profileLoadMore').style.display = 'none';
+        return;
+    }
+
+    batch.forEach(p => {
+        const card = document.createElement('div');
+        card.className = 'pokemon-card-compact profile-card';
+
+        const spriteId = String(p.id).padStart(3, '0');
+        const spriteClass = p.obtained ? 'compact-sprite' : 'compact-sprite not-obtained';
+
+        let indicators = '';
+        if (p.obtained) indicators += '<span class="indicator indicator-complete">Obtained</span>';
+        if (p.shiny) indicators += '<span class="indicator indicator-shiny-box indicator-complete">Shiny</span>';
+
+        if (p.star_tracking) {
+            const totalStars = (p.effective_stars || []).length;
+            const completedStars = Object.values(p.star_tracking).filter(v => v).length;
+            if (totalStars > 0) {
+                const cls = completedStars === totalStars ? 'indicator-stars indicator-complete' : 'indicator-stars';
+                indicators += `<span class="indicator ${cls}">${completedStars}/${totalStars}</span>`;
+            }
+        }
+
+        if (p.form_tracking) {
+            const totalForms = (p.forms || []).length + (p.has_gender_diff ? 2 : 0);
+            const completedForms = Object.values(p.form_tracking).filter(v => v).length;
+            if (totalForms > 0) {
+                indicators += `<span class="indicator indicator-forms">${completedForms}/${totalForms}</span>`;
+            }
+        }
+
+        card.innerHTML = `
+            <img class="${spriteClass}" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${p.id}.png" alt="${p.name}" loading="lazy">
+            <div class="compact-info">
+                <span class="compact-number">#${p.id}</span>
+                <span class="compact-name">${p.name}</span>
+            </div>
+            <div class="compact-indicators">${indicators}</div>
+        `;
+        grid.appendChild(card);
+    });
+
+    displayedCount += batch.length;
+
+    // Load more button
+    const loadMoreDiv = document.getElementById('profileLoadMore');
+    if (displayedCount < filteredPokemon.length) {
+        loadMoreDiv.style.display = '';
+        document.getElementById('profileLoadMoreInfo').textContent =
+            `Showing ${displayedCount} of ${filteredPokemon.length}`;
+    } else {
+        loadMoreDiv.style.display = 'none';
+    }
+}
+
+// Search
+document.getElementById('profileSearchInput').addEventListener('input', function() {
+    const q = this.value.trim().toLowerCase();
+    if (q === '') {
+        filteredPokemon = profilePokemon;
+    } else {
+        filteredPokemon = profilePokemon.filter(p =>
+            p.name.toLowerCase().includes(q) || String(p.id).includes(q)
+        );
+    }
+    displayedCount = 0;
+    renderProfileGrid();
+});
+
+// Load more
+document.getElementById('profileLoadMoreBtn').addEventListener('click', renderProfileGrid);
+
+// Gen progress toggle
+document.getElementById('profileGenToggle').addEventListener('click', function() {
+    const bars = document.getElementById('profileGenBars');
+    const icon = document.getElementById('profileToggleIcon');
+    const isOpen = bars.style.display !== 'none';
+    bars.style.display = isOpen ? 'none' : '';
+    icon.innerHTML = isOpen ? '&#9660;' : '&#9650;';
+});
+
+// Init
+loadProfile();
+</script>
+{% endblock %}
